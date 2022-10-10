@@ -6,7 +6,20 @@ services:
     ports:
       - 5000:5000
     environment:
-      - SECRET_KEY=
+      - SECRET_KEY=asd
     volumes:
       - ./backend:/app
     command: uvicorn src.main:app --reload --host 0.0.0.0 --port 5000
+
+  influxdb:
+    image: influxdb:latest
+    volumes:
+      - ./data/influxdb/data:/var/lib/influxdb2:rw
+#    environment:
+#      - DOCKER_INFLUXDB_INIT_MODE=setup
+#      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+#      - DOCKER_INFLUXDB_INIT_PASSWORD=12345678
+#      - DOCKER_INFLUXDB_INIT_ORG=e-lighthouse
+#      - DOCKER_INFLUXDB_INIT_BUCKET=test-bucket
+    ports:
+      - 8086:8086
