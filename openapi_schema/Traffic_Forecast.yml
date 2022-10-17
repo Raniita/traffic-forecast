@@ -1,16 +1,12 @@
 openapi: "3.0.3"
-
 info:
   title: "Traffic Forecast"
   description: "Microservice app that enables the possibility to create a network, add monitored interfaces and add traffic to an especified interface. With the monitored interfaces info, we can perform a forecast."
   version: "0.2"
-
 servers:
  - url: "https://localhost:5000/"
-
 security:
   - BearerAuth: []
-
 paths:
   /networks:
     get:
@@ -143,6 +139,8 @@ paths:
     post:
       description: Adds new interface
       summary: Adds new interface
+      tags:
+        - Interface
       parameters:
         - $ref: '#/components/parameters/NetworkIn'
       requestBody:
@@ -163,19 +161,138 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
 
-  /interface:
+  /networks/{id_net}/interface/{id_if}:
     get:
-      summary: Return a list of interfaces
-      description: Returns a list of interfaces given a network ID
+      summary: Return data about an interface
+      description: Return data about an interface
+      tags:
+        - Interface
+      parameters:
+        - $ref: '#/components/parameters/NetworkIn'
+        - $ref: '#/components/parameters/InterfaceIn'
       responses:
         '200':
-          description: A JSON array of interfaces
+          description: Succesfully returned an interface
           content:
             application/json:
               schema:
-                type: array
-                items:
+                $ref: '#/components/schemas/Interface'
+        
+        '400':
+          $ref: '#/components/responses/400Error'
+
+    put:
+      summary: Modify data of an interface
+      description: Modify data of an interface
+      tags:
+        - Interface
+      parameters:
+        - $ref: '#/components/parameters/NetworkIn'
+        - $ref: '#/components/parameters/InterfaceIn'
+      responses:
+        '200':
+          description: Succesfully modified an interface
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Interface'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+
+    
+    delete:
+      summary: Delete an interface
+      description: Delete an interface
+      tags:
+        - Interface
+      parameters:
+        - $ref: '#/components/parameters/NetworkIn'
+        - $ref: '#/components/parameters/InterfaceIn'
+      responses:
+        '200':
+          description: Succesfully deleted an interface
+          content:
+            application/json:
+              schema:
+                type: string
+
+        '400':
+          $ref: '#/components/responses/400Error'
+
+  /query/{id_net}:
+    get:
+      summary: Query to return link count samples
+      description: Query to return link count samples
+      tags:
+        - Query link count
+      parameters:
+        - $ref: '#/components/parameters/NetworkIn'
+      responses:
+        '200':
+          description: Succesfully get the sample data
+          content:
+            application/json:
+              schema:
+                type: string
+
+        '400':
+          $ref: '#/components/responses/400Error'
+
+  /forecast:
+    post:
+      summary: Run monitor forecast
+      description: Run monitor forecast
+      tags:
+        - Forecast
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Forecast'
+      responses:
+        '201': 
+          description: Enqueued forecast
+          content:
+            application/json:
+              schema:
+                type: string
+
+        '400':
+          $ref: '#/components/responses/400Error'
+
+
+  /import/{id_net}/PLACEHOLDER:
+    post:
+      summary: Import samples of PLACEHOLDER
+      description: Import samples of PLACEHOLDER
+      tags:
+        - Import link count samples
+      parameters:
+        - $ref: "#/components/parameters/NetworkIn"
+      # TODO
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
                   type: string
+                  format: binary
+
+      responses:
+        '201':
+          description: Enqueued import
+          content:
+            application/json:
+              schema:
+                type: string
+
+        '400':
+          $ref: '#/components/responses/400Error'
 
 components:
   securitySchemes:
@@ -223,6 +340,37 @@ components:
           type: string
           description: Short description of interface
 
+    Forecast:
+      type: object
+      maxItems: 4
+      required:
+        - id_net
+        - id_if
+      properties:
+        id_net:
+          type: string
+          description: Network identifier
+        id_if:
+          type: string
+          description: Interface identifier
+        timestamp:
+          type: string
+          description: Start time of forecast 
+        options:
+          type: object
+          maxItems: 5
+          properties:
+            holidays:
+              type: string
+            seasonality:
+              type: string
+            seasonality_mode:
+              type: string
+            interval_width:
+              type: string
+            changepoint_prior_scale:
+              type: string
+
     Error:
       type: object
       maxItems: 1
@@ -237,10 +385,19 @@ components:
   parameters:
     NetworkIn:
       name: id_net
+      description: ID of a network
       in: path
       required: true
       schema:
-        type: string
+        type: integer
+
+    InterfaceIn:
+      name: id_if
+      description: ID of an interface
+      in: path
+      required: true
+      schema:
+        type: integer
 
   responses:
     400Error:
