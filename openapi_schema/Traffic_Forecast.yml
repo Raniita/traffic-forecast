@@ -1,25 +1,168 @@
 openapi: "3.0.3"
+
 info:
   title: "Traffic Forecast"
   description: "Microservice app that enables the possibility to create a network, add monitored interfaces and add traffic to an especified interface. With the monitored interfaces info, we can perform a forecast."
-  version: "1.0"
+  version: "0.2"
+
 servers:
  - url: "https://localhost:5000/"
-   description: Local server for testing
+
+security:
+  - BearerAuth: []
+
 paths:
-  /network:
+  /networks:
     get:
       summary: Returns a list of networks
       description: Returns a list of networks by ID
+      tags:
+        - Network
       responses:
         '200':
-          description: A JSON array of user names
+          description: Succesfully returned a list of networks
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  type: string
+                  $ref: '#/components/schemas/Network'
+
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Error'
+    post:
+      description: Adds new network
+      summary: Adds a network
+      tags:
+        - Network
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Network'
+
+      responses:
+        '200':
+          description: Succesfully created a new network
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Network'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  
+  /networks/{id_net}:
+    get:
+      summary: Returns data about a network
+      description: Returns info about a network
+      tags:
+        - Network
+      parameters:
+        - $ref: '#/components/parameters/NetworkIn'
+      responses:
+        '200':
+          description: Succesfully returned a network
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Network'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+
+    put:
+      summary: Modify data of a network
+      description: Modify content of a network
+      tags:
+        - Network
+      parameters:
+        - $ref: '#/components/parameters/NetworkIn'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Network'
+      
+      responses:
+        '200':
+          description: Succesfully modified a network
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Network'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+
+    delete:
+      summary: Delete a network
+      description: Delete a network
+      tags:
+        - Network
+      parameters:
+        - $ref: '#/components/parameters/NetworkIn'
+      responses:
+        '200':
+          description: Succesfully deleted a network
+          content:
+            application/json:
+              schema:
+                type: string
+
+        '400':
+          $ref: '#/components/responses/400Error'
+
+  /networks/{id_net}/interface/:
+    get:
+      summary: Return a list of interfaces
+      description: Returns a list of interfaces
+      tags:
+        - Interface
+      parameters:
+        - $ref: '#/components/parameters/NetworkIn'
+      responses:
+        '200':
+          description: Succesfully return the interfaces of a network
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Interface'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+
+    post:
+      description: Adds new interface
+      summary: Adds new interface
+      parameters:
+        - $ref: '#/components/parameters/NetworkIn'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Interface'
+
+      responses:
+        '200':
+          description: Succesfully created a new interface
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Interface'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+
   /interface:
     get:
       summary: Return a list of interfaces
@@ -33,3 +176,76 @@ paths:
                 type: array
                 items:
                   type: string
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    Network:
+      type: object
+      maxItems: 4
+      required:
+        - id_net
+      properties:
+        id_net:
+          type: string
+          description: Network identifier
+        ip_net:
+          type: string
+          description: IP network
+        name:
+          type: string
+          description: Name of network
+        description:
+          type: string
+          description: Short description of network
+
+    Interface:
+      type: object
+      maxItems: 6
+      required:
+        - id_net
+        - id_if
+      properties:
+        id_net:
+          type: string
+          description: Network identifier
+        id_if:
+          type: string
+          description: Interface identifier
+        name:
+          type: string
+          description: Name of interface
+        description:
+          type: string
+          description: Short description of interface
+
+    Error:
+      type: object
+      maxItems: 1
+      required: 
+        - message
+      properties:
+        message:
+          type: string
+          title: Error Message
+          description: Error Message
+
+  parameters:
+    NetworkIn:
+      name: id_net
+      in: path
+      required: true
+      schema:
+        type: string
+
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
