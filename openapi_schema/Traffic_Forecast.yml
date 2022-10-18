@@ -117,7 +117,7 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
 
-  /networks/{id_net}/interface/:
+  /networks/{id_net}/interfaces/:
     get:
       summary: Return a list of interfaces
       description: Returns a list of interfaces
@@ -161,7 +161,7 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
 
-  /networks/{id_net}/interface/{id_if}:
+  /networks/{id_net}/interfaces/{id_if}:
     get:
       summary: Return data about an interface
       description: Return data about an interface
@@ -228,6 +228,13 @@ paths:
         - Query link count
       parameters:
         - $ref: '#/components/parameters/NetworkIn'
+      requestBody:
+        description: JSON for filtering the query
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Query'
       responses:
         '200':
           description: Succesfully get the sample data
@@ -242,7 +249,7 @@ paths:
   /forecast:
     post:
       summary: Run monitor forecast
-      description: Run monitor forecast
+      description: Run monitor forecast using Server-Side Event (SSE) procedure
       tags:
         - Forecast
       requestBody:
@@ -370,6 +377,48 @@ components:
               type: string
             changepoint_prior_scale:
               type: string
+
+    Query:
+      type: object
+      maxItems: 10
+      required:
+        - id_if
+        - key
+        - startTs
+        - endTs
+        - limit
+      properties:
+        id_if:
+          type: string
+          title: ID of interface
+        key:
+          type: string
+          title: Select over TX or RX link count
+        startTs:
+          type: integer
+          title: Epoch start (ms)
+        endTs:
+          type: integer
+          title: Epoch end (ms)
+        limit:
+          type: integer
+          title: Limit number of points returned
+        opt:
+          type: object
+          title: Optional parameters
+          maxItems: 5
+          properties:
+            percentil:
+              type: integer
+              title: Max percentil
+      example:
+        id_if: "5"
+        key: "rx"
+        startTs: 23123
+        endTs: 25123
+        limit: 5000
+        opt:
+          percentil: 0.95
 
     Error:
       type: object
