@@ -2,7 +2,7 @@ openapi: "3.0.3"
 info:
   title: "Traffic Forecast"
   description: "Microservice app that enables the possibility to create a network, add monitored interfaces and add traffic to an especified interface. With the monitored interfaces info, we can perform a forecast."
-  version: "0.2"
+  version: "0.2.1"
 servers:
  - url: "https://localhost:5000/"
 security:
@@ -13,7 +13,7 @@ paths:
       summary: Returns a list of networks
       description: Returns a list of networks by ID
       tags:
-        - Network
+        - Networks
       responses:
         '200':
           description: Succesfully returned a list of networks
@@ -36,7 +36,7 @@ paths:
       description: Adds new network
       summary: Adds a network
       tags:
-        - Network
+        - Networks
       requestBody:
         required: true
         content:
@@ -60,7 +60,7 @@ paths:
       summary: Returns data about a network
       description: Returns info about a network
       tags:
-        - Network
+        - Networks
       parameters:
         - $ref: '#/components/parameters/NetworkIn'
       responses:
@@ -78,7 +78,7 @@ paths:
       summary: Modify data of a network
       description: Modify content of a network
       tags:
-        - Network
+        - Networks
       parameters:
         - $ref: '#/components/parameters/NetworkIn'
       requestBody:
@@ -103,7 +103,7 @@ paths:
       summary: Delete a network
       description: Delete a network
       tags:
-        - Network
+        - Networks
       parameters:
         - $ref: '#/components/parameters/NetworkIn'
       responses:
@@ -122,7 +122,7 @@ paths:
       summary: Return a list of interfaces
       description: Returns a list of interfaces
       tags:
-        - Interface
+        - Interfaces
       parameters:
         - $ref: '#/components/parameters/NetworkIn'
       responses:
@@ -140,7 +140,7 @@ paths:
       description: Adds new interface
       summary: Adds new interface
       tags:
-        - Interface
+        - Interfaces
       parameters:
         - $ref: '#/components/parameters/NetworkIn'
       requestBody:
@@ -166,7 +166,7 @@ paths:
       summary: Return data about an interface
       description: Return data about an interface
       tags:
-        - Interface
+        - Interfaces
       parameters:
         - $ref: '#/components/parameters/NetworkIn'
         - $ref: '#/components/parameters/InterfaceIn'
@@ -185,7 +185,7 @@ paths:
       summary: Modify data of an interface
       description: Modify data of an interface
       tags:
-        - Interface
+        - Interfaces
       parameters:
         - $ref: '#/components/parameters/NetworkIn'
         - $ref: '#/components/parameters/InterfaceIn'
@@ -205,7 +205,7 @@ paths:
       summary: Delete an interface
       description: Delete an interface
       tags:
-        - Interface
+        - Interfaces
       parameters:
         - $ref: '#/components/parameters/NetworkIn'
         - $ref: '#/components/parameters/InterfaceIn'
@@ -220,12 +220,92 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
 
+  /samples:
+    post:
+      summary: Add samples to an interface
+      description: Add samples to an interface
+      tags:
+        - Samples
+      requestBody:
+        description: JSON for upload the info
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sample'
+      responses:
+        '200':
+          description: Succesfully upload sample data
+          content:
+            application/json:
+              schema:
+                type: string
+
+        '400':
+          $ref: '#/components/responses/400Error'
+
+    delete:
+      summary: Delete samples of an interface
+      description: Delete samples of an interfface
+      tags:
+        - Samples
+      requestBody:
+        description: JSON for delete samples
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sample'
+      responses:
+        '200':
+          description: Succesfully upload sample data
+          content:
+            application/json:
+              schema:
+                type: string
+
+        '400':
+          $ref: '#/components/responses/400Error'
+
+  /samples/import:
+    post:
+      summary: Import samples of Network provider
+      description: Import samples of PLACEHOLDER
+      tags:
+        - Samples
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                id_net:
+                  type: string
+                id_if:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+
+      responses:
+        '201':
+          description: Enqueued import
+          content:
+            application/json:
+              schema:
+                type: string
+
+        '400':
+          $ref: '#/components/responses/400Error'
+
+  
   /query/{id_net}:
     get:
       summary: Query to return link count samples
       description: Query to return link count samples
       tags:
-        - Query link count
+        - Query samples link count
       parameters:
         - $ref: '#/components/parameters/NetworkIn'
       requestBody:
@@ -251,7 +331,7 @@ paths:
       summary: Run monitor forecast
       description: Run monitor forecast using Server-Side Event (SSE) procedure
       tags:
-        - Forecast
+        - Forecasts
       requestBody:
         required: true
         content:
@@ -264,38 +344,7 @@ paths:
           content:
             application/json:
               schema:
-                type: string
-
-        '400':
-          $ref: '#/components/responses/400Error'
-
-
-  /import/{id_net}/PLACEHOLDER:
-    post:
-      summary: Import samples of PLACEHOLDER
-      description: Import samples of PLACEHOLDER
-      tags:
-        - Import link count samples
-      parameters:
-        - $ref: "#/components/parameters/NetworkIn"
-      # TODO
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
-
-      responses:
-        '201':
-          description: Enqueued import
-          content:
-            application/json:
-              schema:
+                # TODO
                 type: string
 
         '400':
@@ -347,12 +396,11 @@ components:
           type: string
           description: Short description of interface
 
-    Forecast:
+    Sample:
       type: object
-      maxItems: 4
+      maxItems: 10
       required:
-        - id_net
-        - id_if
+        - ""
       properties:
         id_net:
           type: string
@@ -360,23 +408,15 @@ components:
         id_if:
           type: string
           description: Interface identifier
-        timestamp:
-          type: string
-          description: Start time of forecast 
-        options:
+        samples:
           type: object
-          maxItems: 5
           properties:
-            holidays:
+            timestamp:
+              type: integer
+            mode:
               type: string
-            seasonality:
-              type: string
-            seasonality_mode:
-              type: string
-            interval_width:
-              type: string
-            changepoint_prior_scale:
-              type: string
+            link_count:
+              type: number
 
     Query:
       type: object
@@ -419,6 +459,45 @@ components:
         limit: 5000
         opt:
           percentil: 0.95
+
+    Forecast:
+      type: object
+      maxItems: 4
+      required:
+        - id_net
+        - id_if
+      properties:
+        id_net:
+          type: string
+          description: Network identifier
+        id_if:
+          type: string
+          description: Interface identifier
+        key:
+          type: string
+          title: Select over 'tx' or 'rx'
+        startTs:
+          type: integer
+          description: Epoch timestamp start (ms)
+        endTs:
+          type: integer
+          description: Epoch timestamp end (ms)
+        options:
+          type: object
+          maxItems: 1
+          properties:
+            confidence_interval:
+              type: string
+            holidays:
+              type: string
+            seasonality:
+              type: string
+            seasonality_mode:
+              type: string
+            interval_width:
+              type: string
+            changepoint_prior_scale:
+              type: string
 
     Error:
       type: object
