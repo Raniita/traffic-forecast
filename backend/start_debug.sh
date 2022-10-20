@@ -1,4 +1,4 @@
-source backend/env/bin/activate
+source ./env/bin/activate
 
 export FASTAPI_CONFIG=development
 

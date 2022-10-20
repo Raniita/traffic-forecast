@@ -1,6 +1,7 @@
 data/
 env/
 .~lock.*
+.vscode/
 
 ### PYTHON
 # Byte-compiled / optimized / DLL files
