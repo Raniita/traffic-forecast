@@ -6,10 +6,27 @@ services:
     ports:
       - 5000:5000
     environment:
-      - SECRET_KEY=asd
+      - POSTGRES_USER=monitor
+      - POSTGRES_PASSWORD=forecast2022
+      - POSTGRES_DB=traffic-forecast
+      - SECRET_KEY=upct2022_sk
+      - FASTAPI_CONFIG=development
     volumes:
       - ./backend:/app
     command: uvicorn src.main:app --reload --host 0.0.0.0 --port 5000
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=monitor
+      - POSTGRES_PASSWORD=forecast2022
+      - POSTGRES_DB=traffic-forecast
+    volumes:
+      - ./data/db:/var/lib/postgressql/data
 
   influxdb:
     image: influxdb:latest
