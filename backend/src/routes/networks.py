@@ -41,12 +41,12 @@ async def create_network(net: NetworkInSchema) -> NetworkOutSchema:
     return await crud.create_network(net)
 
 
-@router.get('/networks/{net_id}', 
+@router.get('/networks/{network_id}', 
             response_model=NetworkOutSchema,
             tags=["Networks"])
-async def get_network(net_id: int) -> NetworkOutSchema:
+async def get_network(network_id: int) -> NetworkOutSchema:
     try:
-        return await crud.get_network(net_id)
+        return await crud.get_network(network_id)
     except DoesNotExist:
         raise HTTPException(
             status_code=404,
@@ -54,18 +54,18 @@ async def get_network(net_id: int) -> NetworkOutSchema:
         )
 
 
-@router.patch("/networks/{net_id}",
+@router.patch("/networks/{network_id}",
               response_model=NetworkOutSchema,
               responses={404: {"model": HTTPNotFoundError}},
               tags=["Networks"])
-async def update_network(net_id: int,
+async def update_network(network_id: int,
                         net: NetworkInSchema) -> NetworkOutSchema:
-    return await crud.update_network(net_id=net_id, net=net)
+    return await crud.update_network(net_id=network_id, net=net)
 
 
-@router.delete("/networks/{net_id}",
+@router.delete("/networks/{network_id}",
                response_model=Status,
                responses={404: {"model": HTTPNotFoundError}},
                tags=["Networks"])
-async def delete_network(net_id: int):
-    return await crud.delete_network(net_id=net_id)
+async def delete_network(network_id: int):
+    return await crud.delete_network(net_id=network_id)

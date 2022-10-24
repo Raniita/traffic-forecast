@@ -13,38 +13,38 @@ from src.schemas.messages import Status
 router = APIRouter()
 
 
-@router.get("/networks/{net_id}/interfaces",
+@router.get("/networks/{network_id}/interfaces",
             response_model=List[InterfaceOutSchema],
             tags=["Interfaces"])
-async def get_interfaces(net_id: int):
-    return await crud.get_interfaces(net_id=net_id)
+async def get_interfaces(network_id: int):
+    return await crud.get_interfaces(net_id=network_id)
 
 
-@router.post("/networks/{net_id}/interfaces",
+@router.post("/networks/{network_id}/interfaces",
              response_model=InterfaceOutSchema,
              tags=["Interfaces"])
-async def create_interface(inter: InterfaceInSchema, net_id: int) -> InterfaceOutSchema:
-    return await crud.create_interface(interface=inter, net_id=net_id)
+async def create_interface(inter: InterfaceInSchema, network_id: int) -> InterfaceOutSchema:
+    return await crud.create_interface(interface=inter, net_id=network_id)
 
 
-@router.get("/networks/{net_id}/interfaces/{inter_id}",
+@router.get("/networks/{network_id}/interfaces/{interface_id}",
             response_model=InterfaceOutSchema,
             tags=["Interfaces"])
-async def get_interface(net_id: int, inter_id: int):
-    return await crud.get_interface(if_id=inter_id, net_id=net_id)
+async def get_interface(network_id: int, interface_id: int):
+    return await crud.get_interface(if_id=interface_id, net_id=network_id)
 
 
-@router.patch("/networks/{net_id}/interfaces/{inter_id}",
+@router.patch("/networks/{network_id}/interfaces/{interface_id}",
              response_model=InterfaceOutSchema,
              responses={404: {"model": HTTPNotFoundError}},
              tags=["Interfaces"])
-async def update_interface(net_id: int, inter_id: int, inter: InterfaceInSchema):
-    return await crud.update_interface(net_id=net_id, if_id=inter_id, interface=inter)
+async def update_interface(network_id: int, interface_id: int, interface: InterfaceInSchema):
+    return await crud.update_interface(net_id=network_id, if_id=interface_id, interface=interface)
 
 
-@router.delete("/networks/{net_id}/interfaces/{inter_id}",
+@router.delete("/networks/{network_id}/interfaces/{interface_id}",
               response_model=Status,
               responses={404: {"model": HTTPNotFoundError}},
               tags=["Interfaces"])
-async def delete_interface(net_id: int, inter_id: int):
-    return await crud.delete_interface(if_id=inter_id, net_id=net_id)
+async def delete_interface(network_id: int, interface_id: int):
+    return await crud.delete_interface(if_id=interface_id, net_id=network_id)
