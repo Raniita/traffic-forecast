@@ -4,20 +4,20 @@ from tortoise import BaseDBAsyncClient
 async def upgrade(db: BaseDBAsyncClient) -> str:
     return """
         CREATE TABLE IF NOT EXISTS "networks" (
-    "id_net" SERIAL NOT NULL PRIMARY KEY,
+    "id" BIGSERIAL NOT NULL PRIMARY KEY,
+    "id_network" BIGINT NOT NULL UNIQUE,
     "name" VARCHAR(100),
     "description" VARCHAR(100),
-    "ip_net" VARCHAR(20) NOT NULL,
+    "ip_network" VARCHAR(20) NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL  DEFAULT CURRENT_TIMESTAMP,
     "modified_at" TIMESTAMPTZ NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE IF NOT EXISTS "interfaces" (
-    "id_if" SERIAL NOT NULL PRIMARY KEY,
+    "id" BIGSERIAL NOT NULL PRIMARY KEY,
+    "id_interface" BIGINT NOT NULL UNIQUE,
     "name" VARCHAR(100),
     "description" VARCHAR(100),
-    "created_at" TIMESTAMPTZ NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-    "modified_at" TIMESTAMPTZ NOT NULL  DEFAULT CURRENT_TIMESTAMP,
-    "net_id" INT NOT NULL REFERENCES "networks" ("id_net") ON DELETE CASCADE
+    "network_id" BIGINT NOT NULL REFERENCES "networks" ("id") ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS "aerich" (
     "id" SERIAL NOT NULL PRIMARY KEY,

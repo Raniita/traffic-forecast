@@ -7,9 +7,9 @@ NetworkInSchema = pydantic_model_creator(
 )
 
 NetworkOutSchema = pydantic_model_creator(
-    Networks, name="NetworkOut", exclude=("created_at", "modified_at")  
+    Networks, name="NetworkOut", exclude=("id", "created_at", "modified_at")  
 )
 
 NetworkDatabaseSchema = pydantic_model_creator(
-    Networks, name="NetworkOut", exclude=("created_at", "modified_at")  
+    Networks, name="NetworkDatabase", exclude=("created_at", "modified_at")  
 )

@@ -27,7 +27,7 @@ services:
       - POSTGRES_PASSWORD=forecast2022
       - POSTGRES_DB=traffic-forecast
     volumes:
-      - ./data/db:/var/lib/postgressql/data
+      - ./data/postgres_db:/var/lib/postgressql/data
 
   adminer:
     image: adminer

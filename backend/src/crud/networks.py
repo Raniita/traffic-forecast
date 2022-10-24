@@ -8,7 +8,7 @@ async def get_networks():
     return await NetworkOutSchema.from_queryset(Networks.all())
 
 async def get_network(net_id) -> NetworkOutSchema:
-    return await NetworkOutSchema.from_queryset_single(Networks.get(id_net=net_id))
+    return await NetworkOutSchema.from_queryset_single(Networks.get(id_network=net_id))
 
 async def create_network(net) -> NetworkOutSchema:
     # net is a dict with network info given by user
@@ -22,7 +22,7 @@ async def create_network(net) -> NetworkOutSchema:
 async def delete_network(net_id):
     # net_id is a integer for delete that network
     try:
-        db_net = await NetworkOutSchema.from_queryset_single(Networks.get(id_net=net_id))
+        db_net = await NetworkOutSchema.from_queryset_single(Networks.get(id_network=net_id))
     except DoesNotExist:
         raise HTTPException(status_code=401, detail=f"Network not found.")
 
@@ -33,9 +33,9 @@ async def delete_network(net_id):
 
 async def update_network(net_id, net) -> NetworkOutSchema:
     try:
-        db_net = await NetworkOutSchema.from_queryset_single(Networks.get(id_net=net_id))
+        db_net = await NetworkOutSchema.from_queryset_single(Networks.get(id_network=net_id))
     except DoesNotExist:
         raise HTTPException(status_code=404, detail=f"Network {net_id} not found")
 
     await Networks.filter(id_net=net_id).update(**net.dict(exclude_unset=True))
-    return await NetworkOutSchema.from_queryset_single(Networks.get(id_net=net_id))
+    return await NetworkOutSchema.from_queryset_single(Networks.get(id_network=net_id))

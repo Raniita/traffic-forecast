@@ -18,7 +18,7 @@ def create_app() -> FastAPI:
         openapi_tags=settings.TAG_METADATA,
         title=settings.TITLE,
         description=settings.DESCRIPTION,
-        version=settings.VERSION
+        version=settings.VERSION,
     )
 
     # Enable CORS
