@@ -18,13 +18,25 @@ router = APIRouter()
             response_model=List[NetworkOutSchema],
             tags=["Networks"])
 async def get_networks():
+    """
+    Create an item with all the information:
+
+    - **name**: each item must have a name
+    - **description**: a long description
+    - **price**: required
+    - **tax**: if the item doesn't have tax, you can omit this
+    - **tags**: a set of unique tag strings for this item
+    \f
+
+    :param item: User input.
+    """
+
     return await crud.get_networks()
 
 
 @router.post("/networks",
             response_model=NetworkOutSchema,
-            tags=["Networks"]
-            )
+            tags=["Networks"])
 async def create_network(net: NetworkInSchema) -> NetworkOutSchema:
     return await crud.create_network(net)
 

@@ -17,6 +17,9 @@ class BaseConfig:
     FILE_LOG: str = os.environ.get('FILE_LOG', 'false')
 
     # OpenAPI definitions
+    TITLE = "Traffic Forecast"
+    DESCRIPTION = "Microservice app that enables the possibility to create a network, add monitored interfaces and add traffic to an especified interface. With the monitored interfaces info, we can perform a forecast."
+    VERSION = "0.2.2"
     TAG_METADATA = [
         {
             "name": "Networks",
@@ -39,10 +42,7 @@ class BaseConfig:
             "description": "Operations for execute forecast of an interface monitored traffic."
         }
     ]
-
-    TITLE = "Traffic Forecast"
-    DESCRIPTION = "Microservice app that enables the possibility to create a network, add monitored interfaces and add traffic to an especified interface. With the monitored interfaces info, we can perform a forecast."
-    VERSION = "0.2.1"
+    
 
 class DevelopmentConfig(BaseConfig):
     pass

@@ -10,7 +10,7 @@ from src.config import settings
 
 logger = logging.getLogger(__name__)
 
-def create_app()->FastAPI:
+def create_app() -> FastAPI:
     # enable schemas
     Tortoise.init_models(["src.database.models"], "models")
     
@@ -43,13 +43,15 @@ def create_app()->FastAPI:
     register_tortoise(app, config=TORTOISE_ORM, generate_schemas=False)
 
     # Setting up routes
-    from src.routes import networks
+    from src.routes import networks, interfaces
 
     app.include_router(networks.router)
+    app.include_router(interfaces.router)
 
-    @app.get("/")
+    # Default endpoint
+    @app.get("/", include_in_schema=False)
     async def home():
-        return "Hello, World!"
+        return f"Welcome to {settings.TITLE} API! Go to '/docs' or '/redoc' to view the API definition."
 
     return app
 
