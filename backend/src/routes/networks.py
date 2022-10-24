@@ -7,7 +7,7 @@ from tortoise.contrib.fastapi import HTTPNotFoundError
 from tortoise.exceptions import DoesNotExist
 
 import src.crud.networks as crud
-from src.schemas.networks import NetworkInSchema, NetworkOutSchema
+from src.schemas.networks import NetworkInSchema, NetworkOutSchema, UpdateNetwork
 from src.schemas.messages import Status
 
 
@@ -59,7 +59,7 @@ async def get_network(network_id: int) -> NetworkOutSchema:
               responses={404: {"model": HTTPNotFoundError}},
               tags=["Networks"])
 async def update_network(network_id: int,
-                        net: NetworkInSchema) -> NetworkOutSchema:
+                        net: UpdateNetwork) -> NetworkOutSchema:
     return await crud.update_network(net_id=network_id, net=net)
 
 

@@ -3,6 +3,7 @@ from tortoise.exceptions import DoesNotExist, IntegrityError
 
 from src.database.models import Networks
 from src.schemas.networks import NetworkOutSchema
+from src.schemas.messages import Status
 
 async def get_networks():
     return await NetworkOutSchema.from_queryset(Networks.all())
@@ -26,16 +27,16 @@ async def delete_network(net_id):
     except DoesNotExist:
         raise HTTPException(status_code=401, detail=f"Network not found.")
 
-    deleted_net = await Networks.filter(id_net=net_id).delete()
+    deleted_net = await Networks.filter(id_network=net_id).delete()
     if not deleted_net:
         raise HTTPException(status_code=404, detail=f"Network {net_id} not found")
-    return f"Deleted network {net_id}"
-
+    return Status(message=f"Deleted network {net_id}") 
+    
 async def update_network(net_id, net) -> NetworkOutSchema:
     try:
         db_net = await NetworkOutSchema.from_queryset_single(Networks.get(id_network=net_id))
     except DoesNotExist:
         raise HTTPException(status_code=404, detail=f"Network {net_id} not found")
 
-    await Networks.filter(id_net=net_id).update(**net.dict(exclude_unset=True))
+    await Networks.filter(id_network=net_id).update(**net.dict(exclude_unset=True))
     return await NetworkOutSchema.from_queryset_single(Networks.get(id_network=net_id))

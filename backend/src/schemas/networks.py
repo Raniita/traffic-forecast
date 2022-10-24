@@ -1,3 +1,6 @@
+from typing import Optional
+
+from pydantic import BaseModel
 from tortoise.contrib.pydantic import pydantic_model_creator
 
 from src.database.models import Networks
@@ -13,3 +16,8 @@ NetworkOutSchema = pydantic_model_creator(
 NetworkDatabaseSchema = pydantic_model_creator(
     Networks, name="NetworkDatabase", exclude=("created_at", "modified_at")  
 )
+
+class UpdateNetwork(BaseModel):
+    name: Optional[str]
+    description: Optional[str]
+    ip_network: Optional[str]
