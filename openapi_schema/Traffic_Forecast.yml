@@ -2,7 +2,7 @@ openapi: "3.0.3"
 info:
   title: "Traffic Forecast"
   description: "Microservice app that enables the possibility to create a network, add monitored interfaces and add traffic to an especified interface. With the monitored interfaces info, we can perform a forecast."
-  version: "0.2.1"
+  version: "0.2.2"
 servers:
  - url: "https://localhost:5000/"
 security:
@@ -74,7 +74,7 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
 
-    put:
+    patch:
       summary: Modify data of a network
       description: Modify content of a network
       tags:
@@ -181,7 +181,7 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
 
-    put:
+    patch:
       summary: Modify data of an interface
       description: Modify data of an interface
       tags:
