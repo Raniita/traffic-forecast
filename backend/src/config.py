@@ -16,6 +16,34 @@ class BaseConfig:
     # Boolean to enable logging to file
     FILE_LOG: str = os.environ.get('FILE_LOG', 'false')
 
+    # OpenAPI definitions
+    TAG_METADATA = [
+        {
+            "name": "Networks",
+            "description": "Operations with networks."
+        },
+        {
+            "name": "Interfaces",
+            "description": "Operations with interfaces."
+        },
+        {
+            "name": "Samples",
+            "description": "Operations with samples."
+        },
+        {
+            "name": "Query samples",
+            "description": "Operations for query monitored information."
+        },
+        {
+            "name": "Forecast",
+            "description": "Operations for execute forecast of an interface monitored traffic."
+        }
+    ]
+
+    TITLE = "Traffic Forecast"
+    DESCRIPTION = "Microservice app that enables the possibility to create a network, add monitored interfaces and add traffic to an especified interface. With the monitored interfaces info, we can perform a forecast."
+    VERSION = "0.2.1"
+
 class DevelopmentConfig(BaseConfig):
     pass
 

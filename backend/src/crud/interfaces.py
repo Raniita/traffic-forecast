@@ -31,11 +31,20 @@ async def delete_interface(if_id, net_id):
     except DoesNotExist:
         raise HTTPException(status_code=401, detail=f"Network ID {net_id} doesnt exists.")
 
+    try:
+        db_if = await InterfaceOutSchema.from_queryset_single(Interfaces.get(id_if=if_id))
+    except DoesNotExist:
+        raise HTTPException(status_code=401, detail=f"Interface ID {if_id} doesnt exists.")
+
     deleted_interface = await Interfaces.filter(if_id).delete()
     if not deleted_interface:
         raise HTTPException(status_code=404, detail=f"Interface ID {if_id} not found.")
     return f"Deleted interface {if_id}"
 
 async def update_interface(if_id, interface) -> InterfaceOutSchema:
-    # TODO
-    return InterfaceOutSchema.from_queryset_single(Interfaces.get(id_if=if_id))
+    try:
+        db_if = await InterfaceOutSchema.from_queryset_single(Interfaces.get(id_if=if_id))
+    except DoesNotExist:
+        raise HTTPException(status_code=404, detail=f"Interface {if_id} not found.")
+    await Interfaces.filter(id_if=if_id).update(**interface.dict(exclude_unset=True))
+    return await InterfaceOutSchema.from_queryset_single(Interfaces.get(id_if=if_id))

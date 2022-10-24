@@ -6,6 +6,7 @@ import logging
 
 from src.database.register import register_tortoise
 from src.database.config import TORTOISE_ORM
+from src.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +14,12 @@ def create_app()->FastAPI:
     # enable schemas
     Tortoise.init_models(["src.database.models"], "models")
     
-    app = FastAPI()
+    app = FastAPI(
+        openapi_tags=settings.TAG_METADATA,
+        title=settings.TITLE,
+        description=settings.DESCRIPTION,
+        version=settings.VERSION
+    )
 
     # Enable CORS
     app.add_middleware(
@@ -35,6 +41,11 @@ def create_app()->FastAPI:
 
     # Setting up database & models
     register_tortoise(app, config=TORTOISE_ORM, generate_schemas=False)
+
+    # Setting up routes
+    from src.routes import networks
+
+    app.include_router(networks.router)
 
     @app.get("/")
     async def home():
