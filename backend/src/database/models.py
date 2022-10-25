@@ -27,4 +27,4 @@ class Interfaces(models.Model):
     #modified_at = fields.DatetimeField(auto_now=True)
 
     def __str__(self):
-        return f"<ID {self.id_interface}> Interface: {self.name} on network ID {self.network}"
+        return f"<ID {self.id_interface}> Interface: {self.name} on network"

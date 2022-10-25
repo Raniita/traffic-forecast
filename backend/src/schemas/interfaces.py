@@ -1,9 +1,12 @@
+from typing import Optional
+
+from pydantic import BaseModel
 from tortoise.contrib.pydantic import pydantic_model_creator
 
 from src.database.models import Interfaces
 
 InterfaceInSchema = pydantic_model_creator(
-    Interfaces, name="InterfaceIn", exclude=("id_network", ""), exclude_readonly=True
+    Interfaces, name="InterfaceIn", exclude=("id", "network_id"), exclude_readonly=True
 )
 
 InterfaceOutSchema = pydantic_model_creator(
@@ -11,5 +14,9 @@ InterfaceOutSchema = pydantic_model_creator(
 )
 
 InterfaceDatabaseSchema = pydantic_model_creator(
-    Interfaces, name="InterfaceDatabase", exclude=("created_at", "modified_at")
+    Interfaces, name="InterfaceDatabase",
 )
+
+class UpdateInterface(BaseModel):
+    name: Optional[str]
+    description: Optional[str]

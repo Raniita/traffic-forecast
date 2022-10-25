@@ -14,7 +14,7 @@ NetworkOutSchema = pydantic_model_creator(
 )
 
 NetworkDatabaseSchema = pydantic_model_creator(
-    Networks, name="NetworkDatabase", exclude=("created_at", "modified_at")  
+    Networks, name="NetworkDatabase"  
 )
 
 class UpdateNetwork(BaseModel):

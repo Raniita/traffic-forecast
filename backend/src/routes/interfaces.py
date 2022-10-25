@@ -6,7 +6,7 @@ from tortoise.contrib.fastapi import HTTPNotFoundError
 from tortoise.exceptions import DoesNotExist
 
 import src.crud.interfaces as crud
-from src.schemas.interfaces import InterfaceInSchema, InterfaceOutSchema
+from src.schemas.interfaces import InterfaceInSchema, InterfaceOutSchema, UpdateInterface
 from src.schemas.messages import Status
 
 
@@ -38,7 +38,7 @@ async def get_interface(network_id: int, interface_id: int):
              response_model=InterfaceOutSchema,
              responses={404: {"model": HTTPNotFoundError}},
              tags=["Interfaces"])
-async def update_interface(network_id: int, interface_id: int, interface: InterfaceInSchema):
+async def update_interface(network_id: int, interface_id: int, interface: UpdateInterface):
     return await crud.update_interface(net_id=network_id, if_id=interface_id, interface=interface)
 
 
