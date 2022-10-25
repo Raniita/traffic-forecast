@@ -14,7 +14,9 @@ async def get_network(net_id) -> NetworkOutSchema:
 async def create_network(net) -> NetworkOutSchema:
     # net is a dict with network info given by user
     try:
-        net_obj = await Networks.create(**net.dict(exclude_unset=True))
+        # TODO: Create influx_net
+        influx_net = (net.name + '-' + str(net.id_network)).strip()
+        net_obj = await Networks.create(**net.dict(exclude_unset=True), influx_net=influx_net)
     except IntegrityError:
         raise HTTPException(status_code=401, detail=f"That network ID already exists.")
 

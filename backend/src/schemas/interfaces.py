@@ -7,15 +7,20 @@ from src.database.models import Interfaces
 
 InterfaceInSchema = pydantic_model_creator(
     Interfaces, name="InterfaceIn", exclude=("id", 
-                                             "network_id"), 
+                                             "network_id",
+                                             "influx_rx",
+                                             "influx_tx"), 
                                              exclude_readonly=True
 )
 
 InterfaceOutSchema = pydantic_model_creator(
     Interfaces, name="InterfaceOut", exclude=("id", 
                                               "created_at", 
-                                              "modified_at", 
+                                              "modified_at",
+                                              "influx_rx",
+                                              "influx_tx", 
                                               "network.id",
+                                              "network.influx_net",
                                               "network.created_at",
                                               "network.modified_at")
 )

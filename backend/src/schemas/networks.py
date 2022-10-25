@@ -6,14 +6,20 @@ from tortoise.contrib.pydantic import pydantic_model_creator
 from src.database.models import Networks
 
 NetworkInSchema = pydantic_model_creator(
-    Networks, name="NetworkIn", exclude_readonly=True
+    Networks, name="NetworkIn", exclude=("id",
+                                         "interfaces",
+                                         "influx_net"),
+                                         exclude_readonly=True
 )
 
 NetworkOutSchema = pydantic_model_creator(
-    Networks, name="NetworkOut", exclude=("id", 
+    Networks, name="NetworkOut", exclude=("id",
+                                          "influx_net",
                                           "created_at", 
                                           "modified_at", 
                                           "interfaces.id",
+                                          "interfaces.influx_rx",
+                                          "interfaces.influx_tx",
                                           "interfaces.created_at",
                                           "interfaces.modified_at")  
 )
