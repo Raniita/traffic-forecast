@@ -1,14 +1,13 @@
 from typing import List
 
-from fastapi import APIRouter, HTTPException
-from fastapi.encoders import jsonable_encoder
+from fastapi import APIRouter, HTTPException, Path
 
 from tortoise.contrib.fastapi import HTTPNotFoundError
 from tortoise.exceptions import DoesNotExist
 
 import src.crud.networks as crud
 from src.schemas.networks import NetworkInSchema, NetworkOutSchema, UpdateNetwork
-from src.schemas.messages import Status
+from src.schemas.messages import Status, HTTPUnauthorizedError
 
 
 router = APIRouter()
@@ -19,16 +18,14 @@ router = APIRouter()
             tags=["Networks"])
 async def get_networks():
     """
-    Create an item with all the information:
+    Return an item with all the networks:
 
-    - **name**: each item must have a name
-    - **description**: a long description
-    - **price**: required
-    - **tax**: if the item doesn't have tax, you can omit this
-    - **tags**: a set of unique tag strings for this item
+    - **id_network**: Number for identificate a network
+    - **name**: Name given to a network
+    - **description**: Short description for the network
+    - **ip_network**: IP of most important network monitored
+    - **interfaces**: Returns alls interfaces associated with the network
     \f
-
-    :param item: User input.
     """
 
     return await crud.get_networks()
@@ -36,15 +33,42 @@ async def get_networks():
 
 @router.post("/networks",
             response_model=NetworkOutSchema,
+            responses={401: {"model": HTTPUnauthorizedError}},
             tags=["Networks"])
 async def create_network(net: NetworkInSchema) -> NetworkOutSchema:
+    """
+    Create a network with all the informations:
+
+    - **id_network**: Number for identificate a network
+    - **name**: Name given to a network
+    - **description**: Short description for the network
+    - **ip_network**: IP of most important network monitored
+    \f
+
+    :param net: Network Schema for DataIn (id_net, name, description & ip_net)
+    """
+
     return await crud.create_network(net)
 
 
 @router.get('/networks/{network_id}', 
             response_model=NetworkOutSchema,
+            responses={404: {"model": HTTPNotFoundError}},
             tags=["Networks"])
-async def get_network(network_id: int) -> NetworkOutSchema:
+async def get_network(network_id: int = Path(None, description="ID of a monitored network")) -> NetworkOutSchema:
+    """
+    Return an item with the specified network:
+
+    - **id_network**: Number for identificate a network
+    - **name**: Name given to a network
+    - **description**: Short description for the network
+    - **ip_network**: IP of most important network monitored
+    - **interfaces**: Returns alls interfaces associated with the network
+    \f
+
+    :param network_id: identifier for network
+    """
+
     try:
         return await crud.get_network(network_id)
     except DoesNotExist:
@@ -58,8 +82,21 @@ async def get_network(network_id: int) -> NetworkOutSchema:
               response_model=NetworkOutSchema,
               responses={404: {"model": HTTPNotFoundError}},
               tags=["Networks"])
-async def update_network(network_id: int,
-                        net: UpdateNetwork) -> NetworkOutSchema:
+async def update_network(net: UpdateNetwork,
+                         network_id: int = Path(None, description="ID of a monitored network"),
+                         ) -> NetworkOutSchema:
+    """
+    Update a network with information:
+
+    - **name**: Name given to a network
+    - **description**: Short description for the network
+    - **ip_network**: IP of most important network monitored
+    \f
+
+    :param net: Item with updated info of the network
+    :param network_id: identifier for network 
+    """
+
     return await crud.update_network(net_id=network_id, net=net)
 
 
@@ -67,5 +104,12 @@ async def update_network(network_id: int,
                response_model=Status,
                responses={404: {"model": HTTPNotFoundError}},
                tags=["Networks"])
-async def delete_network(network_id: int):
+async def delete_network(network_id: int = Path(None, description="ID of a monitored network")):
+    """
+    Delete network given the id.
+    \f
+
+    :param network_id: identifier for network 
+    """
+
     return await crud.delete_network(net_id=network_id)

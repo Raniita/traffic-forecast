@@ -18,8 +18,16 @@ class BaseConfig:
 
     # OpenAPI definitions
     TITLE = "Traffic Forecast"
-    DESCRIPTION = "Microservice app that enables the possibility to create a network, add monitored interfaces and add traffic to an especified interface. With the monitored interfaces info, we can perform a forecast."
     VERSION = "0.2.2"
+    DESCRIPTION = """ 
+This is a microservice app for **monitor**, **store** samples and generate **forecast** of a **network traffic**. Features: 
+
+* Add monited network, monitored interfaces, and samples. 
+* Execute a traffic forecast with the objetive of predcit the traffic over the time. 
+* Query the storaged samples and apply some filtering. 
+    
+"""
+
     TAG_METADATA = [
         {
             "name": "Networks",
