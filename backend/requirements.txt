@@ -3,3 +3,4 @@ asyncpg
 fastapi
 tortoise-orm
 uvicorn
+influxdb_client

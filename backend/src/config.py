@@ -13,6 +13,12 @@ class BaseConfig:
 
     DATABASE_URL: str = f"postgres://{POSTGRES_USER}:{POSTGRES_PASSWORD}@db:5432/{POSTGRES_DB}"
 
+    # Database config {InfluxDB}
+    INFLUX_URL: str = os.environ.get('INFLUX_URL', "http://influxdb:8086")
+    INFLUX_TOKEN: str | None = os.environ.get('INFLUX_TOKEN', None)
+    INFLUX_ORG: str = os.environ.get('INFLUX_ORG', "e-lighthouse")
+    INFLUX_BUCKET: str = os.environ.get('INFLUX_BUCKET', "traffic_forecast")
+
     # Boolean to enable logging to file
     FILE_LOG: str = os.environ.get('FILE_LOG', 'false')
 
