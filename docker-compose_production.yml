@@ -59,7 +59,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.tf-influx.entryPoints=web-secure
-      - traefik.http.routers.tf-influx.rule=Host(`tfm-api.ranii.pro`) && Path(`/influx`)
+      - traefik.http.routers.tf-influx.rule=Host(`tfm-influx.ranii.pro`)
       - traefik.http.routers.tf-influx.tls.certresolver=default
       - traefik.http.services.tf-influx.loadbalancer.server.port=8086
 #    environment:
