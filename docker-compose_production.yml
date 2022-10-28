@@ -14,7 +14,7 @@ services:
     volumes:
       - ./backend:/app
     labels:
-      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.enable=false"
       - traefik.enable=true
       - traefik.http.routers.tf-api.entryPoints=web-secure
       - traefik.http.routers.tf-api.rule=Host(`tfm-api.ranii.pro`)
@@ -27,9 +27,12 @@ services:
 
   db:
     image: postgres:13
+    container_name: tf-postgres
+    restart: unless-stopped
 #    expose:
 #      - 5432
     environment:
+      - "com.centurylinklabs.watchtower.enable=false"
       - POSTGRES_USER=monitor
       - POSTGRES_PASSWORD=forecast2022
       - POSTGRES_DB=traffic-forecast
@@ -49,13 +52,21 @@ services:
 
   influxdb:
     image: influxdb:latest
+    container_name: tf-influx
+    restart: unless-stopped
     volumes:
       - ./data/influxdb/data:/var/lib/influxdb2:rw
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.tf-influx.entryPoints=web-secure
+      - traefik.http.routers.tf-influx.rule=Host(`tfm-api.ranii.pro`) && Path(`/influx`)
+      - traefik.http.routers.tf-influx.tls.certresolver=default
+      - traefik.http.services.tf-influx.loadbalancer.server.port=8086
 #    environment:
 #      - DOCKER_INFLUXDB_INIT_MODE=setup
 #      - DOCKER_INFLUXDB_INIT_USERNAME=admin
 #      - DOCKER_INFLUXDB_INIT_PASSWORD=12345678
 #      - DOCKER_INFLUXDB_INIT_ORG=e-lighthouse
 #      - DOCKER_INFLUXDB_INIT_BUCKET=test-bucket
-    ports:
-      - 8086:8086
+#    ports:
+#      - 8086:8086
