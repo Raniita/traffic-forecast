@@ -26,6 +26,12 @@ async def get_interfaces(network_id: int = Path(None, description="ID of a monit
     - **name**: Name given to a network
     - **description**: Short description for the network
     - **network**: Object with all the information of the network
+    
+    Paginated endpoint, use query strings for:
+    - **page**: Set the return page with the **size** specified
+    - **size**: Set the max items returned in a **page**
+    - **items**: List of returned info
+    - **total**: Total of items to paginate
     \f
 
     :param network_id: identifier for network

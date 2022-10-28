@@ -26,6 +26,12 @@ async def get_networks():
     - **description**: Short description for the network
     - **ip_network**: IP of most important network monitored
     - **interfaces**: Returns alls interfaces associated with the network
+    
+    Paginated endpoint, use query strings for:
+    - **page**: Set the return page with the **size** specified
+    - **size**: Set the max items returned in a **page**
+    - **items**: List of returned info
+    - **total**: Total of items to paginate
     \f
     """
     
