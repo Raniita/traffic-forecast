@@ -4,6 +4,7 @@ from functools import lru_cache
 class BaseConfig:
     BASE_DIR: pathlib.Path = pathlib.Path(__file__).parent.parent
 
+    DEBUG: bool = False
     SECRET_KEY: str = os.environ.get('SECRET_KEY', 'traffic-forecast')
 
     # Database config {Postgres13}
@@ -59,6 +60,8 @@ This is a microservice app for **monitor**, **store** samples and generate **for
     
 
 class DevelopmentConfig(BaseConfig):
+    DEBUG: bool  = True
+
     pass
 
 class ProductionConfig(BaseConfig):

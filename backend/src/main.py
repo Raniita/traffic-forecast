@@ -16,6 +16,7 @@ def create_app() -> FastAPI:
     Tortoise.init_models(["src.database.models"], "models")
     
     app = FastAPI(
+        debug=settings.DEBUG,
         openapi_tags=settings.TAG_METADATA,
         title=settings.TITLE,
         description=settings.DESCRIPTION,
