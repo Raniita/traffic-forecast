@@ -5,6 +5,10 @@ from tortoise.contrib.pydantic import pydantic_model_creator
 
 from src.database.models import Networks
 
+## TODO: revisar si necesario orm_mode
+class pydantic_config:
+    orm_mode = True
+
 NetworkInSchema = pydantic_model_creator(
     Networks, name="NetworkIn", exclude=("id",
                                          "interfaces",

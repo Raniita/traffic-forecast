@@ -1,6 +1,7 @@
 from typing import List
 
 from fastapi import APIRouter, HTTPException, Path
+from fastapi_pagination import Page, paginate
 
 from tortoise.contrib.fastapi import HTTPNotFoundError
 from tortoise.exceptions import DoesNotExist
@@ -14,7 +15,7 @@ router = APIRouter()
 
 
 @router.get('/networks', 
-            response_model=List[NetworkOutSchema],
+            response_model=Page[NetworkOutSchema],
             tags=["Networks"])
 async def get_networks():
     """
@@ -27,8 +28,9 @@ async def get_networks():
     - **interfaces**: Returns alls interfaces associated with the network
     \f
     """
-
-    return await crud.get_networks()
+    
+    result = await crud.get_networks()
+    return paginate(result)
 
 
 @router.post("/networks",

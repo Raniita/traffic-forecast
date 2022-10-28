@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_pagination import add_pagination
 from tortoise import Tortoise
 
 import logging
@@ -47,6 +48,9 @@ def create_app() -> FastAPI:
 
     app.include_router(networks.router)
     app.include_router(interfaces.router)
+
+    # Enable FastAPI-Pagination
+    add_pagination(app)
 
     # Default endpoint
     @app.get("/", include_in_schema=False)

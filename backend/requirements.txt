@@ -1,6 +1,7 @@
 aerich
 asyncpg
 fastapi
+fastapi-pagination
 tortoise-orm
 uvicorn
 influxdb_client
