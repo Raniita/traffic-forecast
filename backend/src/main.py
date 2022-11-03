@@ -7,6 +7,7 @@ import logging
 
 from src.database.register import register_tortoise
 from src.database.config import TORTOISE_ORM
+#from src.utils.influxdb import check_influxdb
 from src.config import settings
 
 logger = logging.getLogger(__name__)
@@ -35,7 +36,8 @@ def create_app() -> FastAPI:
     # Enable logging
     logger.setLevel(logging.INFO)
     ch = logging.StreamHandler()
-    formatter = logging.Formatter("%(asctime)s - %(module)s - %(funcName)s - %(levelname)s - %(message)s")
+    #formatter = logging.Formatter("%(asctime)s - %(module)s - %(funcName)s - %(levelname)s - %(message)s")
+    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     ch.setFormatter(formatter)
     logger.addHandler(ch)
 
@@ -44,11 +46,19 @@ def create_app() -> FastAPI:
     # Setting up database & models
     register_tortoise(app, config=TORTOISE_ORM, generate_schemas=False)
 
+    # Verify influxdb connection
+    from src.utils.influxdb import check_influxdb, check_query, check_write
+    logger.info(f"[InfluxDB] >> Bucket: {settings.INFLUX_BUCKET}, Org: {settings.INFLUX_ORG}")
+    check_influxdb()
+    #check_query()
+    #check_write()
+
     # Setting up routes
-    from src.routes import networks, interfaces
+    from src.routes import networks, interfaces, samples
 
     app.include_router(networks.router)
     app.include_router(interfaces.router)
+    app.include_router(samples.router)
 
     # Enable FastAPI-Pagination
     add_pagination(app)
