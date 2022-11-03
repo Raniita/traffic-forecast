@@ -9,7 +9,10 @@ services:
       - POSTGRES_USER=monitor
       - POSTGRES_PASSWORD=forecast2022
       - POSTGRES_DB=traffic-forecast
-      - INFLUX_TOKEN=WCkcYu0ajtEJokr0AaWMpGB2sQo6sTYE0mQAEaaJRJn25rC3rrAEMsneEbJYL-HTe77FFGaJNPsQTPdyzvMdMQ==
+      - INFLUX_URL=https://tfm-influx.ranii.pro:8443/
+      - INFLUX_TOKEN=r0y6FXSqs58hmOoIeMnUL6l1xEW6d55lRDzxkrFwssuxp8yDdW2ncnGHoDw_rKu6xn1BIfoOAq3MzSe1hcJvOw==
+      - INFLUX_ORG=e-lighthouse
+      - INFLUX_BUCKET=traffic-forecast
       - SECRET_KEY=upct2022_sk
       - FASTAPI_CONFIG=development
     volumes:
@@ -18,7 +21,7 @@ services:
     depends_on:
       - db
       - adminer
-      - influxdb
+#      - influxdb
 
   db:
     image: postgres:13
@@ -36,15 +39,15 @@ services:
     ports:
       - 8080:8080
 
-  influxdb:
-    image: influxdb:latest
-    volumes:
-      - ./data/influxdb/data:/var/lib/influxdb2:rw
+#  influxdb:
+#    image: influxdb:latest
+#    volumes:
+#      - ./data/influxdb/data:/var/lib/influxdb2:rw
 #    environment:
 #      - DOCKER_INFLUXDB_INIT_MODE=setup
 #      - DOCKER_INFLUXDB_INIT_USERNAME=admin
 #      - DOCKER_INFLUXDB_INIT_PASSWORD=12345678
 #      - DOCKER_INFLUXDB_INIT_ORG=e-lighthouse
 #      - DOCKER_INFLUXDB_INIT_BUCKET=test-bucket
-    ports:
-      - 8086:8086
+#    ports:
+#      - 8086:8086

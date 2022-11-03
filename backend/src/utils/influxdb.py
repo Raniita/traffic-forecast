@@ -5,32 +5,37 @@ from influxdb_client.rest import ApiException
 from influxdb_client.client.write_api import WriteApi, WriteOptions, SYNCHRONOUS
 from influxdb_client.client.delete_api import DeleteApi
 
-from src.schemas.samples import Point
+#from src.schemas.samples import PointSchema
 from src.main import logger
 from src.config import settings
+
 
 def connect_influx() -> InfluxDBClient:
     client = InfluxDBClient(url=settings.INFLUX_URL, token=settings.INFLUX_TOKEN)
     return client
+
 
 def create_write_api() -> WriteApi:
     client = connect_influx()
     write_api = client.write_api(write_options=SYNCHRONOUS)
     return write_api
 
+
 def create_delete_api() -> DeleteApi:
     client = connect_influx()
     delete_api = client.delete_api()
     return delete_api
+
 
 def check_influxdb() -> None:
     client = connect_influx()
     
     health = client.health()
     if health.status == "pass":
-        logger.info("Influxdb connection SUCCESS.")
+        logger.info("[InfluxDB] Connection SUCCESS.")
     else:
-        logger.warn(f"Influxdb connection FAILURE: {health.message}!")
+        logger.warn(f"[InfluxDB] Connection FAILURE: {health.message}!")
+
 
 def check_query() -> None:
     try:
@@ -41,6 +46,9 @@ def check_query() -> None:
             raise Exception(f"The specified token doesn't have sufficient credentials to read from '{settings.INFLUX_BUCKET}' "
                             f"or specified bucket doesn't exists.") from e
         raise
+
+    logger.info("[InfluxDB] Selftest read access SUCCESS")
+
 
 def check_write() -> None:
     try:
@@ -56,6 +64,54 @@ def check_write() -> None:
         # 400 (BadRequest) caused by empty LineProtocol
         if e.status != 400:
             raise
+
+    logger.info("[InfluxDB] Selftest write access SUCCESS")
+
+
+def create_network(influx_network: str):
+    logger.info(f"[InfluxDB] Creating network {influx_network}")
+    write_api = create_write_api()
+    now = int(datetime.now().timestamp())
+
+    init_point = Point(influx_network).tag("interface", "init-if").field("TX", 0).time(now, WritePrecision.S)
+
+    try:
+        write_api.write(bucket=settings.INFLUX_BUCKET,
+                        org=settings.INFLUX_ORG,
+                        record=[init_point])
+        logger.info(f"[InfluxDB] Succesfull created network {influx_network}")
+        return "OK"
+    except Exception as ex:
+        logger.info("[InfluxDB] Error writing samples to database")
+        logger.info(f"[InfluxDB] Exception: {ex}")
+        return "KO"
+
+
+def delete_network(influx_network: str):
+    logger.info(f"[InfluxDB] Deleting network {influx_network}")
+    delete_api = create_delete_api()
+
+    start = "1970-01-01T00:00:00Z"
+    stop = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
+    try:
+        delete_api.delete(start, stop, f'_measurement="{influx_network}"',
+                        bucket=settings.INFLUX_BUCKET,
+                        org=settings.INFLUX_ORG)
+        logger.info(f"[InfluxDB] Succesfull deleted network {influx_network}")
+    except Exception as ex:
+        logger.info("[InfluxDB] Error writing samples to database")
+        logger.info(f"[InfluxDB] Exception: {ex}")
+
+
+def delete_interface(influx_network: str, influx_interface: str):
+    delete_api = create_delete_api()
+
+    start = "1970-01-01T00:00:00Z"
+    stop = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
+    delete_api.delete(start, stop, f'_measurement="{influx_network}" AND interface="{influx_interface}"',
+                      bucket=settings.INFLUX_BUCKET,
+                      org=settings.INFLUX_ORG)
+
 
 def add_points(influx_network: str, influx_interface: str, point: List[Point]) -> str:
     write_api = create_write_api()
@@ -78,20 +134,3 @@ def add_points(influx_network: str, influx_interface: str, point: List[Point]) -
         return "KO"
         
 
-def delete_network(influx_network: str):
-    delete_api = create_delete_api()
-
-    start = "1970-01-01T00:00:00Z"
-    stop = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
-    delete_api.delete(start, stop, f'_measurement="{influx_network}"',
-                      bucket=settings.INFLUX_BUCKET,
-                      org=settings.INFLUX_ORG)
-
-def delete_interface(influx_network: str, influx_interface: str):
-    delete_api = create_delete_api()
-
-    start = "1970-01-01T00:00:00Z"
-    stop = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
-    delete_api.delete(start, stop, f'_measurement="{influx_network}" AND interface="{influx_interface}"',
-                      bucket=settings.INFLUX_BUCKET,
-                      org=settings.INFLUX_ORG)

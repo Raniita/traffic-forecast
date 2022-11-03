@@ -2,6 +2,16 @@
 
 Trabajo Final de Master
 
+
+## InfluxDB ranii.pro
+
+* URL: https://tfm-influx.ranii.pro:8443/
+
+* Username: admin
+* Password: r**22
+* Org: e-lighthouse
+* bucket: traffic-forecast
+
 ### Links interesantes
 
 * https://github.com/uriyyo/fastapi-pagination

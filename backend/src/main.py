@@ -48,10 +48,10 @@ def create_app() -> FastAPI:
 
     # Verify influxdb connection
     from src.utils.influxdb import check_influxdb, check_query, check_write
-    logger.info(f"[InfluxDB] >> Bucket: {settings.INFLUX_BUCKET}, Org: {settings.INFLUX_ORG}")
+    logger.info(f"[InfluxDB] >> URL: {settings.INFLUX_URL}, Bucket: {settings.INFLUX_BUCKET}, Org: {settings.INFLUX_ORG}")
     check_influxdb()
-    #check_query()
-    #check_write()
+    check_query()
+    check_write()
 
     # Setting up routes
     from src.routes import networks, interfaces, samples

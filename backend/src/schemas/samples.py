@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
 
-class Point(BaseModel):
+class PointSchema(BaseModel):
     timestamp: str
     link_count: str
