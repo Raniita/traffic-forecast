@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.rest import ApiException
+from influxdb_client.client.query_api import QueryApi
 from influxdb_client.client.write_api import WriteApi, WriteOptions, SYNCHRONOUS
 from influxdb_client.client.delete_api import DeleteApi
 
@@ -25,6 +26,12 @@ def create_delete_api() -> DeleteApi:
     client = connect_influx()
     delete_api = client.delete_api()
     return delete_api
+
+
+def create_query_api() -> QueryApi:
+    client = connect_influx()
+    query_api = client.query_api()
+    return query_api
 
 
 def check_influxdb() -> None:
@@ -85,6 +92,29 @@ def create_network(influx_network: str):
         logger.info("[InfluxDB] Error writing samples to database")
         logger.info(f"[InfluxDB] Exception: {ex}")
         return "KO"
+
+
+def check_exists_network(influx_network: str) -> bool:
+    logger.info(f"[InfluxDB] Verify if network {influx_network} exists")
+    try:
+        query_api = create_query_api()
+    
+        query = f'from(bucket: "{settings.INFLUX_BUCKET}")' \
+                    ' |> range(start: 1970-01-01T00:00:00Z)' \
+                   f' |> filter(fn: (r) => r["_measurement"] == "{influx_network}")'
+        #logger.info(f"[InfluxDB] Query: {query}")
+
+        result = query_api.query(query, settings.INFLUX_ORG)
+        #logger.info(f"[InfluxDB] Result of query: {type(result)}")
+        if result:
+            logger.info(f"[InfluxDB] Network already exists")
+            return True
+        else:
+            logger.info(f"[InfluxDB] Network doesnt exists")
+            return False
+    except ApiException as ex:
+        logger.warn(f"[InfluxDB] Error ex: {ex}")
+        return False
 
 
 def delete_network(influx_network: str):

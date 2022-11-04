@@ -17,7 +17,7 @@ async def create_network(net: NetworkInSchema) -> NetworkOutSchema:
     # net is a dict with network info given by user
     try:
         # Creating influxdb network measurement with dummy data
-        influx_net = (net.id_network + '-' + str(net.name)).strip()
+        influx_net = (str(net.id_network) + '-' + net.name).strip()
         influxdb_create_network(influx_net)
 
         net_obj = await Networks.create(**net.dict(exclude_unset=True), influx_net=influx_net)

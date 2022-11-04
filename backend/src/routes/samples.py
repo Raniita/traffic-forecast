@@ -8,7 +8,7 @@ router = APIRouter(prefix="/samples",
                    tags=["Samples"])
 
 
-@router.get("/{network_id}/test_data")
+@router.post("/{network_id}/test_data")
 async def add_test_data(network_id: str, file: UploadFile):
     """
         Upload a **.CSV** to insert the data on the relating network.
@@ -20,4 +20,4 @@ async def add_test_data(network_id: str, file: UploadFile):
         - **RX**: link count for receive dataframes on the interface
     """
 
-    return await samples.add_test_data(network_id=network_id, file=file)
+    return await samples.add_test_data(network_id=network_id, file=file.file)
