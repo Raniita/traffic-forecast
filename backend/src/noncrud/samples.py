@@ -59,14 +59,11 @@ async def add_test_data(network_id: str, file):
             df_field = df_if[["timestamp", "interface", fields[i]]]
 
             # Adapt dataframe to InfluxDB format
-            #df_field = df_field.drop(columns=["interface"])
-            #df_field["_measurement"] = db_net.influx_net
             df_field["interface"] = interface_influx[i]
             df_field = df_field.rename(columns={"timestamp": "_time", fields[i]: "link_count"})  # type: ignore
-            #df_field["_field"] = fields[i]
             df_field.set_index("_time")
 
-            logger.info(f"Dataframe of InfluxDB: {df_field}")
+            #logger.info(f"Dataframe of InfluxDB: {df_field}")
 
             # Push points to influxDB
             logger.info(f"[InfluxDB] Writing data to {db_net.influx_net}")

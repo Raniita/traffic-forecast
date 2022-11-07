@@ -80,7 +80,7 @@ def create_network(influx_network: str):
     write_api = create_write_api()
     now = int(datetime.now().timestamp())
 
-    init_point = Point(influx_network).tag("interface", "init-if").field("TX", 0).time(now, WritePrecision.S)
+    init_point = Point(influx_network).tag("interface", "init-if").field("link_count", 0).time(now, WritePrecision.S)
 
     try:
         write_api.write(bucket=settings.INFLUX_BUCKET,
