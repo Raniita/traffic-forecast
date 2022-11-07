@@ -5,11 +5,15 @@ from influxdb_client.rest import ApiException
 from influxdb_client.client.query_api import QueryApi
 from influxdb_client.client.write_api import WriteApi, WriteOptions, SYNCHRONOUS
 from influxdb_client.client.delete_api import DeleteApi
+from tortoise.exceptions import DoesNotExist, IntegrityError
+from pandas import DataFrame
 
 #from src.schemas.samples import PointSchema
 from src.main import logger
 from src.config import settings
-
+from src.database.models import Networks, Interfaces
+from src.schemas.networks import NetworkDatabaseSchema
+from src.schemas.interfaces import InterfaceDatabaseSchema
 
 def connect_influx() -> InfluxDBClient:
     client = InfluxDBClient(url=settings.INFLUX_URL, token=settings.INFLUX_TOKEN)
@@ -163,4 +167,59 @@ def add_points(influx_network: str, influx_interface: str, point: List[Point]) -
         logger.info(f"Exception: {ex}")
         return "KO"
         
+async def query_linkcount_5m(id_network: str, id_interface: str, field: str):
+    # Get influx fields of network and interface
+    try:
+        db_net = await NetworkDatabaseSchema.from_queryset_single(Networks.get(id_network=id_network))
+    
+        influx_network = db_net.influx_net
+    except DoesNotExist:
+        logger.info("Error. Network doesnt exists")
+        raise DoesNotExist
 
+    try:
+        db_if = await InterfaceDatabaseSchema.from_queryset_single(Interfaces.get(network=db_net.id, id_interface=id_interface))
+    
+        if field.upper() == "RX":
+            influx_interface = db_if.influx_rx
+        elif field.upper() == "TX":
+            influx_interface = db_if.influx_tx
+        else:
+            logger.info("field not valid")
+            raise DoesNotExist
+    except DoesNotExist:
+        logger.info("Error. Interface not found")
+        raise DoesNotExist
+
+    # Given a network and an interface, query:
+    try:
+        client = connect_influx()
+
+        query = f'from(bucket: "{settings.INFLUX_BUCKET}")' \
+                    ' |> range(start: 1970-01-01T00:00:00Z)' \
+                   f' |> filter(fn: (r) => r["_measurement"] == "{influx_network}")' \
+                    ' |> filter(fn: (r) => r["_field"] == "link-count")' \
+                   f' |> filter(fn: (r) => r["interface"] == "{influx_interface}")' \
+                    ' |> aggregateWindow(every: 5m, fn: mean, createEmpty: false)' \
+                    ' |> yield(name: "mean")'     
+
+        df_result = client.query_api().query_data_frame(query, settings.INFLUX_ORG)
+        if df_result:
+            logger.info("return result")
+            df_result = remove_columns_result_query(df_result)
+            return df_result
+        else:
+            logger.info("no result")
+            raise DoesNotExist
+    except ApiException as e:
+        if e.status == 404:
+            raise Exception(f"The specified token doesn't have sufficient credentials to read from '{settings.INFLUX_BUCKET}' "
+                            f"or specified bucket doesn't exists.") from e
+        raise
+
+    logger.info("[InfluxDB] Query success")
+
+def remove_columns_result_query(df):
+    df = df.drop(columns=['result', 'table', '_start', '_stop', '_measurement'])
+    df = df.rename(columns={'_time': 'time', '_value': 'value', '_field': 'field'})
+    return df
