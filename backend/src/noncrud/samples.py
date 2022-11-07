@@ -72,6 +72,7 @@ async def add_test_data(network_id: str, file):
                             record=df_field,
                             data_frame_measurement_name=db_net.influx_net,
                             data_frame_timestamp_column="_time",
+                            data_frame_timestamp_timezone="Europe/Madrid",
                             data_frame_tag_columns=['interface'])
             logger.info(f"[InfluxDB] Dataframe writed to database.")
 
