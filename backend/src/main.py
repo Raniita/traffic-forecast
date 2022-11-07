@@ -54,11 +54,12 @@ def create_app() -> FastAPI:
     check_write()
 
     # Setting up routes
-    from src.routes import networks, interfaces, samples
+    from src.routes import networks, interfaces, samples, query
 
     app.include_router(networks.router)
     app.include_router(interfaces.router)
     app.include_router(samples.router)
+    app.include_router(query.router)
 
     # Enable FastAPI-Pagination
     add_pagination(app)
