@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, File, UploadFile
+from fastapi import APIRouter, UploadFile
 
 import src.noncrud.samples as samples
 from src.schemas.messages import Status

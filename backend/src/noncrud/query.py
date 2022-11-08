@@ -25,7 +25,7 @@ async def query_linkcount_5m(id_network: str, id_interface: str, field: str, to_
         elif field.upper() == "TX":
             influx_interface = db_if.influx_tx
         else:
-            logger.info("field not valid")
+            logger.info("Field not valid")
             raise DoesNotExist
     except DoesNotExist:
         logger.info("Error. Interface not found")
@@ -33,8 +33,8 @@ async def query_linkcount_5m(id_network: str, id_interface: str, field: str, to_
 
     # Given a network and an interface, query:
     result_df = influx_query_5m(influx_network=influx_network,influx_interface=influx_interface)
-    logger.info(f"Result query: {result_df}")
-    logger.info(f"Type query result: {type(result_df)}")
+    #logger.info(f"Result query: {result_df}")
+    #logger.info(f"Type query result: {type(result_df)}")
 
     # Return data to client
     if to_csv:

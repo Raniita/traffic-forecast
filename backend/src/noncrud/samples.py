@@ -77,4 +77,4 @@ async def add_test_data(network_id: str, file):
             logger.info(f"[InfluxDB] Dataframe writed to database.")
 
     # Return Status if success or error
-    return Status(message="Adding test data..")
+    return Status(message="Test data submited")

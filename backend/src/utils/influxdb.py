@@ -6,7 +6,6 @@ from influxdb_client.client.query_api import QueryApi
 from influxdb_client.client.write_api import WriteApi, WriteOptions, SYNCHRONOUS
 from influxdb_client.client.delete_api import DeleteApi
 from tortoise.exceptions import DoesNotExist, IntegrityError
-from pandas import DataFrame
 
 from src.main import logger
 from src.config import settings
@@ -181,13 +180,12 @@ def query_5m(influx_network: str, influx_interface: str):
 
         df_result = client.query_api().query_data_frame(query, settings.INFLUX_ORG)
         #logger.info(f"Result query: {df_result}")
+        #logger.info(f"Type result: {type(df_result)}")
         
         if not df_result.empty:
-            logger.info("return result")
             df_result = remove_columns_result_query(df_result)
             return df_result
         else:
-            logger.info("no result")
             raise DoesNotExist
     except ApiException as e:
         if e.status == 404:

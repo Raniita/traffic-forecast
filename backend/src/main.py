@@ -3,6 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi_pagination import add_pagination
 from tortoise import Tortoise
 
+# Disable pivot warning for influxdb
+from influxdb_client.client.warnings import MissingPivotFunction
+import warnings
+
 import logging
 
 from src.database.register import register_tortoise
@@ -22,6 +26,7 @@ def create_app() -> FastAPI:
         title=settings.TITLE,
         description=settings.DESCRIPTION,
         version=settings.VERSION,
+        swagger_ui_parameters={"defaultModelsExpandDepth": 0}       # -1: disable, 0: collapsed, 1: enable
     )
 
     # Enable CORS
@@ -52,6 +57,9 @@ def create_app() -> FastAPI:
     check_influxdb()
     check_query()
     check_write()
+
+    # Disable Pivot warning InfluxDB
+    warnings.simplefilter("ignore", MissingPivotFunction)
 
     # Setting up routes
     from src.routes import networks, interfaces, samples, query
