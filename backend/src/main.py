@@ -62,12 +62,13 @@ def create_app() -> FastAPI:
     warnings.simplefilter("ignore", MissingPivotFunction)
 
     # Setting up routes
-    from src.routes import networks, interfaces, samples, query
+    from src.routes import networks, interfaces, samples, query, forecasts
 
     app.include_router(networks.router)
     app.include_router(interfaces.router)
     app.include_router(samples.router)
     app.include_router(query.router)
+    app.include_router(forecasts.router)
 
     # Enable FastAPI-Pagination
     add_pagination(app)

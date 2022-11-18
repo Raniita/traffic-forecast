@@ -186,6 +186,7 @@ def query_5m(influx_network: str, influx_interface: str):
             df_result = remove_columns_result_query(df_result)
             return df_result
         else:
+            logger.info("Empty result")
             raise DoesNotExist
     except ApiException as e:
         if e.status == 404:
