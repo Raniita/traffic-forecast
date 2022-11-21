@@ -194,6 +194,71 @@ def query_5m(influx_network: str, influx_interface: str):
                             f"or specified bucket doesn't exists.") from e
         raise
 
+
+def query_24h(influx_network: str, influx_interface: str):
+    try:
+        client = connect_influx()
+
+        query = f'from(bucket: "{settings.INFLUX_BUCKET}")' \
+                    ' |> range(start: 1970-01-01T00:00:00Z)' \
+                   f' |> filter(fn: (r) => r["_measurement"] == "{influx_network}")' \
+                    ' |> filter(fn: (r) => r["_field"] == "link_count")' \
+                   f' |> filter(fn: (r) => r["interface"] == "{influx_interface}")' \
+                    ' |> aggregateWindow(every: 24h, fn: mean, createEmpty: false)' \
+                    ' |> yield(name: "mean")' \
+                    #' |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")'    
+
+        #logger.info(f"Query: {query}")
+
+        df_result = client.query_api().query_data_frame(query, settings.INFLUX_ORG)
+        #logger.info(f"Result query: {df_result}")
+        #logger.info(f"Type result: {type(df_result)}")
+        
+        if not df_result.empty:
+            df_result = remove_columns_result_query(df_result)
+            return df_result
+        else:
+            logger.info("Empty result")
+            raise DoesNotExist
+    except ApiException as e:
+        if e.status == 404:
+            raise Exception(f"The specified token doesn't have sufficient credentials to read from '{settings.INFLUX_BUCKET}' "
+                            f"or specified bucket doesn't exists.") from e
+        raise
+
+
+def query24h_percentile95(influx_network: str, influx_interface: str):
+    try:
+        client = connect_influx()
+
+        query = f'from(bucket: "{settings.INFLUX_BUCKET}")' \
+                    ' |> range(start: 1970-01-01T00:00:00Z)' \
+                   f' |> filter(fn: (r) => r["_measurement"] == "{influx_network}")' \
+                    ' |> filter(fn: (r) => r["_field"] == "link_count")' \
+                   f' |> filter(fn: (r) => r["interface"] == "{influx_interface}")' \
+                    ' |> aggregateWindow(every: 24h, fn: (tables=<-, column) => tables |> quantile(q: 0.95, method: "exact_selector"), createEmpty: false)' \
+                    ' |> yield(name: "mean")' \
+                    #' |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")'    
+
+        #logger.info(f"Query: {query}")
+
+        df_result = client.query_api().query_data_frame(query, settings.INFLUX_ORG)
+        #logger.info(f"Result query: {df_result}")
+        #logger.info(f"Type result: {type(df_result)}")
+        
+        if not df_result.empty:
+            df_result = remove_columns_result_query(df_result)
+            return df_result
+        else:
+            logger.info("Empty result")
+            raise DoesNotExist
+    except ApiException as e:
+        if e.status == 404:
+            raise Exception(f"The specified token doesn't have sufficient credentials to read from '{settings.INFLUX_BUCKET}' "
+                            f"or specified bucket doesn't exists.") from e
+        raise
+
+
 def remove_columns_result_query(df):
     df = df.drop(columns=['result', 'table', '_start', '_stop', '_measurement'])
     df = df.rename(columns={'_time': 'time', '_value': 'value', '_field': 'field'})
