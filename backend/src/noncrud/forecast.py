@@ -30,7 +30,7 @@ async def forecast_interface(network_id: str, interface_id: str, field: str, per
             influx_interface = db_if.influx_tx
         else:
             logger.info("Field not valid")
-            raise DoesNotExist
+            raise HTTPException(status_code=401, detail=f"Interface field invalid. User 'rx' or 'tx'")
     except DoesNotExist:
         raise HTTPException(status_code=401, detail=f"Interface ID {interface_id} doesnt exists.")
     

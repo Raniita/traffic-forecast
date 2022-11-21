@@ -9,10 +9,12 @@ router = APIRouter(prefix="/samples",
                    tags=["Samples"])
 
 
-@router.post("/{network_id}/test_data")
-async def add_test_data(network_id: str, file: UploadFile) -> Status:
+@router.post("/{network_id}/import_topology")
+async def import_topology(network_id: str, file: UploadFile) -> Status:
     """
         Upload a **.CSV** to insert the data on the relating network.
+
+        Allow more than one interface
 
         CSV columns:
         - **timestamp**: timestamp with ISO format
@@ -21,4 +23,17 @@ async def add_test_data(network_id: str, file: UploadFile) -> Status:
         - **RX**: link count for receive dataframes on the interface
     """
 
-    return await samples.add_test_data(network_id=network_id, file=file.file)
+    return await samples.import_topology(network_id=network_id, file=file.file)
+
+
+@router.post("/{network_id}/import_interface/{interface_id}") 
+async def import_interface(network_id: str, interface_id:str, file: UploadFile, field: str = "RX") -> Status:
+    """
+        Upload a **.CSV** to insert data on the desired interface
+    
+        CSV columns:
+        - **time**: datetime (iso format) of the point
+        - **flow**: link count value
+    """
+
+    return await samples.import_interface(network_id=network_id, interface_id=interface_id, field=field, file=file.file)
