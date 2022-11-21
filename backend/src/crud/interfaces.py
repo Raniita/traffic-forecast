@@ -31,8 +31,8 @@ async def create_interface(interface, net_id) -> InterfaceOutSchema:
         raise HTTPException(status_code=401, detail=f"Network ID {interface.net} doesnt exists.")
 
     try:
-        influx_rx = (str(interface.id_interface) + interface.name + '-RX').strip()
-        influx_tx = (str(interface.id_interface) + interface.name + '-TX').strip()
+        influx_rx = (str(interface.id_interface) + '-' + interface.name + '-RX').strip()
+        influx_tx = (str(interface.id_interface) + '-' + interface.name + '-TX').strip()
         if_obj = await Interfaces.create(**interface.dict(), network_id=db_net.id,
                                                              influx_rx=influx_rx,
                                                              influx_tx=influx_tx)
