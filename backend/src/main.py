@@ -11,7 +11,6 @@ import logging
 
 from src.database.register import register_tortoise
 from src.database.config import TORTOISE_ORM
-#from src.utils.influxdb import check_influxdb
 from src.config import settings
 
 logger = logging.getLogger(__name__)

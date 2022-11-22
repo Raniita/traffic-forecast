@@ -36,7 +36,7 @@ class NetworkInSchema(NetworkInSchema):
     class Config:
         schema_extra = {
             "example": {
-                "id_network": "0",
+                "id_network": 0,
                 "name": "net-0",
                 "description": "description here",
                 "ip_network": "0.0.0.0",
@@ -47,3 +47,12 @@ class UpdateNetwork(BaseModel):
     name: Optional[str]
     description: Optional[str] 
     ip_network: Optional[str]
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "name": "net-0",
+                "description": "description here",
+                "ip_network": "0.0.0.0",
+            }
+        }

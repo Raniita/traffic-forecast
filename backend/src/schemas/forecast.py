@@ -14,8 +14,8 @@ class ForecastOptionsSchema(BaseModel):
 
 
 class ForecastSchema(BaseModel):
-    network_id: str
-    interface_id: str
+    id_network: int = Field(..., example=0)
+    id_interface: int = Field(..., example=0)
     field: Literal['RX', 'TX']
     days: int = Field(..., example=365)
     options: Optional[ForecastOptionsSchema]

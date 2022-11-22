@@ -17,8 +17,8 @@ async def forecast_link_count_interface(forecast_in: ForecastSchema,
 
     """
 
-    return await forecasts.forecast_interface(network_id=forecast_in.network_id, 
-                                 interface_id=forecast_in.interface_id,
+    return await forecasts.forecast_interface(network_id=forecast_in.id_network, 
+                                 interface_id=forecast_in.id_interface,
                                  field=forecast_in.field,
                                  periods=forecast_in.days,
                                  options=forecast_in.options,
