@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from tortoise.contrib.pydantic import pydantic_model_creator
 
 from src.database.models import Networks
@@ -32,7 +32,18 @@ NetworkDatabaseSchema = pydantic_model_creator(
     Networks, name="NetworkDatabase"  
 )
 
+class NetworkInSchema(NetworkInSchema):
+    class Config:
+        schema_extra = {
+            "example": {
+                "id_network": "0",
+                "name": "net-0",
+                "description": "description here",
+                "ip_network": "0.0.0.0",
+            }
+        }
+
 class UpdateNetwork(BaseModel):
     name: Optional[str]
-    description: Optional[str]
+    description: Optional[str] 
     ip_network: Optional[str]
