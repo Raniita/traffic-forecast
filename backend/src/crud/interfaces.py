@@ -55,13 +55,14 @@ async def delete_interface(if_id, net_id):
     except DoesNotExist:
         raise HTTPException(status_code=401, detail=f"Interface ID {if_id} doesnt exists.")
 
+    deleted_interface = await Interfaces.filter(id_interface=if_id, network=db_net.id).delete()
+    if not deleted_interface:
+        raise HTTPException(status_code=404, detail=f"Interface ID {if_id} not found.")
+
     # Delete interface on influxdb
     influxdb_delete_interface(db_net.influx_net, db_if.influx_rx)
     influxdb_delete_interface(db_net.influx_net, db_if.influx_tx)
 
-    deleted_interface = await Interfaces.filter(id_interface=if_id, network=db_net.id).delete()
-    if not deleted_interface:
-        raise HTTPException(status_code=404, detail=f"Interface ID {if_id} not found.")
     return Status(message=f"Deleted interface with ID {if_id}")
 
 async def update_interface(net_id, if_id, interface) -> InterfaceOutSchema:
