@@ -11,7 +11,9 @@ from src.main import logger
 from src.config import settings
 
 def connect_influx() -> InfluxDBClient:
-    client = InfluxDBClient(url=settings.INFLUX_URL, token=settings.INFLUX_TOKEN)
+    client = InfluxDBClient(url=settings.INFLUX_URL, 
+                            token=settings.INFLUX_TOKEN, 
+                            timeout=settings.INFLUX_TIMEOUT)
     return client
 
 

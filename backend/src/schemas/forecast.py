@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 
 class ForecastOptionsSchema(BaseModel):
     # Seasonality Mode
-    #mode: str                               # Default: additive. Other option: multiplicative
+    #mode: str                                                  # Default: additive. Other option: multiplicative
     # Holidays Region
     holidays_region: str = Field(..., example="ES")            # Default: none, example: ES, US, ...
     # Regresion penalty

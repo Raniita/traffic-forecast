@@ -3,7 +3,6 @@ from fastapi import APIRouter
 from fastapi.responses import PlainTextResponse
 
 import src.noncrud.forecast as forecasts
-from src.schemas.messages import Status
 from src.schemas.forecast import ForecastSchema
 
 router = APIRouter(prefix="/forecast",
@@ -21,5 +20,6 @@ async def forecast_link_count_interface(forecast_in: ForecastSchema,
     return await forecasts.forecast_interface(network_id=forecast_in.network_id, 
                                  interface_id=forecast_in.interface_id,
                                  field=forecast_in.field,
-                                 periods=forecast_in.periods,
+                                 periods=forecast_in.days,
+                                 options=forecast_in.options,
                                  to_csv=to_csv)
