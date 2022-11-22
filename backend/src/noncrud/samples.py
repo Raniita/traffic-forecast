@@ -1,6 +1,6 @@
 import pandas as pd
 import random
-from fastapi import HTTPException, File
+from fastapi import HTTPException
 from tortoise.exceptions import DoesNotExist, IntegrityError
 
 from src.main import logger

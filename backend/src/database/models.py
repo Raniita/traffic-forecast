@@ -1,4 +1,3 @@
-from enum import unique
 from tortoise import fields, models
 
 class Networks(models.Model):

@@ -1,7 +1,7 @@
 from fastapi.responses import PlainTextResponse
 from tortoise.exceptions import DoesNotExist, IntegrityError
 
-from src.main import logger, settings
+from src.main import logger
 from src.database.models import Networks, Interfaces
 from src.schemas.networks import NetworkDatabaseSchema
 from src.schemas.interfaces import InterfaceDatabaseSchema
