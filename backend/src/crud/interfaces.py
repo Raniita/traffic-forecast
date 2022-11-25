@@ -6,6 +6,7 @@ from src.schemas.interfaces import InterfaceOutSchema, InterfaceDatabaseSchema
 from src.schemas.networks import NetworkOutSchema, NetworkDatabaseSchema
 from src.schemas.messages import Status
 from src.main import logger
+from src.utils.influxdb import delete_interface as influxdb_delete_interface
 
 async def get_interfaces(net_id):
     try:
@@ -57,6 +58,11 @@ async def delete_interface(if_id, net_id):
     deleted_interface = await Interfaces.filter(id_interface=if_id, network=db_net.id).delete()
     if not deleted_interface:
         raise HTTPException(status_code=404, detail=f"Interface ID {if_id} not found.")
+
+    # Delete interface on influxdb
+    influxdb_delete_interface(db_net.influx_net, db_if.influx_rx)
+    influxdb_delete_interface(db_net.influx_net, db_if.influx_tx)
+
     return Status(message=f"Deleted interface with ID {if_id}")
 
 async def update_interface(net_id, if_id, interface) -> InterfaceOutSchema:

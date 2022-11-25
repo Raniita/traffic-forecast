@@ -33,12 +33,13 @@ async def delete_network(net_id):
     except DoesNotExist:
         raise HTTPException(status_code=401, detail=f"Network not found.")
 
-    # Deleting influxdb measurement with all data
-    influxdb_delete_network(db_net.influx_net)
-
     deleted_net = await Networks.filter(id_network=net_id).delete()
     if not deleted_net:
         raise HTTPException(status_code=404, detail=f"Network {net_id} not found")
+
+    # Deleting influxdb measurement with all data
+    influxdb_delete_network(db_net.influx_net)
+
     return Status(message=f"Deleted network {net_id}") 
     
 async def update_network(net_id, net) -> NetworkOutSchema:

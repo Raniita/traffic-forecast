@@ -3,13 +3,16 @@ version: '3.8'
 services:
   traffic_forecast:
     build: ./backend
-    container_name: tf_api
+    container_name: traffic_forecast-api
     restart: unless-stopped
     environment:
       - POSTGRES_USER=monitor
       - POSTGRES_PASSWORD=forecast2022
       - POSTGRES_DB=traffic-forecast
-      - INFLUX_TOKEN=WCkcYu0ajtEJokr0AaWMpGB2sQo6sTYE0mQAEaaJRJn25rC3rrAEMsneEbJYL-HTe77FFGaJNPsQTPdyzvMdMQ==
+      - INFLUX_URL=https://tfm-influx.ranii.pro:8443/
+      - INFLUX_TOKEN=r0y6FXSqs58hmOoIeMnUL6l1xEW6d55lRDzxkrFwssuxp8yDdW2ncnGHoDw_rKu6xn1BIfoOAq3MzSe1hcJvOw==
+      - INFLUX_ORG=e-lighthouse
+      - INFLUX_BUCKET=traffic-forecast
       - SECRET_KEY=upct2022_sk
     volumes:
       - ./backend:/app
@@ -27,7 +30,7 @@ services:
 
   db:
     image: postgres:13
-    container_name: tf-postgres
+    container_name: traffic_forecast-postgres
     restart: unless-stopped
 #    expose:
 #      - 5432
@@ -41,7 +44,7 @@ services:
 
   adminer:
     image: adminer
-    container_name: tf-adminer
+    container_name: traffic_forecast-adminer
     restart: unless-stopped
     labels:
       - traefik.enable=true
@@ -52,7 +55,7 @@ services:
 
   influxdb:
     image: influxdb:latest
-    container_name: tf-influx
+    container_name: traffic_forecast-influx
     restart: unless-stopped
     volumes:
       - ./data/influxdb/data:/var/lib/influxdb2:rw

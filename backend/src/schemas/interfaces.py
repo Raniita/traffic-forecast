@@ -29,6 +29,24 @@ InterfaceDatabaseSchema = pydantic_model_creator(
     Interfaces, name="InterfaceDatabase",
 )
 
+class InterfaceInSchema(InterfaceInSchema):
+    class Config:
+        schema_extra = {
+            "example": {
+                "id_interface": 0,
+                "name": "if-0",
+                "description": "description here",
+            }
+        }
+
 class UpdateInterface(BaseModel):
     name: Optional[str]
     description: Optional[str]
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "name": "if-0",
+                "description": "description here",
+            }
+        }

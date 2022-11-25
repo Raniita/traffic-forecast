@@ -5,13 +5,13 @@ from fastapi.responses import PlainTextResponse
 from tortoise.exceptions import DoesNotExist
 
 from src.main import logger
-from src.config import settings
 from src.database.models import Networks, Interfaces
 from src.schemas.networks import NetworkDatabaseSchema
 from src.schemas.interfaces import InterfaceDatabaseSchema
 from src.utils.influxdb import query_5m as influx_query_5m
+from src.utils.influxdb import query_24h as influx_query_24h
 
-async def forecast_interface(network_id: str, interface_id: str, field: str, periods: str, to_csv):
+async def forecast_interface(network_id: str, interface_id: str, field: str, periods: str, options: dict, to_csv):
     # Verify that networks exists
     try:
         db_net = await NetworkDatabaseSchema.from_queryset_single(Networks.get(id_network=network_id))
@@ -39,12 +39,14 @@ async def forecast_interface(network_id: str, interface_id: str, field: str, per
     # Verify periods
     time_periods = int(periods)
     if time_periods < 0:
-        raise HTTPException(status_code=404, detail=f"Periods must be greater than 0.")
+        raise HTTPException(status_code=404, detail=f"Days must be greater than 0.")
     elif time_periods >= 365:
         time_periods = 365      # Max time fixed to one year
 
     # Query samples on influxdb
-    result_df = influx_query_5m(influx_network=influx_network,
+    #result_df = influx_query_5m(influx_network=influx_network,
+    #                            influx_interface=influx_interface)
+    result_df = influx_query_24h(influx_network=influx_network,
                                 influx_interface=influx_interface)
     logger.info(f"Result query: {result_df}")
     logger.info(f"Type query result: {type(result_df)}")
@@ -64,7 +66,27 @@ async def forecast_interface(network_id: str, interface_id: str, field: str, per
 
     logger.info(f"[Forecast] Creating Prophet")
 
-    model = Prophet(seasonality_mode='multiplicative')
+    # Setting up the model given an options!
+    if options.flexibility_trend and options.flexibility_season and options.flexibility_holidays:
+        logger.info(f"[Forecast] Setting up model")
+        logger.info(f"[Forecast] flexibility_trend: {options.flexibility_trend}, flexibility_season: {options.flexibility_season}, flexibility_holidays: {options.flexibility_holidays}")
+        model = Prophet(seasonality_mode='multiplicative',
+                        changepoint_prior_scale=options.flexibility_trend,
+                        seasonality_prior_scale=options.flexibility_season,
+                        holidays_prior_scale=options.flexibility_holidays)
+    else:
+        logger.info(f"[Forecast] Setting up default model")
+        model = Prophet(seasonality_mode='multiplicative')
+    
+    if options.holidays_region:
+        try:
+            model.add_country_holidays(country_name=options.holidays_region)
+            logger.info(f"[Forecast] Added country holidays for: {options.holidays_region}")
+        except:
+            logger.info(f"[Forecast] Invalid country name. Unable to add holidays. Going default")
+            pass
+
+    # Fitting the model
     logger.info(f"[Forecast] Fitting the model")
     model.fit(df_prophet)
 

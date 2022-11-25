@@ -19,6 +19,7 @@ class BaseConfig:
     INFLUX_TOKEN: str | None = os.environ.get('INFLUX_TOKEN', None)
     INFLUX_ORG: str = os.environ.get('INFLUX_ORG', "e-lighthouse")
     INFLUX_BUCKET: str = os.environ.get('INFLUX_BUCKET', "traffic_forecast")
+    INFLUX_TIMEOUT: int = 30*1000   # Timeout: 30 seconds
 
     # Boolean to enable logging to file
     FILE_LOG: str = os.environ.get('FILE_LOG', 'false')

@@ -1,6 +1,6 @@
 import pandas as pd
 import random
-from fastapi import HTTPException, File
+from fastapi import HTTPException
 from tortoise.exceptions import DoesNotExist, IntegrityError
 
 from src.main import logger
@@ -78,7 +78,7 @@ async def import_topology(network_id: str, file):
             logger.info(f"[InfluxDB] Dataframe writed to database.")
 
     # Return Status if success or error
-    return Status(message="Test data submited")
+    return Status(message=f"Succesfully imported monitored data of topology on network {network_id}")
 
 
 async def import_interface(network_id: str, interface_id: str, field: str, file):
@@ -137,4 +137,4 @@ async def import_interface(network_id: str, interface_id: str, field: str, file)
                     data_frame_tag_columns=['interface'])
     logger.info(f"[InfluxDB] Dataframe writed to database.")
 
-    return Status(message="Interface imported")
+    return Status(message=f"Succesfully imported monitored data on interface {interface_id} with mode: {field}")
