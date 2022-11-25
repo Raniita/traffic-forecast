@@ -1,6 +1,0 @@
-source ./backend/env/bin/activate
-
-export FASTAPI_CONFIG=development
-
-uvicorn src.main:app --reload --host 0.0.0.0 --port 5000
-# sudo docker-compose up traffic_forecast
