@@ -148,7 +148,28 @@
 	
 	\chapter{Tecnologías empleadas}
 	
+	\noindent En este capítulo, se van a presentar las diferentes tecnologías utilizadas para la implementación de la aplicación.
+	
 	\section{Arquitectura y microservicios}
+	
+	\noindent En primer lugar, se va a comentar acerca de la arquitectura escogida. En este caso, se decide realizar el sistema siguiendo la premisa de ser una \textbf{API} (\textit{Application programming interface}), ya que uno de los objetivos propuestos es el de poder realizar ejecuciones de la aplicación, desde otras aplicaciones. \\
+	
+	\noindent Una API permite a dos componentes comunicarse entre sí mediante una serie de reglas. Además, supone un ''contrato'' en el que se establecen las solicitudes y respuestas esperadas en la comunicación. \\
+	
+	\noindent Dependiendo de la implementación de la API que se realice, distinguimos cuatro tipos de API:
+	
+	\begin{itemize}
+		\item API de SOAP. Utilizan un protocolo de acceso a objetos. Los interlocutores intercambian mensajes XML. En general, es una solución poco flexible.
+		
+		\item API de RPC. Basado en llamadas de procedimientos remotos. El cliente ejecuta una función en el servidor, y este responde con la salida de la función.
+		
+		\item API de WebSocket. Solución moderna de desarrollo de API, que utiliza objetos JSON y un canal bidireccional para realizar la comunicación entre el cliente y el servidor.
+		
+		\item API de REST. Solución más popular. El cliente envía solicitudes al servidor como datos, utilizando métodos HTTP. Es una opción muy flexible.
+	\end{itemize}
+
+	\noindent En en caso de nuestra aplicación, se decidió utilizar el tipo REST API, ya que permite una sencilla implementación de cara al cliente que quiera utilizar dicha interfaz.
+	
 	
 	\section{Bases de datos}
 	
@@ -185,6 +206,13 @@
 	\pagebreak
 	
 	\chapter{Bibliografía}
+	
+	\begin{enumerate}
+		% 1
+		\item
+		\label{what is api}
+		\href{https://aws.amazon.com/es/what-is/api/}{¿Qué es una API?}
+	\end{enumerate}
 	
 	\pagebreak
 	
