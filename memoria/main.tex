@@ -154,7 +154,7 @@
 	
 	\noindent En primer lugar, se va a comentar acerca de la arquitectura escogida. En este caso, se decide realizar el sistema siguiendo la premisa de ser una \textbf{API} (\textit{Application programming interface}), ya que uno de los objetivos propuestos es el de poder realizar ejecuciones de la aplicación, desde otras aplicaciones. \\
 	
-	\noindent Una API permite a dos componentes comunicarse entre sí mediante una serie de reglas. Además, supone un ''contrato'' en el que se establecen las solicitudes y respuestas esperadas en la comunicación. \\
+	\noindent Una API permite a dos componentes comunicarse entre sí mediante una serie de reglas. Además, supone un ''contrato'' en el que se establecen las solicitudes y respuestas esperadas en la comunicación. [\ref{bib: what is api}] \\
 	
 	\noindent Dependiendo de la implementación de la API que se realice, distinguimos cuatro tipos de API:
 	
@@ -169,6 +169,28 @@
 	\end{itemize}
 
 	\noindent En en caso de nuestra aplicación, se decidió utilizar el tipo REST API, ya que permite una sencilla implementación de cara al cliente que quiera utilizar dicha interfaz.
+	
+	\pagebreak
+	
+	\noindent \textbf{\large Arquitectura basada en \textbf{microservicios}} \\
+	
+	\noindent Lo primero, es entender en que consiste un microservicio. Para ello, podemos definirlo como los sistemas que cumplen las siguientes premisas: [\ref{bib: microservices}]
+	
+	\begin{itemize}
+		\item Los microservicios son sistemas pequeños, independientes y poco ''acoplados''.
+		
+		\item Cada servicio tiene su propio código fuente, que esta separado del resto de códigos de los servicios.
+		
+		\item Cada servicio se puede desplegar de manera independiente. 
+		
+		\item Cada servicio es responsable de la persistencia de sus datos.
+		
+		\item Los servicios se comunican entre sí utilizando APIs
+		
+		\item Además, como ventaja, los servicios no tienen por qué estar implementados todos en el mismo lenguaje de programación.
+	\end{itemize}
+
+	\noindent Por lo tanto, dado los objetivos presentados en este trabajo, se llegó a la conclusión de que tratar el sistema propuesto como un microservicio podría aportar numerosas ventajas, ya que permitiría ser utilizado por otros servicios, extendiendo la funcionalidad de estos y añadiendo un valor extra.
 	
 	
 	\section{Bases de datos}
@@ -210,8 +232,15 @@
 	\begin{enumerate}
 		% 1
 		\item
-		\label{what is api}
+		\label{bib: what is api}
 		\href{https://aws.amazon.com/es/what-is/api/}{¿Qué es una API?}
+		
+		% 2
+		\item
+		\label{bib: microservices}
+		\href{https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/microservices}{Microservice architecture style}
+		
+		
 	\end{enumerate}
 	
 	\pagebreak
