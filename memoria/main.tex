@@ -110,6 +110,7 @@
 			
 			\vspace{2cm}
 			\textbf{Autor:} \author{Enrique Fernández Sánchez} \\
+			
 			\textbf{Tutor:} Pablo Pavón Mariño
 	\end{minipage}}
 	
@@ -152,25 +153,8 @@
 	
 	\section{Arquitectura y microservicios}
 	
-	\noindent En primer lugar, se va a comentar acerca de la arquitectura escogida. En este caso, se decide realizar el sistema siguiendo la premisa de ser una \textbf{API} (\textit{Application programming interface}), ya que uno de los objetivos propuestos es el de poder realizar ejecuciones de la aplicación, desde otras aplicaciones. \\
+	\noindent En primer lugar, se va a comentar acerca de la arquitectura escogida. En este caso, se decide realizar una implementación basada en microservicios utilizando una REST API. \\
 	
-	\noindent Una API permite a dos componentes comunicarse entre sí mediante una serie de reglas. Además, supone un ''contrato'' en el que se establecen las solicitudes y respuestas esperadas en la comunicación. [\ref{bib: what is api}] \\
-	
-	\noindent Dependiendo de la implementación de la API que se realice, distinguimos cuatro tipos de API:
-	
-	\begin{itemize}
-		\item API de SOAP. Utilizan un protocolo de acceso a objetos. Los interlocutores intercambian mensajes XML. En general, es una solución poco flexible.
-		
-		\item API de RPC. Basado en llamadas de procedimientos remotos. El cliente ejecuta una función en el servidor, y este responde con la salida de la función.
-		
-		\item API de WebSocket. Solución moderna de desarrollo de API, que utiliza objetos JSON y un canal bidireccional para realizar la comunicación entre el cliente y el servidor.
-		
-		\item API de REST. Solución más popular. El cliente envía solicitudes al servidor como datos, utilizando métodos HTTP. Es una opción muy flexible.
-	\end{itemize}
-
-	\noindent En en caso de nuestra aplicación, se decidió utilizar el tipo REST API, ya que permite una sencilla implementación de cara al cliente que quiera utilizar dicha interfaz.
-	
-	\pagebreak
 	
 	\noindent \textbf{\large Arquitectura basada en \textbf{microservicios}} \\
 	
@@ -190,10 +174,98 @@
 		\item Además, como ventaja, los servicios no tienen por qué estar implementados todos en el mismo lenguaje de programación.
 	\end{itemize}
 
-	\noindent Por lo tanto, dado los objetivos presentados en este trabajo, se llegó a la conclusión de que tratar el sistema propuesto como un microservicio podría aportar numerosas ventajas, ya que permitiría ser utilizado por otros servicios, extendiendo la funcionalidad de estos y añadiendo un valor extra.
+	\noindent Por lo tanto, dado los objetivos presentados en este trabajo, se llegó a la conclusión de que tratar el sistema propuesto como un microservicio podría aportar numerosas ventajas, ya que permitiría ser utilizado por otros servicios, extendiendo la funcionalidad de estos y añadiendo un valor extra. Para ello, será necesario definir la API que utilizaremos para comunicarnos con el sistema.
 	
+	\pagebreak
+	
+	\noindent \textbf{\large Comunicación basada en \textbf{API}} \\
+	
+	\noindent Una API permite a dos componentes comunicarse entre sí mediante una serie de reglas. Además, supone un ''contrato'' en el que se establecen las solicitudes y respuestas esperadas en la comunicación. [\ref{bib: what is api}] \\
+	
+	\noindent Dependiendo de la implementación de la API que se realice, distinguimos cuatro tipos de API:
+	
+	\begin{itemize}
+		\item API de SOAP. Utilizan un protocolo de acceso a objetos. Los interlocutores intercambian mensajes XML. En general, es una solución poco flexible.
+		
+		\item API de RPC. Basado en llamadas de procedimientos remotos. El cliente ejecuta una función en el servidor, y este responde con la salida de la función.
+		
+		\item API de WebSocket. Solución moderna de desarrollo de API, que utiliza objetos JSON y un canal bidireccional para realizar la comunicación entre el cliente y el servidor.
+		
+		\item API de REST. Solución más popular. El cliente envía solicitudes al servidor como datos, utilizando métodos HTTP. Es una opción muy flexible.
+	\end{itemize}
+	
+	\noindent En en caso de nuestra aplicación, se decidió utilizar el tipo REST API, ya que permite una sencilla implementación de cara al cliente que quiera utilizar dicha interfaz.
+	
+	
+	\pagebreak
 	
 	\section{Bases de datos}
+	
+	\noindent Para asegurar la persistencia de los datos en nuestra aplicación, es necesario utilizar una base de datos. En dicha base de datos, guardaremos información relevante para el correcto funcionamiento del sistema, en nuestro caso, redes y/o interfaces a monitorizar, o los datos monitorizados. \\
+	
+	\noindent En la aplicación de monitorización, distinguimos entre datos de dos tipos:
+	
+	\begin{itemize}
+		\item Datos clásicos. Como por ejemplo, la información asociada a una red a monitorizar.
+		\item Datos de tipo ''time series''. Como por ejemplo, las muestras de monitorización de una red.
+	\end{itemize}
+
+	\noindent En primer lugar, se diseña una base de datos tipo SQL para almacenar los ''datos clásicos''. Y por otro lado, se diseña una base de datos diferente, especializada para el almacenamiento de datos tipo ''time series'', en este caso, se elige una base de datos llamada InfluxDB.
+	
+	\subsection{Base de datos tipo relacional/SQL}
+	
+	\noindent SQL es una base de datos de tipo relacional. Dichas bases de datos, suponen una colección de información que organizan los datos en una serie de ''relaciones'' cuando la información es almacenada en una o varias ''tablas''. Por lo tanto, las relaciones suponen conexiones entre diferentes tablas, permitiendo así una asociación entre información diferente. [\ref{bib: relational database}] \\
+	
+	\noindent Por ejemplo, si vemos la figura \ref{img: example sql}, podemos comprobar como se realizan las relaciones entre las diferentes tablas (Ratings, Users, Movies o Tags), se realiza mediante uno de los campos definidos en la propia tabla. Por ejemplo, el campo ''user\_id'' de la tabla Ratings, permite una relación con la tabla Users, con el campo ''id''.
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.95\textwidth]{img/example_relational_database.jpg}
+			\caption{Ejemplo de relaciones dentro de una base de datos SQL. [\ref{bib_img: example sql}]}
+			\label{img: example sql}
+		\end{center}
+	\end{figure}
+	
+	\noindent Para el caso de nuestra aplicación de monitorización de tráfico en red, modelamos la base de datos según la información que vamos a almacenar. Por lo que tenemos que definir la estructura de tablas, los campos que van a tener cada una de las tablas, y los campos por los que se van a relacionar entre sí. A esta información la llamamos modelo de datos.
+	
+	\pagebreak
+	
+	\subsubsection{Modelos de datos}
+	
+	\noindent El primer modelo de datos de la aplicación, es el referido a la información de una red a monitorizar. La descripción del modelo la podemos ver en la figura \ref{img: modelo sql networks}.
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.5\textwidth]{img/model_sql_networks.png}
+			\caption{Modelo de datos para las redes a monitorizar. Equivale con la tabla ''networks''.}
+			\label{img: modelo sql networks}
+		\end{center}
+	\end{figure}
+	
+	\noindent El segundo modelo de datos de la aplicación, es el referido a la información de una interfaz a monitorizar, que esta dentro de una red monitorizada. La descripción del modelo la podemos ver en la figura \ref{img: modelo sql interfaces}.
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.5\textwidth]{img/model_sql_interfaces.png}
+			\caption{Modelos de datos para las interfaces a monitorizar. Equivale con la tabla ''interfaces''}
+			\label{img: modelo sql interfaces}
+		\end{center}
+	\end{figure}
+
+	\noindent Se establece una relación del modo que una interfaz solo puede pertenecer a una red monitorizada, y que además, una red monitorizada puede tener muchas interfaces. Dicha relación se realiza mediante el campo ''id\_net'' de la tabla Interfaces. \\
+	
+	\noindent Por último, la base de datos SQL utilizada para esta aplicación es PostgreSQL [\ref{bib: postgresql}], ya que además de ser Open Source, permite una gran escalabilidad, amoldándose a los recursos de la máquina en la que esté funcionando.
+	
+	\pagebreak
+	
+	\subsection{Base de datos tipo ''time series''/InfluxDB} 
+	
+	% TODO:
+	% https://www.stackhero.io/en/services/InfluxDB/documentations/Introduction#differences-between-influxdb-and-relational-sql-databases
+	% https://archive.docs.influxdata.com/influxdb/v1.2/concepts/crosswalk/
+	
+	
+	\pagebreak
 	
 	\section{Modelo de predicción}
 	
@@ -229,6 +301,9 @@
 	
 	\chapter{Bibliografía}
 	
+	\subsection*{Enlaces y referencias}
+	\addcontentsline{toc}{section}{Enlaces y referencias}
+	
 	\begin{enumerate}
 		% 1
 		\item
@@ -241,6 +316,30 @@
 		\href{https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/microservices}{Microservice architecture style}
 		
 		
+		% 3
+		\item
+		\label{bib: relational database}
+		\href{https://cloud.google.com/learn/what-is-a-relational-database}{What is a relational database?}
+		
+		
+		% 4
+		\item
+		\label{bib: postgresql}
+		\href{https://www.postgresql.org/}{PostgreSQL}
+		
+		
+	\end{enumerate}
+
+	\vspace{20px}
+	
+	\subsection*{Figuras}
+	\addcontentsline{toc}{section}{Imagenes}
+
+	\begin{enumerate}
+		% 1
+		\item
+		\label{bib_img: example sql}
+		\href{https://xbsoftware.com/blog/main-types-of-database-management-systems/}{Relational Databases}
 	\end{enumerate}
 	
 	\pagebreak
