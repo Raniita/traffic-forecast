@@ -258,20 +258,80 @@
 	
 	\pagebreak
 	
-	\subsection{Base de datos tipo ''time series''/InfluxDB} 
+	\subsection{Base de datos tipo ``time series''/InfluxDB} 
 	
-	% TODO:
-	% https://www.stackhero.io/en/services/InfluxDB/documentations/Introduction#differences-between-influxdb-and-relational-sql-databases
-	% https://archive.docs.influxdata.com/influxdb/v1.2/concepts/crosswalk/
+	\noindent InfluxDB es una base de datos diseñada para trabajar con datos tipo time-series. Si bien es cierto que SQL puede gestionar este tipo de datos, no fue creado estrictamente para este objetivo. En este caso, InfluxDB esta diseñado para almacenar grandes volúmenes de datos, y además realizar análisis en tiempo real sobre esos datos. \\
+	
+	\noindent En comparación con SQL, en InfluxDB un ``timestamp'' identifica un punto en cualquier serie de datos. Esto sería equivalente a SQL, si la clave primaria de una tabla es establecida por el sistema y siempre es equivalente al tiempo. Además, InfluxDB permite reconocer el ``schema'' de manera dinámica, además de que no estas obligado a definir el ``schema'' y seguirlo, es decir, se permiten cambios dentro de la misma serie de datos. [\ref{bib: influxdb doc vs sql}] \\
+	
+	\noindent Algunas de las razones destacadas para elegir InfluxDB son: [\ref{bib: influxdb doc}]
+	
+	\begin{itemize}
+		\item Perfecto para almacenar datos de telemetría, como métricas de aplicaciones o sensores IoT.
+		\item Los datos son comprimidos automáticamente para ser eficientes con el espacio disponible.
+		\item Se realizan tareas automáticas de ``downsampling'' para reducir el uso de disco.
+		\item Lenguaje para hacer consultas que permite analizar en profundidad los datos almacenados.
+		\item Disponible una aplicación web para realizar consultas y comprobar los datos disponibles en la base de datos.
+	\end{itemize}
+
+	\vspace{10px}
+
+	\noindent \textbf{\large Terminología} \\
+	
+	\noindent Comparando con los conceptos ya existentes en bases de datos de tipo SQL, se definen los siguientes conceptos en InfluxDB:
+	
+	\begin{itemize}
+		\item ``measurement'': equivalente a una tabla.
+		\item ``tags'': equivalente a columnas indexadas dentro de una tabla.
+		\item ``fields'': equivalente a columnas no indexadas dentro de una tabla.
+		\item ``points'': similar a las filas en una tabla.
+	\end{itemize}
+
+	\vspace{20px}
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.6\textwidth]{img/InfluxDB.png}
+			\caption{Logotipo base de datos InfluxDB.}
+			\label{img: influxdb logo}
+		\end{center}
+	\end{figure}
+
+	\pagebreak
+
+	\noindent \textbf{\large Modelo de datos} \\
+	
+	\noindent Para la aplicación a diseñar, se plantea la premisa de que en la base de datos InfluxDB solo se van a guardar los datos de cada muestra de monitorización de una interfaz. Además, se pueden tener tantas redes como sean necesarias, y dentro de cada red, tantas interfaces como creamos necesarias. \\
+	
+	\noindent En resumen, definimos el modelo de datos que tiene que seguir nuestra aplicación:
+	
+	\begin{itemize}
+		\item ``measurement'': equivalente a una red a monitorizar, valor almacenado en Networks::influx\_net.
+		\item ``fields'': nombre del valor a monitorizado, en este caso el default es \textit{link\_count}.
+		\item ``tags'': solo tenemos un tag llamado \textit{interface}, su objetivo es identificar a que interfaz pertenece el punto de monitorización. El valor puede estar ser Interfaces::influx\_if\_rx o Interfaces::influx\_if\_tx.
+		\item ``points'': corresponde con el valor numérico del ``field''. En este caso, corresponde con el valor númerico de link\_count en ese periodo de 5 minutos.
+	\end{itemize} 
 	
 	
 	\pagebreak
 	
 	\section{Modelo de predicción}
 	
-	\section{Lenguajes de programación y frameworks}
+	\pagebreak
 	
-	\section{Tecnologías utilizadas en un despliegue en producción}
+	\section[Lenguajes y frameworks]{Lenguajes de programación y frameworks}
+	
+	\noindent En resumen, para el desarrollo de esta aplicación se han utilizado el lenguaje de programación Python, con el framework de desarrollo para APIs FastAPI.
+	
+	\pagebreak
+	
+	\section[Despliegue en Producción]{Tecnologías utilizadas en un despliegue en producción}
+	
+	\noindent \textbf{\large Docker} \\
+	
+	\noindent \textbf{\large docker-compose} \\
+	
+	\noindent \textbf{\large Traefik} \\
 	
 	\pagebreak
 	
@@ -327,6 +387,16 @@
 		\label{bib: postgresql}
 		\href{https://www.postgresql.org/}{PostgreSQL}
 		
+		% 5
+		\item
+		\label{bib: influxdb doc}
+		\href{https://www.stackhero.io/en/services/InfluxDB/documentations/Introduction#differences-between-influxdb-and-relational-sql-databases}{InfluxDB: Introduction}
+		
+		
+		% 5
+		\item
+		\label{bib: influxdb doc vs sql}
+		\href{https://archive.docs.influxdata.com/influxdb/v1.2/concepts/crosswalk/}{InfluxDB: Comparison to SQL}
 		
 	\end{enumerate}
 
