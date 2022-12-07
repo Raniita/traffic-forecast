@@ -161,7 +161,7 @@
 	\noindent Lo primero, es entender en que consiste un microservicio. Para ello, podemos definirlo como los sistemas que cumplen las siguientes premisas: [\ref{bib: microservices}]
 	
 	\begin{itemize}
-		\item Los microservicios son sistemas pequeños, independientes y poco ''acoplados''.
+		\item Los microservicios son sistemas pequeños, independientes y poco ``acoplados'' (ver figura \ref{img: microservice architecture}).
 		
 		\item Cada servicio tiene su propio código fuente, que esta separado del resto de códigos de los servicios.
 		
@@ -180,7 +180,7 @@
 	
 	\noindent \textbf{\large Comunicación basada en \textbf{API}} \\
 	
-	\noindent Una API permite a dos componentes comunicarse entre sí mediante una serie de reglas. Además, supone un ''contrato'' en el que se establecen las solicitudes y respuestas esperadas en la comunicación. [\ref{bib: what is api}] \\
+	\noindent Una API permite a dos componentes comunicarse entre sí mediante una serie de reglas. Además, supone un ``contrato'' en el que se establecen las solicitudes y respuestas esperadas en la comunicación. [\ref{bib: what is api}] \\
 	
 	\noindent Dependiendo de la implementación de la API que se realice, distinguimos cuatro tipos de API:
 	
@@ -195,6 +195,14 @@
 	\end{itemize}
 	
 	\noindent En en caso de nuestra aplicación, se decidió utilizar el tipo REST API, ya que permite una sencilla implementación de cara al cliente que quiera utilizar dicha interfaz.
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.85\textwidth]{img/microservice_architecture.png}
+			\caption{Comparativa entre arquitectura de microservicios y arquitectura ``monolítica''. [\ref{bib_img: microservice architecture}]}
+			\label{img: microservice architecture}
+		\end{center}
+	\end{figure}
 	
 	
 	\pagebreak
@@ -228,33 +236,7 @@
 	
 	\noindent Para el caso de nuestra aplicación de monitorización de tráfico en red, modelamos la base de datos según la información que vamos a almacenar. Por lo que tenemos que definir la estructura de tablas, los campos que van a tener cada una de las tablas, y los campos por los que se van a relacionar entre sí. A esta información la llamamos modelo de datos.
 	
-	\pagebreak
 	
-	\subsubsection{Modelos de datos}
-	
-	\noindent El primer modelo de datos de la aplicación, es el referido a la información de una red a monitorizar. La descripción del modelo la podemos ver en la figura \ref{img: modelo sql networks}.
-	
-	\begin{figure}[h!]
-		\begin{center}
-			\includegraphics[width=0.5\textwidth]{img/model_sql_networks.png}
-			\caption{Modelo de datos para las redes a monitorizar. Equivale con la tabla ''networks''.}
-			\label{img: modelo sql networks}
-		\end{center}
-	\end{figure}
-	
-	\noindent El segundo modelo de datos de la aplicación, es el referido a la información de una interfaz a monitorizar, que esta dentro de una red monitorizada. La descripción del modelo la podemos ver en la figura \ref{img: modelo sql interfaces}.
-
-	\begin{figure}[h!]
-		\begin{center}
-			\includegraphics[width=0.5\textwidth]{img/model_sql_interfaces.png}
-			\caption{Modelos de datos para las interfaces a monitorizar. Equivale con la tabla ''interfaces''}
-			\label{img: modelo sql interfaces}
-		\end{center}
-	\end{figure}
-
-	\noindent Se establece una relación del modo que una interfaz solo puede pertenecer a una red monitorizada, y que además, una red monitorizada puede tener muchas interfaces. Dicha relación se realiza mediante el campo ''id\_net'' de la tabla Interfaces. \\
-	
-	\noindent Por último, la base de datos SQL utilizada para esta aplicación es PostgreSQL [\ref{bib: postgresql}], ya que además de ser Open Source, permite una gran escalabilidad, amoldándose a los recursos de la máquina en la que esté funcionando.
 	
 	\pagebreak
 	
@@ -292,42 +274,100 @@
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[width=0.6\textwidth]{img/InfluxDB.png}
-			\caption{Logotipo base de datos InfluxDB.}
+			\caption{Logotipo base de datos InfluxDB [\ref{bib_img: influxdb logo}].}
 			\label{img: influxdb logo}
 		\end{center}
 	\end{figure}
 
 	\pagebreak
-
-	\noindent \textbf{\large Modelo de datos} \\
 	
-	\noindent Para la aplicación a diseñar, se plantea la premisa de que en la base de datos InfluxDB solo se van a guardar los datos de cada muestra de monitorización de una interfaz. Además, se pueden tener tantas redes como sean necesarias, y dentro de cada red, tantas interfaces como creamos necesarias. \\
-	
-	\noindent En resumen, definimos el modelo de datos que tiene que seguir nuestra aplicación:
-	
-	\begin{itemize}
-		\item ``measurement'': equivalente a una red a monitorizar, valor almacenado en Networks::influx\_net.
-		\item ``fields'': nombre del valor a monitorizado, en este caso el default es \textit{link\_count}.
-		\item ``tags'': solo tenemos un tag llamado \textit{interface}, su objetivo es identificar a que interfaz pertenece el punto de monitorización. El valor puede estar ser Interfaces::influx\_if\_rx o Interfaces::influx\_if\_tx.
-		\item ``points'': corresponde con el valor numérico del ``field''. En este caso, corresponde con el valor númerico de link\_count en ese periodo de 5 minutos.
-	\end{itemize} 
-	
-	
-	\pagebreak
-	
-	\section{Modelo de predicción}
+	%\section{Modelo de predicción}
+	% TODO: eliminar?
 	
 	\pagebreak
 	
 	\section[Lenguajes y frameworks]{Lenguajes de programación y frameworks}
 	
-	\noindent En resumen, para el desarrollo de esta aplicación se han utilizado el lenguaje de programación Python, con el framework de desarrollo para APIs FastAPI.
+	\noindent En resumen, para el desarrollo de esta aplicación se ha utilizado el lenguaje de programación Python, con el framework de desarrollo para APIs llamado FastAPI.
+	
+	\subsection{Python}
+	
+	\noindent Python [\ref{bib: python doc}] es un lenguaje de programación orientado a objetos, interpretado y de alto nivel con tipado dinámico. Es muy atractivo ya que permite un desarrollo rápido de aplicaciones, además de ser muy adecuado para realizar tareas de ``scripting''. Python es un lenguaje simple y sencillo de aprender. Por otro lado, dispone de multitud de ``librerías'' o ``módulos'' publicados por usuarios, dando lugar a una gran comunidad y una gran variedad de alternativas para implementar soluciones. \\
+	
+	\noindent Actualmente, Python destaca como lenguaje de programación en los siguientes ámbitos:
+	\begin{itemize}
+		\item Desarrollo de aplicaciones web, utilizando los frameworks Django, Flask o FastAPI.
+		\item Tareas asociadas a ``data science'', utilizando librerías como Pandas o NumPy.
+		\item Inteligencia artificial, utilizando frameworks como TensorFlow o scikit-learn.
+	\end{itemize}
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.5\textwidth]{img/python_logo.png}
+			\caption{Logotipo Python [\ref{bib_img: python logo}].}
+			\label{img: python logo}
+		\end{center}
+	\end{figure}
+	
+	\subsection{FastAPI}
+	
+	\noindent FastAPI [\ref{bib: fastapi doc}] es un framework moderno y rápido para construir APIs utilizando la versión de Python 3.7+. Algunas de las características más destacadas son:
+	
+	\begin{itemize}
+		\item Rápido: rendimiento muy alto, prácticamente a la par con otros lenguajes de programación destinados al desarrollo de backend (como NodeJS o Go).
+		\item Intuitivo: soporta auto completado en el código.
+		\item Robusto: código pensado para entornos de producción, además de incluir documentación automática (usando Swagger o ReDoc).
+		\item Basado en estándares: al utilizar estándares de tipo de datos, permite ser totalmente compatible con los estándares de \href{https://github.com/OAI/OpenAPI-Specification}{OpenAPI} [\ref{bib: openapi}] y \href{https://json-schema.org/}{JSON Schema} [\ref{bib: json schema}].
+	\end{itemize}
+	
+	\pagebreak
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.6\textwidth]{img/fastapi_logo.png}
+			\caption{Logotipo FastAPI [\ref{bib_img: fastapi logo}].}
+			\label{img: fastapi logo}
+		\end{center}
+	\end{figure}
+
+	\subsection{Prophet}
+	
+	\noindent Prophet [\ref{bib: prophet doc}] es un framework del lenguaje de programación Python, desarrollado por \href{https://github.com/facebook/}{Meta}, que recoge una serie de procedimientos que permiten realizar predicciones de un dataset de series temporales, en el que se pueden encontrar diferentes efectos no lineales, llamados tendencias (como puede ser una tendencia anual, semanal, o mensual), además de otros efectos causados por fechas concretas. \\
+	
+	\noindent Es un framework de predicción basado en inferencia estadística, lo que permite tener un rendimiento mayor que si utilizamos técnicas de Machine Learning para solucionar el mismo problema de predicción de datos. Además, es robusto a datos no disponibles y a modificaciones aleatorias sobre las tendencias. 
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.55\textwidth]{img/prophet_logo.png}
+			\caption{Logotipo Prophet [\ref{bib_img: prophet logo}].}
+			\label{img: prophet logo}
+		\end{center}
+	\end{figure}
 	
 	\pagebreak
 	
 	\section[Despliegue en Producción]{Tecnologías utilizadas en un despliegue en producción}
 	
+	\noindent Otro de los aspectos importantes para la realización de este proyecto, es el hecho de que la aplicación desarrollada debe ser apta para desplegarse en un entorno de producción y funcionar correctamente para que sea implementada como microservicio por otras aplicaciones. Es por este motivo por el que nos decantamos por implementar este microservicio dentro de un contenedor. \\
+	
 	\noindent \textbf{\large Docker} \\
+
+	\noindent Utilizamos Docker como la tecnología para realizar un contenedor de nuestra aplicación, implementando dentro del contenedor todas las librerías y código necesario para hacer funcionar la aplicación. \\
+	
+	\noindent Por otro lado, también será necesario desplegar diferentes contenedores que tendrán alojadas las bases de datos que utilizaremos en el proyecto. En este caso, al utilizar dos bases de datos, tendremos que hacer uso de un contenedor para desplegar una base de datos SQL, y otro contenedor para desplegar una base de datos InfluxDB. \\ 
+	
+	\noindent Los contenedores Docker necesarios se desplegarán sobre una máquina host que tenga en funcionamiento el ``daemon'' de Docker. 
+	
+	% TODO: revisar imagen
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=1\textwidth]{img/docker_capture.png}
+			\caption{Docker}
+			%\label{img: prophet logo}
+		\end{center}
+	\end{figure}
+
+	\pagebreak
 	
 	\noindent \textbf{\large docker-compose} \\
 	
@@ -342,6 +382,49 @@
 	\section{Estructura de la aplicación}
 	
 	\section{Modelos de datos}
+	
+	\subsection{Base de datos SQL}
+	
+	\subsubsection{Modelos de datos}
+	
+	\noindent El primer modelo de datos de la aplicación, es el referido a la información de una red a monitorizar. La descripción del modelo la podemos ver en la figura \ref{img: modelo sql networks}.
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.5\textwidth]{img/model_sql_networks.png}
+			\caption{Modelo de datos para las redes a monitorizar. Equivale con la tabla ''networks''.}
+			\label{img: modelo sql networks}
+		\end{center}
+	\end{figure}
+	
+	\noindent El segundo modelo de datos de la aplicación, es el referido a la información de una interfaz a monitorizar, que esta dentro de una red monitorizada. La descripción del modelo la podemos ver en la figura \ref{img: modelo sql interfaces}.
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.5\textwidth]{img/model_sql_interfaces.png}
+			\caption{Modelos de datos para las interfaces a monitorizar. Equivale con la tabla ''interfaces''}
+			\label{img: modelo sql interfaces}
+		\end{center}
+	\end{figure}
+	
+	\noindent Se establece una relación del modo que una interfaz solo puede pertenecer a una red monitorizada, y que además, una red monitorizada puede tener muchas interfaces. Dicha relación se realiza mediante el campo ''id\_net'' de la tabla Interfaces. \\
+	
+	\noindent Por último, la base de datos SQL utilizada para esta aplicación es PostgreSQL [\ref{bib: postgresql}], ya que además de ser Open Source, permite una gran escalabilidad, amoldándose a los recursos de la máquina en la que esté funcionando.
+	
+	\subsection{Base de datos InfluxDB}
+	
+	\noindent \textbf{\large Modelo de datos} \\
+	
+	\noindent Para la aplicación a diseñar, se plantea la premisa de que en la base de datos InfluxDB solo se van a guardar los datos de cada muestra de monitorización de una interfaz. Además, se pueden tener tantas redes como sean necesarias, y dentro de cada red, tantas interfaces como creamos necesarias. \\
+	
+	\noindent En resumen, definimos el modelo de datos que tiene que seguir nuestra aplicación:
+	
+	\begin{itemize}
+		\item ``measurement'': equivalente a una red a monitorizar, valor almacenado en Networks::influx\_net.
+		\item ``fields'': nombre del valor a monitorizado, en este caso el default es \textit{link\_count}.
+		\item ``tags'': solo tenemos un tag llamado \textit{interface}, su objetivo es identificar a que interfaz pertenece el punto de monitorización. El valor puede estar ser Interfaces::influx\_if\_rx o Interfaces::influx\_if\_tx.
+		\item ``points'': corresponde con el valor numérico del ``field''. En este caso, corresponde con el valor númerico de link\_count en ese periodo de 5 minutos.
+	\end{itemize} 
 	
 	\section{Endpoints}
 	
@@ -392,12 +475,35 @@
 		\label{bib: influxdb doc}
 		\href{https://www.stackhero.io/en/services/InfluxDB/documentations/Introduction#differences-between-influxdb-and-relational-sql-databases}{InfluxDB: Introduction}
 		
-		
-		% 5
+		% 6
 		\item
 		\label{bib: influxdb doc vs sql}
 		\href{https://archive.docs.influxdata.com/influxdb/v1.2/concepts/crosswalk/}{InfluxDB: Comparison to SQL}
 		
+		% 7
+		\item
+		\label{bib: python doc}
+		\href{https://www.python.org/}{Python}
+		
+		% 8
+		\item
+		\label{bib: fastapi doc}
+		\href{https://fastapi.tiangolo.com/}{FastAPI framework}
+		
+		% 9
+		\item
+		\label{bib: openapi}
+		\href{https://github.com/OAI/OpenAPI-Specification}{GitHub: OpenAPI-Specification}
+		
+		% 10
+		\item
+		\label{bib: json schema}
+		\href{https://json-schema.org/}{JSON Schema}
+		
+		% 11
+		\item
+		\label{bib: prophet doc}
+		\href{https://facebook.github.io/prophet/}{Prophet}
 	\end{enumerate}
 
 	\vspace{20px}
@@ -406,10 +512,38 @@
 	\addcontentsline{toc}{section}{Imagenes}
 
 	\begin{enumerate}
+		
 		% 1
+		\item
+		\label{bib_img: microservice architecture}
+		\href{https://xbsoftware.com/blog/microservices-vs-monolithic-architecture/}{Monolithic vs Microservices Architecture}
+		
+		% 2
 		\item
 		\label{bib_img: example sql}
 		\href{https://xbsoftware.com/blog/main-types-of-database-management-systems/}{Relational Databases}
+		
+		% 3
+		\item
+		\label{bib_img: influxdb logo}
+		\href{https://www.influxdata.com/}{InfluxDB}
+		
+		% 4
+		\item
+		\label{bib_img: python logo}
+		\href{https://www.python.org/}{Python}
+		
+		% 5
+		\item
+		\label{bib_img: fastapi logo}
+		\href{https://fastapi.tiangolo.com/}{FastAPI}
+		
+		% 6
+		\item
+		\label{bib_img: prophet logo}
+		\href{https://facebook.github.io/prophet/}{Prophet}
+		
+		
 	\end{enumerate}
 	
 	\pagebreak
