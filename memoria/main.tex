@@ -189,6 +189,7 @@
 	\pagebreak
 	
 	\noindent \textbf{\large Comunicación basada en \textbf{API}} \\
+	\label{sec: api}
 	
 	\noindent Una API permite a dos componentes comunicarse entre sí mediante una serie de reglas. Además, supone un ``contrato'' en el que se establecen las solicitudes y respuestas esperadas en la comunicación. [\ref{bib: what is api}] \\
 	
@@ -526,7 +527,51 @@ services:
 	
 	\chapter{Diseño e implementación del sistema}
 	
+	\noindent En este capítulo se va a comentar más en detalle la implementación del sistema propuesto para la monitorización y predicción de tráfico en una red. Tal y como vimos en el capitulo anterior, se va a utilizar el lenguaje de programación Python, con el framework de desarollo FastAPI.
+	
 	\section{Descripción REST API}
+	
+	\noindent Tal y como pudimos ver en la sección \ref{sec: api}, para la aplicación propuesta hemos elegido que siga la estructura de REST API, ya que es la más sencilla de implementar y la más flexible. \\
+	
+	\noindent Para nuestro caso particular de monitorización del tráfico de una red, se han detectado tres ``agentes'' involucrados dentro del sistema. Dichos agentes son los siguientes:
+	
+	\begin{itemize}
+		\item Redes (desde ahora \texttt{networks}). Corresponde con una red en la que queremos monitorizar el tráfico de ciertas interfaces.
+		\item Interfaces de red (desde ahora \texttt{interfaces}). Corresponde con las interfaces de red de las que queremos monitorizar su tráfico.
+		\item Muestras de monitorización (desde ahora \texttt{samples}). Corresponden con los diferentes datos de monitorización de tráfico asociados a una interfaz.
+	\end{itemize}
+
+	\noindent Definidos los agentes, se procede a diseñar el almacenamiento de la información de cada uno de ellos. Para ello, en primer lugar, nos decantamos por aplicar el concepto de CRUD en los agentes \texttt{networks} y \texttt{interfaces}. \\
+	
+	\noindent \textbf{\large CRUD: \texttt{networks}} \\
+	
+	\noindent Tal y como se refiere la definición de CRUD (\textbf{C}reate \textbf{R}ead \textbf{U}pdate \textbf{D}elete), en el caso del agente de \texttt{networks}, queremos definir el funcionamiento que tiene que seguir la aplicación cuando queramos referirnos a una red a monitorizar. Además, asumimos que dentro de una misma red podemos tener diferentes interfaces, que también serán dadas de altas en la aplicación. Por lo tanto, una única red puede tener muchas interfaces de red monitorizadas. \\
+	
+	\noindent Dado que estamos planteando un servicio HTTP, debemos asignar una ruta (desde ahora \texttt{endpoint}) asociada a la colección de métodos de la CRUD de \texttt{networks}. En este caso, el endpoint de la colección sera: ``\texttt{/networks}''
+	
+	\pagebreak
+	
+	\noindent A modo de resumen, recogemos en la siguiente tabla el funcionamiento esperado de la aplicación, en función del método HTTP recibido y el recurso sobre el que se ejecute la petición HTTP.
+	
+	% Please add the following required packages to your document preamble:
+	% \usepackage{graphicx}
+	\begin{table}[h!]
+		\centering
+		\resizebox{\columnwidth}{!}{%
+			\begin{tabular}{lllll}
+				\hline
+				\multicolumn{1}{|c|}{\textbf{Recurso}}                                                                                           & \multicolumn{1}{c|}{\textbf{\texttt{GET}}}                                                                    & \multicolumn{1}{c|}{\textbf{\texttt{POST}}}                                                  & \multicolumn{1}{c|}{\textbf{\texttt{PATCH}}}                                                                      & \multicolumn{1}{c|}{\textbf{\texttt{DELETE}}}                                               \\ \hline
+				\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Colección de redes:\\ \\ \texttt{/networks}\end{tabular}}                                 & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Lista de redes \\ dadas de alta\end{tabular}}         & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Añade una nueva \\ red\end{tabular}} & \multicolumn{1}{c|}{*}                                                                                   & \multicolumn{1}{c|}{*}                                                             \\ \hline
+				\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}Red en particular:\\ \\ \texttt{/networks/\textless{}id\_net\textgreater{}}\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Información de\\  una red en particular\end{tabular}} & \multicolumn{1}{c|}{*}                                                              & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Modificamos la \\ informacion de \\ una red\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Eliminamos \\ una red\end{tabular}} \\ \hline
+				&                                                                                                      &                                                                                     &                                                                                                          &                                                                                   
+			\end{tabular}%
+		}
+		\caption{CRUD \texttt{networks} (* equivalente a ``acceso denegado'')}
+		\label{tab:crud networks}
+	\end{table}
+
+
+	\pagebreak
 	
 	\section{Estructura de la aplicación}
 	
