@@ -63,6 +63,16 @@
 	tabsize=2
 }
 
+\lstdefinestyle{yaml}{
+	basicstyle=\color{blue}\ttfamily\footnotesize,
+	rulecolor=\color{black},
+	string=[s]{'}{'},
+	stringstyle=\color{blue},
+	comment=[l]{:},
+	commentstyle=\color{black},
+	morecomment=[l]{-}
+}
+
 \lstset{style=mystyle}
 
 % Configuracion encabezados y pies de pagina
@@ -369,11 +379,150 @@
 
 	\pagebreak
 	
-	\noindent \textbf{\large docker-compose} \\
+	\noindent \textbf{\large Docker Compose} \\
+	
+	\noindent Compose es una herramienta de Docker que permite definir y ejecutar instancias multi contenedores de Docker [\ref{bib: docker compose doc}]. Con la herramienta Compose, podemos utilizar un archivo YAML para describir y configurar los contenedores que vamos a utilizar, dando lugar a que con un único comando puedas crear y ejecutar todos los servicios de la aplicación, y con la misma configuración. \\
+	
+	\noindent Compose funciona para los diferentes entornos: producción, desarrollo, y o pruebas. Además, tiene disponibles comandos para hacer más sencilla la tarea de iniciar o parar servicios, o ver la salida de consola producida por los contenedores. \\
+	
+	\noindent En el caso de nuestra aplicación, el archivo ``\textit{docker-compose.yml}'' utilizado para el entorno de desarrollo sería el siguiente:
+	
+	\begin{lstlisting}[style=yaml, caption={Archivo configuración de contenedores para entorno de desarrollo.}]
+version: '3.8'
+
+services:
+  traffic_forecast:
+    build: ./backend
+    ports:
+     - 5000:5000
+    environment:
+     - POSTGRES_USER=monitor
+     - POSTGRES_PASSWORD=forecast2022
+     - POSTGRES_DB=traffic-forecast
+     - INFLUX_TOKEN=*******
+     - INFLUX_ORG=e-lighthouse
+     - INFLUX_BUCKET=traffic-forecast
+     - SECRET_KEY=upct2022_sk
+     - FASTAPI_CONFIG=development
+    volumes:
+     - ./backend:/app
+    depends_on:
+     - db
+     - influxdb
+
+  db:
+    image: postgres:13
+    expose:
+     - 5432
+    environment:
+     - POSTGRES_USER=monitor
+     - POSTGRES_PASSWORD=forecast2022
+     - POSTGRES_DB=traffic-forecast
+    volumes:
+     - ./data/postgres_db:/var/lib/postgressql/data
+    
+   influxdb:
+     image: influxdb:latest
+     volumes:
+       - ./data/influxdb/data:/var/lib/influxdb2:rw
+     ports:
+       - 8086:8086
+	\end{lstlisting}
+
+	\pagebreak
+	
+	\noindent Para desplegar los contenedores, según el archivo YAML definido, tenemos que ejecutar el siguiente comando: 
+	
+	\begin{verbatim}
+		docker compose up -f <filename> traffic_forecast
+	\end{verbatim}
 	
 	\noindent \textbf{\large Traefik} \\
 	
+	\noindent Traefik es una herramienta que permite hacer de ``reverse proxy'' y ``load balancer'' en contenedores Docker, permitiendo el despliegue sencillo de microservicios en un entorno de producción. \\
+	
+	\noindent Traefik esta diseñado para ser simple de operar, pero con una gran capacidad de gestión en entornos complejos. Además, se integra perfectamente con la infraestructura ya existente y configurar el sistema de manera dinámica. Algunas de las tareas que realiza Traefik son: [\ref{bib: traefik webpage}] 
+	
+	\begin{itemize}
+		\item Gestionar middlewares necesarios para la aplicación (forzar protocolos específicos, configurar contraseña para el servicio...).
+		\item Funcionar con API Gateway, gestionando los dominios y certificados para cada uno de los microservicios desplegados.
+		\item Orquestador de nodo de entrada, gestionando la comunicación de tráfico de un dominio hacia el servicio asociado.
+	\end{itemize}
+
+	% TODO: revisar imagen
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.78\textwidth]{img/traefik_example.png}
+			\caption{Captura portal de gestión de Traefik. Detalle de enrutado hacia un servicio.}
+			%\label{img: prophet logo}
+		\end{center}
+	\end{figure}
+	
 	\pagebreak
+	
+	\noindent En el caso de nuestra aplicación, para el entorno de producción usamos el siguiente archivo que permite a la herramienta docker compose ejecutar los servicios con sus configuraciones asociadas. Como podemos ver, en la sección de ``labels'' se encuentra la configuración asociada a Traefik. Dicha configuración permite a Traefik asignar un servicio a un dominio, crear un certificado SSL y configurar los puertos de acceso para dicho servicio. [\ref{bib: traefik wiki}]
+	
+	\begin{lstlisting}[style=yaml, caption={Archivo configuración de contenedores para entorno de producción.}]
+version: '3.8'
+
+services:
+  traffic_forecast:
+    build: ./backend
+    container_name: traffic_forecast-api
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=monitor
+      - POSTGRES_PASSWORD=forecast2022
+      - POSTGRES_DB=traffic-forecast
+      - INFLUX_URL=https://tfm-influx.ranii.pro:8443/
+      - INFLUX_TOKEN=****
+      - INFLUX_ORG=e-lighthouse
+      - INFLUX_BUCKET=traffic-forecast
+      - SECRET_KEY=upct2022_sk
+    volumes:
+      - ./backend:/app
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.tf-api.entryPoints=web-secure
+      - traefik.http.routers.tf-api.rule=Host(`tfm-api.ranii.pro`)
+      - traefik.http.routers.tf-api.tls.certresolver=default
+      - traefik.http.services.tf-api.loadbalancer.server.port=5000
+    depends_on:
+      - db
+      - influxdb
+
+  db:
+    image: postgres:13
+    container_name: traffic_forecast-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=monitor
+      - POSTGRES_PASSWORD=forecast2022
+      - POSTGRES_DB=traffic-forecast
+    volumes:
+      - ./data/postgres_db:/var/lib/postgressql/data
+
+  influxdb:
+    image: influxdb:latest
+    container_name: traffic_forecast-influx
+    restart: unless-stopped
+    volumes:
+      - ./data/influxdb/data:/var/lib/influxdb2:rw
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.tf-influx.entryPoints=web-secure
+      - traefik.http.routers.tf-influx.rule=Host(`tfm-influx.ranii.pro`)
+      - traefik.http.routers.tf-influx.tls.certresolver=default
+      - traefik.http.services.tf-influx.loadbalancer.server.port=8086
+	\end{lstlisting} 
+
+	\noindent Para desplegar los contenedores, según el archivo YAML definido, tenemos que ejecutar el siguiente comando: 
+	
+	\begin{verbatim}
+		docker compose up -f <filename> traffic_forecast
+	\end{verbatim}
+
+	\noindent En el caso de querer profundizar más en el funcionamiento de Traefik, se puede consultar el siguiente enlace \href{https://doc.traefik.io/traefik/}{Traefik: Get Started}
 	
 	\chapter{Diseño e implementación del sistema}
 	
@@ -504,6 +653,23 @@
 		\item
 		\label{bib: prophet doc}
 		\href{https://facebook.github.io/prophet/}{Prophet}
+		
+		% 12
+		\item
+		\label{bib: docker compose doc}
+		\href{https://docs.docker.com/compose/}{Docker Compose Overview}
+		
+		% 13
+		\item
+		\label{bib: traefik webpage}
+		\href{https://traefik.io/traefik/}{Traefik Webpage}
+		
+		% 14
+		\item
+		\label{bib: traefik wiki}
+		\href{https://doc.traefik.io/traefik/}{Traefik Wiki}
+		
+		
 	\end{enumerate}
 
 	\vspace{20px}
