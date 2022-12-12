@@ -656,7 +656,43 @@ services:
 		\end{center}
 	\end{figure}
 
-	\noindent De esta manera, en el caso de querer añadir una funcionalidad nueva, solo tendríamos que modificar los archivos pertinentes. Las modificaciones en archivos ya existentes serían mínimas. Permitiendo de esta manera un fácil mantenimiento y desarrollo sobre la aplicación.
+	\noindent De esta manera, en el caso de querer añadir una funcionalidad nueva, solo tendríamos que modificar los archivos pertinentes. Las modificaciones en archivos ya existentes serían mínimas. Permitiendo de esta manera un fácil mantenimiento y desarrollo sobre la aplicación. \\
+	
+	\pagebreak
+	
+	%\noindent \textbf{\large OpenAPI Specification. Swagger} \\
+	\subsection{OpenAPI Specification. Swagger}
+	
+	\noindent Una de las ventajas que supone el uso de FastAPI, es que de manera automática genera la documentación asociada a OpenAPI de la aplicación, dando lugar a que el endpoint \texttt{/docs} nos redirige directamente a la aplicación web \texttt{Swagger}, que nos muestra de una manera sencilla todos los endpoints asociados de nuestra aplicación, permitiendo realizar peticiones y comprobando la funcionalidad de esta. \\
+	
+	\noindent De esta manera, si navegamos a dicha ruta (\texttt{/docs}), podemos ver como nos aparece una web similar a la de la figura \ref{img: swagger 1}.
+	
+	\begin{figure}[h!]
+		\includegraphics[width=1.2\textwidth,center]{img/swagger_1.png}
+		\caption{Captura Swagger. Vista por defecto.}
+		\label{img: swagger 1}
+	\end{figure}
+
+	\noindent A modo de ejemplo, si hiciéramos \textit{click} en uno de los \texttt{endpoints}, podremos comprobar como se nos despliega información asociada. Por ejemplo, del esquema de datos de entrada, o el esquema de datos de salida, al igual que los códigos HTTP esperados. En la figura \ref{img: swagger 2}, podemos ver el detalle de la información necesaria para crear una red. \\
+	
+	\noindent Además, una de las funcionalidades más interesantes que nos aporta Swagger, es la documentación necesaria sobre los esquemas de los JSON de salida de la aplicación. Esto es muy importante ya que nos permitiría conectar con otras aplicaciones, y presentar la información recibida. En la figura \ref{img: swagger schemas 1}, podemos ver un detalle de algunos de los esquemas que se utilizan en la aplicación.
+	
+	\pagebreak
+	
+	\begin{figure}[h!]
+		\includegraphics[width=1.2\textwidth, center]{img/swagger_2.png}
+		\caption{Captura Swagger. Detalle del método de crear red. (\texttt{POST} a \texttt{/networks})}
+		\label{img: swagger 2}
+	\end{figure}
+
+	\begin{figure}[h!]
+		\includegraphics[width=1.2\textwidth, center]{img/swagger_schemas_1.png}
+		\caption{Captura Swagger. Detalle de esquemas JSON de salida de \texttt{networks} e \texttt{interfaces}.}
+		\label{img: swagger schemas 1}
+	\end{figure}
+	
+	
+	\pagebreak
 	
 	\section{Modelos de datos}
 	
