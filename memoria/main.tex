@@ -321,6 +321,7 @@
 	\end{figure}
 	
 	\subsection{FastAPI}
+	\label{sec: fastapi}
 	
 	\noindent FastAPI [\ref{bib: fastapi doc}] es un framework moderno y rápido para construir APIs utilizando la versión de Python 3.7+. Algunas de las características más destacadas son:
 	
@@ -570,10 +571,92 @@ services:
 		\label{tab:crud networks}
 	\end{table}
 
+	\vspace{22px}
+
+	\noindent \textbf{\large CRUD: \texttt{interfaces}} \\
+	
+	\noindent Para el caso del agente \texttt{interfaces}, definimos el funcionamiento de la aplicación. Entendemos una interfaz como aquellas interfaces de red que queremos monitorizar su tráfico dentro de una red, que previamente ya ha sido dada de alta en el sistema. \\
+	
+	\noindent Cómo compromiso de diseño, se entiende que cada tendremos que dar de alta dos interfaces en el sistema, una interfaz para monitorizar los datos de transmisión (desde ahora, TX) y otra interfaz para monitorizar los datos de recepción (desde ahora, RX). De esta manera, tendríamos completamente monitorizada la interfaz de red. \\
+	
+	\noindent Una interfaz monitorizada puede tener muchas muestras guardadas en el sistema, dichas muestras serán almacenadas en la base de datos para datos temporales (en nuestro caso InfluxDB). \\
+	
+	\noindent Al igual que en el caso de \texttt{networks}, debemos asignar un \texttt{endpoint} asociado a la colección de los métodos CRUD de \texttt{interfaces}. En este caso, el \texttt{endpoint} asociado de la colección será: ``\texttt{/networks/<id\_net>/interfaces}''. \\
+	
+	\begin{table}[h!]
+		\centering
+		\resizebox{\columnwidth}{!}{%
+			\begin{tabular}{|l|l|c|c|c|}
+				\hline
+				\multicolumn{1}{|c|}{\textbf{Recurso}}                                                                                                                     & \multicolumn{1}{c|}{\textbf{\texttt{GET}}}                                                        & \textbf{\texttt{POST}}                                                                                      & \textbf{\texttt{PATCH}}                                                                                                 & \textbf{\texttt{DELETE}}                                                                         \\ \hline
+				\begin{tabular}[c]{@{}l@{}}Colección de interfaces:\\ \\ \texttt{/networks/\textless{}id\_net\textgreater{}/interfaces}\end{tabular}                                & \begin{tabular}[c]{@{}l@{}}Listado de \\ interfaces dentro \\ de una red.\end{tabular}   & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Añade una nueva\\ interfaz a una red.\end{tabular}} & *                                                                                                              & *                                                                                       \\ \hline
+				\begin{tabular}[c]{@{}l@{}}Interfaz en particular:\\ \\ \texttt{/networks/\textless{}id\_net\textgreater{}/interfaces/\textless{}id\_if\textgreater{}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}Información \\ de una interfaz \\ en particular.\end{tabular} & *                                                                                                  & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Modificamos \\ la información \\ de una interfaz.\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Eliminamos \\ una interfaz\end{tabular}} \\ \hline
+			\end{tabular}%
+		}
+		\caption{CRUD \texttt{interfaces} (* equivale a ``acceso denegado'')}
+		\label{tab:crud interfaces}
+	\end{table}
+
+	\pagebreak
+
+	\noindent \textbf{\large Métodos non CRUD} \\
+	
+	\noindent Por otro lado, la aplicación también estará compuesta por otros métodos que no encajan en el esquema CRUD. Estos métodos son:
+	
+	\begin{itemize}
+		\item Muestras monitorizadas. Permite importar muestras al sistema. Corresponde con el \texttt{endpoint}: \texttt{/samples}
+		\item Consultas de muestras monitorizadas. Permite acceder a la información de monitorización que esta almacenada en el sistema. Corresponde con el \texttt{endpoint}: \texttt{/query}
+		\item Ejecución de una predicción. Permite generar una predicción de tráfico. Corresponde con el \texttt{endpoint}: \texttt{/forecast}
+	\end{itemize}
+	
+	% TODO: Imagen draw-io con la estructura de la app.
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=1\textwidth]{diag/traffic_forecast_schema.png}
+			\caption{Diagrama resumen de la estructura de la aplicación.}
+			%\label{}
+		\end{center}
+	\end{figure}
 
 	\pagebreak
 	
-	\section{Estructura de la aplicación}
+	\section{Implementación de la aplicación}
+	
+	\noindent Tal y como se adelantó en la sección \ref{sec: fastapi}, el lenguaje utilizado para implementar la aplicación es Python, utilizando el framework de desarrollo FastAPI. \\
+	
+	\noindent Para la implementación de la aplicación, se ha seguido la metodología de diseño ``\textit{Factory Pattern}''. Dicha metodología permite estructurar un proyecto software de modo que la implementación de nuevas funcionalidades sea sencilla y no implique modificar partes ya validadas del sistema. Esto se basa en que permitimos a una clase crear objetos derivados de esta, en función de las necesidades del sistema. A grandes rasgos, intentamos emular el funcionamiento de una producción en cadena de una fabrica. Podemos encontrar más información en: [\ref{bib: factory method}] [\ref{bib: fastapi doc bigger apps}]. \\
+	
+	\noindent A consecuencia de esta metodología, el proyecto se estructura según la imagen \ref{img: folder structure}. Dicha estructura tiene como raíz la carpeta \texttt{backend}, y esta se divide tal que:
+	
+	\begin{itemize}
+		\item \texttt{migrations}. Carpeta que contiene las utilidades asociadas a la migración de la base de datos SQL. Permite realizar modificaciones en los modelos de datos y que dichas modificaciones se apliquen en la base de datos final.
+		\item \texttt{src}. Carpeta en la que encontramos todo el código asociado a la aplicación.
+			\begin{itemize}
+				\item \texttt{crud}. Contiene los archivos de funcionalidad para cada una de las CRUD (\texttt{networks} y \texttt{interfaces}).
+				\item \texttt{database}. Contiene los archivos asociados a los modelos de datos.
+				\item \texttt{noncrud}. Contiene la funcionalidad de los agentes que no siguen la estructura CRUD (\texttt{samples}, \texttt{query} y \texttt{forecast}).
+				\item \texttt{routes}. Contiene los \texttt{endpoints} de la aplicación, redirige a la funcionalidad en las carpetas \texttt{crud} y/o \texttt{noncrud}.
+				\item \texttt{schemas}. Contiene los diferentes esquemas de datos que se utilizan en la aplicación, tanto de entrada de datos del usuario, como de salida de datos del sistema.
+				\item \texttt{utils}. Contiene funciones de ayuda para simplificar el código, por ejemplo para manejar el InfluxDB.
+				\item \texttt{config.py}. Contiene las opciones configurables de la aplicación. Se definen dos entornos de ejecución: \texttt{development} o \texttt{production}.
+				\item \texttt{main.py}. Archivo principal del sistema, aquí comienza la ejecución de la aplicación.
+			\end{itemize}
+		
+		\item \texttt{Dockerfile}. Archivo que describe los pasos para crear un contenedor para nuestra aplicación.
+		\item \texttt{requirements.txt}. Archivo que contiene los diferentes paquetes de Python utilizados.
+	\end{itemize}
+	
+	\pagebreak
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.3\textwidth]{img/folder_structure.jpg}
+			\caption{Captura estructura de carpetas de la aplicación.}
+			\label{img: folder structure}
+		\end{center}
+	\end{figure}
+
+	\noindent De esta manera, en el caso de querer añadir una funcionalidad nueva, solo tendríamos que modificar los archivos pertinentes. Las modificaciones en archivos ya existentes serían mínimas. Permitiendo de esta manera un fácil mantenimiento y desarrollo sobre la aplicación.
 	
 	\section{Modelos de datos}
 	
@@ -622,7 +705,7 @@ services:
 	
 	\section{Endpoints}
 	
-	\section{Implementación del sistema}
+	%\section{Implementación del sistema}
 	
 	\pagebreak
 	
@@ -713,6 +796,16 @@ services:
 		\item
 		\label{bib: traefik wiki}
 		\href{https://doc.traefik.io/traefik/}{Traefik Wiki}
+		
+		% 15
+		\item
+		\label{bib: factory method}
+		\href{https://www.geeksforgeeks.org/factory-method-python-design-patterns/}{Factory Method - Python Design Patterns}
+		
+		% 16
+		\item
+		\label{bib: fastapi doc bigger apps}
+		\href{https://fastapi.tiangolo.com/tutorial/bigger-applications/}{FastAPI Doc: Bigger Applications}
 		
 		
 	\end{enumerate}
