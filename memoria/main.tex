@@ -138,6 +138,11 @@
 	
 	\pagebreak
 	
+	\addcontentsline{toc}{section}{Índice de tablas}
+	\listoftables
+	
+	\pagebreak
+	
 	\addcontentsline{toc}{section}{Listado de ejemplos}
 	\lstlistoflistings
 	
@@ -343,6 +348,7 @@
 	\end{figure}
 
 	\subsection{Prophet}
+	\label{sec: prophet}
 	
 	\noindent Prophet [\ref{bib: prophet doc}] es un framework del lenguaje de programación Python, desarrollado por \href{https://github.com/facebook/}{Meta}, que recoge una serie de procedimientos que permiten realizar predicciones de un dataset de series temporales, en el que se pueden encontrar diferentes efectos no lineales, llamados tendencias (como puede ser una tendencia anual, semanal, o mensual), además de otros efectos causados por fechas concretas. \\
 	
@@ -567,7 +573,7 @@ services:
 				&                                                                                                      &                                                                                     &                                                                                                          &                                                                                   
 			\end{tabular}%
 		}
-		\caption{CRUD \texttt{networks} (* equivalente a ``acceso denegado'')}
+		\caption{CRUD \texttt{networks} (* equivale a ``acceso denegado'')}
 		\label{tab:crud networks}
 	\end{table}
 
@@ -658,10 +664,18 @@ services:
 
 	\noindent De esta manera, en el caso de querer añadir una funcionalidad nueva, solo tendríamos que modificar los archivos pertinentes. Las modificaciones en archivos ya existentes serían mínimas. Permitiendo de esta manera un fácil mantenimiento y desarrollo sobre la aplicación. \\
 	
+	\subsection{Migración de base de datos SQL}
+	
+	\noindent Para permitir que sea sencillo extender los modelos de datos de la aplicación es necesario tener en cuenta que va a suceder si en algún momento decidimos cambiar algo de dichos modelos y que tenemos que hacer para que esos cambios se apliquen correctamente en la base de datos que estemos utilizando. Es por esto por lo que aparecen dos herramientas muy importantes: \texttt{ORM} y \texttt{migrations}.  \\
+	
+	\noindent En primer lugar, \texttt{ORM} (Object-relational Mappers) permite una abstracción de alto nivel que da lugar a describir un modelo de datos de SQL en Python, en vez de utilizar lenguaje SQL directamente. Además, permite acceder a la información de la base de datos de manera más sencilla, ya que para el programa es como si el modelo de datos fuera un objeto, pero internamente se están realizando las consultas SQL que sean necesarias. [\ref{bib: orm python}] [\ref{bib: fastapi orm}] \\
+	
+	\noindent En segundo lugar, \texttt{migrations} permite tener un control de versiones dentro de los modelos de datos que estemos usando en la aplicación. Además, permite aplicar automaticamente modificaciones en los modelos de datos, de modo que al ejecutar la aplicación, la base de datos actualizará su estructura (por ejemplo, añadir una nueva columna en una tabla) en función del modelo de datos que hayamos actualizado del \texttt{ORM}. [\ref{bib: fastapi migrations}]
+	
 	\pagebreak
 	
 	%\noindent \textbf{\large OpenAPI Specification. Swagger} \\
-	\subsection{OpenAPI Specification. Swagger}
+	\subsection{OpenAPI Specification. \texttt{Swagger}}
 	
 	\noindent Una de las ventajas que supone el uso de FastAPI, es que de manera automática genera la documentación asociada a OpenAPI de la aplicación, dando lugar a que el endpoint \texttt{/docs} nos redirige directamente a la aplicación web \texttt{Swagger}, que nos muestra de una manera sencilla todos los endpoints asociados de nuestra aplicación, permitiendo realizar peticiones y comprobando la funcionalidad de esta. \\
 	
@@ -696,15 +710,17 @@ services:
 	
 	\section{Modelos de datos}
 	
+	\noindent Por otro lado, debemos definir los datos y su representación dentro de nuestra aplicación. Esto nos permite adaptar la información en función del tipo de base de datos que vayamos a consultar, y en función del modelo a utilizar. Para ello, diferenciamos entre los modelos que estarán almacenados en la base de datos tipo SQL, y los datos almacenados en la base de datos tipo serie temporal.
+	
 	\subsection{Base de datos SQL}
 	
-	\subsubsection{Modelos de datos}
+	%\subsubsection{Modelos de datos}
 	
 	\noindent El primer modelo de datos de la aplicación, es el referido a la información de una red a monitorizar. La descripción del modelo la podemos ver en la figura \ref{img: modelo sql networks}.
 	
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.5\textwidth]{img/model_sql_networks.png}
+			\includegraphics[width=0.45\textwidth]{img/model_sql_networks.png}
 			\caption{Modelo de datos para las redes a monitorizar. Equivale con la tabla ''networks''.}
 			\label{img: modelo sql networks}
 		\end{center}
@@ -714,7 +730,7 @@ services:
 	
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.5\textwidth]{img/model_sql_interfaces.png}
+			\includegraphics[width=0.45\textwidth]{img/model_sql_interfaces.png}
 			\caption{Modelos de datos para las interfaces a monitorizar. Equivale con la tabla ''interfaces''}
 			\label{img: modelo sql interfaces}
 		\end{center}
@@ -726,7 +742,7 @@ services:
 	
 	\subsection{Base de datos InfluxDB}
 	
-	\noindent \textbf{\large Modelo de datos} \\
+	%\noindent \textbf{\large Modelo de datos} \\
 	
 	\noindent Para la aplicación a diseñar, se plantea la premisa de que en la base de datos InfluxDB solo se van a guardar los datos de cada muestra de monitorización de una interfaz. Además, se pueden tener tantas redes como sean necesarias, y dentro de cada red, tantas interfaces como creamos necesarias. \\
 	
@@ -737,7 +753,66 @@ services:
 		\item ``fields'': nombre del valor a monitorizado, en este caso el default es \textit{link\_count}.
 		\item ``tags'': solo tenemos un tag llamado \textit{interface}, su objetivo es identificar a que interfaz pertenece el punto de monitorización. El valor puede estar ser Interfaces::influx\_if\_rx o Interfaces::influx\_if\_tx.
 		\item ``points'': corresponde con el valor numérico del ``field''. En este caso, corresponde con el valor númerico de link\_count en ese periodo de 5 minutos.
-	\end{itemize} 
+	\end{itemize}
+
+	\section{Predicción de tráfico}
+	
+	\noindent Uno de los objetivos más importantes que tiene satisfacer la aplicación es la posibilidad de predecir tráfico de red a partir de muestras de monitorización almacenadas en el sistema. Para ello, tal y como introducimos en \ref{sec: prophet}, vamos a utilizar la herramienta de predicción Prophet. \\
+	
+	\noindent En primer lugar, se decide que la predicción de tráfico va a consumir información que esta almacenada en el sistema. Por lo tanto, es necesario crear una red a la que monitorizar, y añadir muestras asociadas a la monitorización. En resumen, si quisiéramos ejecutar una predicción de tráfico desde cero, tendríamos que seguir los siguientes pasos dentro de la aplicación:
+	
+	\begin{enumerate}
+		\item Creamos una red a monitorizar. Utilizaremos el endpoint POST: \texttt{/networks}.
+		
+		\item Creamos una interfaz a monitorizar, dentro de la red previa. Utilizamos el endpoint POST: \texttt{/networks/<network\_id>/interfaces}.
+		
+		\item Importamos datos de monitorización. Utilizamos alguno de los endpoints asociados para importar datos, por ejemplo: 
+		\begin{itemize}
+			\item \texttt{/samples/<network\_id>/import\_topology}
+			
+			\item \texttt{/samples/<network\_id>/import\_interface/<interface\_id>}
+		\end{itemize}
+	
+		\item Ejecutamos una predicción de tráfico. Usamos el endpoint POST: \texttt{/forecast}.
+	\end{enumerate}
+
+	\noindent Llegados a este punto, una vez ejecutada la predicción y en el caso de que la predicción pueda completarse, el sistema nos devolverá los puntos asociados con toda la serie temporal, incluidos los valores predichos por el sistema. Como característica adicional, se ha implementado la posibilidad de elegir si queremos la salida de los datos como CSV o como JSON.
+
+	\pagebreak
+
+	\noindent En el último paso, en el que ejecutamos la predicción de tráfico, podemos configurar en cierta manera cómo se va a realizar la predicción. Los parámetros a configurar son los siguientes: (ver figura \ref{img: prophet schema})
+	
+	\begin{itemize}
+		\item \texttt{id\_network}
+		
+		\item \texttt{id\_interface}
+		
+		\item \texttt{field}
+		
+		\item \texttt{days}
+		
+		\item \texttt{options}
+		
+		\begin{itemize}
+			\item \texttt{holidays\_region}
+			
+			\item \texttt{flexibility\_trend}
+			
+			\item \texttt{flexibility\_season}
+			
+			\item \texttt{flexibility\_holidays}
+		\end{itemize}
+	\end{itemize}
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.45\textwidth]{img/prophet_schema.png}
+			\caption{Datos de entrada para la ejecución de una predicción de tráfico.}
+			\label{img: prophet schema}
+		\end{center}
+	\end{figure}
+
+	\pagebreak
 	
 	\section{Endpoints}
 	
@@ -842,6 +917,21 @@ services:
 		\item
 		\label{bib: fastapi doc bigger apps}
 		\href{https://fastapi.tiangolo.com/tutorial/bigger-applications/}{FastAPI Doc: Bigger Applications}
+		
+		% 17
+		\item
+		\label{bib: orm python}
+		\href{https://www.fullstackpython.com/object-relational-mappers-orms.html}{Object-relational Mappers (ORMs)}
+		
+		% 18
+		\item
+		\label{bib: fastapi orm}
+		\href{https://fastapi.tiangolo.com/tutorial/sql-databases/#orms}{FastAPI Doc: SQL (Relational) Databases. ORM}
+		
+		% 19
+		\item
+		\label{bib: fastapi migrations}
+		\href{https://fastapi.tiangolo.com/tutorial/sql-databases/#migrations}{FastAPI Doc: SQL (Relational) Databases. Migrations}
 		
 		
 	\end{enumerate}
