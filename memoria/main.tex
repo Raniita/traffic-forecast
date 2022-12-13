@@ -756,6 +756,7 @@ services:
 	\end{itemize}
 
 	\section{Predicción de tráfico de red}
+	\label{sec: prophet info}
 	
 	\noindent Uno de los objetivos más importantes que tiene satisfacer la aplicación es la posibilidad de predecir tráfico de red a partir de muestras de monitorización almacenadas en el sistema. Para ello, tal y como introducimos en \ref{sec: prophet}, vamos a utilizar la herramienta de predicción Prophet. \\
 	
@@ -1013,9 +1014,79 @@ services:
 	
 	\subsection{Colección \texttt{Samples}}
 	
+	\begin{enumerate}
+		\item Ruta \texttt{/samples/\{network\_id\}/import\_topology}:
+		
+		\begin{itemize}
+			\item \textbf{Método HTTP}: \texttt{POST}
+			\item \textbf{Descripción}: permite subir un archivo tipo \texttt{.csv} que contenga información de más de una interfaz. Las columnas permitidas del \texttt{.csv} son: \texttt{timestamp}, \texttt{interface}, \texttt{TX} y \texttt{RX}. El sistema dará de alta las interfaces asociadas y cargará en la base de datos las muestras para cada una de las interfaces involucradas.
+			\item \textbf{Parámetros}: \texttt{network\_id} como identificador de la red a la que se va a subir los datos de monitorización.
+			\item \textbf{Respuesta}: una vez se carga la topología, el servidor nos devuelve un mensaje confirmando que se han creado las interfaces de red y que se han subido correctamente los datos a la base de datos.
+		\end{itemize}
+	
+		\item Ruta \texttt{/samples/\{network\_id\}/import\_interface/\{interface\_id\}}:
+		
+		\begin{itemize}
+			\item \textbf{Método HTTP}: \texttt{POST}
+			\item \textbf{Descripción}: permite subir un archivo tipo \texttt{.csv} que contenga muestras de tráfico de una única interfaz, especificando si es de tipo \texttt{RX} o \texttt{TX}. El sistema subirá la información de las muestras a la base de datos, asociadas a la interfaz de red que especificamos como parámetro.
+			\item \textbf{Parámetros}: \texttt{network\_id} e \texttt{interface\_id}, como identificadores tanto de red como de interfaz monitorizada.
+			\item \textbf{Respuesta}: una vez cargados los datos de monitorización, el servidor devuelve un mensaje confirmando que se han subido correctamente los datos.
+		\end{itemize}
+	\end{enumerate}
+	
 	\subsection{Colección \texttt{Query samples}}
 	
+	\begin{enumerate}
+		\item Ruta \texttt{/query}:
+		
+		\begin{itemize}
+			\item \textbf{Método HTTP}: \texttt{GET}
+			\item \textbf{Descripción}: permite consultar la información de monitorización almacenada en el sistema. Además, permite modificar si queremos la salida como \texttt{CSV} o como \texttt{JSON}.
+			\item \textbf{Parámetros}: \texttt{network\_id} e \texttt{interface\_id}, como identificadores de los datos a consultar, \texttt{field} para elegir entre interfaz de transmisión (\texttt{TX}) o interfaz de recepción (\texttt{RX}), y \texttt{to\_csv} para elegir entre si queremos la salida en formato \texttt{CSV} (campo en \texttt{true}) o la salida en formato JSON (campo en \texttt{false}).
+			\item \textbf{Respuesta}: el servidor devuelve los datos almacenados en el sistema. En función del parámetro \texttt{to\_csv}, la salida será un archivo con formato \texttt{CSV} o un archivo con formato \texttt{JSON}.
+		\end{itemize}
+	\end{enumerate}
+	
+	\pagebreak
+	
 	\subsection{Colección \texttt{Forecast}}
+	
+	\begin{enumerate}
+		\item Ruta \texttt{/forecast}:
+		
+		\begin{itemize}
+			\item \textbf{Método HTTP}: \texttt{POST}
+			\item \textbf{Descripción}: permite ejecutar una predicción de tráfico de red sobre una interfaz en específico. Más información en la sección \ref{sec: prophet info}
+			\item \textbf{Parámetros}: además del campo \texttt{body} que vemos en la figura \ref{img: parameters post forecast}, tenemos otro parámetro que permite elegir el formato de respuesta del servidor, este parámetro es \texttt{to\_csv} y funciona de manera equivalente que en la ruta de \texttt{/query}.
+			\item \textbf{Respuesta}: el servidor devuelve la serie temporal completa, tanto la almacenada como los datos predichos. En función del parámetro \texttt{to\_csv}, la salida tendrá formato \texttt{CSV} (ver figura \ref{img: output forecast csv}) o bien \texttt{JSON} (ver figura \ref{img: output forecast json}).
+			
+			\begin{figure}[h!]
+				\begin{center}
+					\includegraphics[width=0.25\textwidth]{img/parameters_post_forecast.png}
+					\caption{Parámetros POST Forecast}
+					\label{img: parameters post forecast}
+				\end{center}
+			\end{figure}
+		
+			\begin{figure}[h!]
+				\begin{center}
+					\includegraphics[width=0.91\textwidth]{img/output_forecast_csv.png}
+					\caption{Respuesta del servidor de una predicción de tráfico, en formato \texttt{CSV}.}
+					\label{img: output forecast csv}
+				\end{center}
+			\end{figure}
+		
+			\pagebreak
+			
+			\begin{figure}[h!]
+				\begin{center}
+					\includegraphics[width=0.6\textwidth]{img/output_forecast_json.png}
+					\caption{Respuesta del servidor de una predicción de tráfico, en formato \texttt{JSON}.}
+					\label{img: output forecast json}
+				\end{center}
+			\end{figure}
+		\end{itemize}
+	\end{enumerate}
 	
 	\pagebreak
 	
