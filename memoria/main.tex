@@ -364,7 +364,7 @@
 	
 	\pagebreak
 	
-	\section[Despliegue en Producción]{Tecnologías utilizadas en un despliegue en producción}
+	\section[Despliegue en producción]{Tecnologías utilizadas en un despliegue en producción}
 	
 	\noindent Otro de los aspectos importantes para la realización de este proyecto, es el hecho de que la aplicación desarrollada debe ser apta para desplegarse en un entorno de producción y funcionar correctamente para que sea implementada como microservicio por otras aplicaciones. Es por este motivo por el que nos decantamos por implementar este microservicio dentro de un contenedor. \\
 	
@@ -755,7 +755,7 @@ services:
 		\item ``points'': corresponde con el valor numérico del ``field''. En este caso, corresponde con el valor númerico de link\_count en ese periodo de 5 minutos.
 	\end{itemize}
 
-	\section{Predicción de tráfico}
+	\section{Predicción de tráfico de red}
 	
 	\noindent Uno de los objetivos más importantes que tiene satisfacer la aplicación es la posibilidad de predecir tráfico de red a partir de muestras de monitorización almacenadas en el sistema. Para ello, tal y como introducimos en \ref{sec: prophet}, vamos a utilizar la herramienta de predicción Prophet. \\
 	
@@ -783,30 +783,30 @@ services:
 	\noindent En el último paso, en el que ejecutamos la predicción de tráfico, podemos configurar en cierta manera cómo se va a realizar la predicción. Los parámetros a configurar son los siguientes: (ver figura \ref{img: prophet schema})
 	
 	\begin{itemize}
-		\item \texttt{id\_network}
+		\item \texttt{id\_network}. Identificador de red, se obtiene una vez creas la red a monitorizar o haciendo un GET a \texttt{/networks}.
 		
-		\item \texttt{id\_interface}
+		\item \texttt{id\_interface}. Identificador de interfaz de red, es necesario que este asociado con una red a monitorizar. Se obtiene una vez se crea la interfaz, o bien haciendo un GET a \texttt{/networks/<id\_network>/interfaces}.
 		
-		\item \texttt{field}
+		\item \texttt{field}. Permite seleccionar el tráfico de una interfaz, elegimos entre recepción (``\texttt{RX}'') o transmisión (``\texttt{TX}'').
 		
-		\item \texttt{days}
+		\item \texttt{days}. Número de días que queremos predecir. Si quisiéramos predecir el tráfico dentro de un año, pondremos \texttt{365}.
 		
-		\item \texttt{options}
+		\item \texttt{options}. Opciones configurables del modelo de predicción de tráfico. [\ref{bib: prophet parameters}]
 		
 		\begin{itemize}
-			\item \texttt{holidays\_region}
+			\item \texttt{holidays\_region}. Permite elegir que días festivos se aplican en la predicción. Esto permite detectar sucesos en días de festividad de las diferentes regiones. En el caso de España, tendremos que utilizar ``\texttt{ES}''.
 			
-			\item \texttt{flexibility\_trend}
+			\item \texttt{flexibility\_trend}. Parámetro que más impacto tiene en la predicción. Determina la flexibilidad respecto a una tendencia, es decir, cuanto puede cambiar una tendencia en los diferentes puntos. El valor por defecto es \texttt{0.05}, aunque se puede modificar en un rango de \texttt{[0.001, 0.5]}. Es un parámetro que afecta a la penalización por regulación. [\ref{bib: prophet trend flex}]
 			
-			\item \texttt{flexibility\_season}
+			\item \texttt{flexibility\_season}. Controla la flexibilidad de los efectos estacionales. El valor por defecto es \texttt{10}, aunque se puede modificar en un rango de \texttt{[0.01, 10]}.
 			
-			\item \texttt{flexibility\_holidays}
+			\item \texttt{flexibility\_holidays}. Controla la flexibilidad de los efectos por días festivos. El valor por defecto es \texttt{10}, aunque se puede modificar en un rango de \texttt{[0.01, 10]}.
 		\end{itemize}
 	\end{itemize}
 	
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.45\textwidth]{img/prophet_schema.png}
+			\includegraphics[width=0.4\textwidth]{img/prophet_schema.png}
 			\caption{Datos de entrada para la ejecución de una predicción de tráfico.}
 			\label{img: prophet schema}
 		\end{center}
@@ -814,9 +814,208 @@ services:
 
 	\pagebreak
 	
-	\section{Endpoints}
+	\section{Rutas HTTP (\texttt{endpoints})}
 	
-	%\section{Implementación del sistema}
+	\noindent En esta sección se pretende recapitular todos los \texttt{endpoints} disponibles en la aplicación, además de sus esquemas de entrada y de salida. Es importante recordar que la aplicación tiene la aplicación documental \texttt{Swagger} implementada, por lo que accediendo a la ruta \texttt{/doc}, podemos ver toda la documentación asociada a la API.
+	
+	\subsection{Colección \texttt{Networks}}
+	
+	\begin{enumerate}
+		\item Ruta \texttt{/networks}:
+		
+		\begin{itemize}
+			%\item \textbf{Ruta}: \texttt{/networks}
+			\item \textbf{Método HTTP}: \texttt{GET}
+			\item \textbf{Descripción}: permite listar todas las redes monitorizadas del sistema.
+			
+			\begin{figure}[h!]
+				\begin{center}
+					\includegraphics[width=0.38\textwidth]{img/parameters_get_networks.png}
+					\caption{Parametros GET Networks}
+					\label{img: parameters get networks}
+				\end{center}
+			\end{figure}
+			
+			\begin{figure}[h!]
+				\begin{center}
+					\includegraphics[width=0.87\textwidth]{diag/response_get_networks.png}
+					\caption{Respuesta GET Networks}
+					\label{img: response get networks}
+				\end{center}
+			\end{figure}
+		
+		\end{itemize}
+	
+		\pagebreak
+	
+		\item Ruta \texttt{/networks}:
+		
+		\begin{itemize}
+			\item \textbf{Método HTTP}: \texttt{POST}
+			\item \textbf{Descripción}: permite crear una nueva red en el sistema.
+			
+			\begin{figure}[h!]
+				\begin{center}
+					\includegraphics[width=0.35\textwidth]{img/parameters_post_networks.png}
+					\caption{Parametros POST Networks}
+					\label{img: parameters post networks}
+				\end{center}
+			\end{figure}
+			
+			\begin{figure}[h!]
+				\begin{center}
+					\includegraphics[width=1\textwidth]{diag/response_post_networks.png}
+					\caption{Respuesta POST Networks}
+					\label{img: response post networks}
+				\end{center}
+			\end{figure}
+		\end{itemize}
+	
+		\pagebreak
+		
+		\item Ruta \texttt{/networks/\{network\_id\}}:
+		
+		\begin{itemize}
+			\item \textbf{Método HTTP}: \texttt{GET}
+			\item \textbf{Descripción}: devuelve la información de una red, dado un identificador de red.
+			\item \textbf{Parámetros}: \texttt{network\_id}, como identificador de red.
+			
+			\begin{figure}[h!]
+				\begin{center}
+					\includegraphics[width=0.85\textwidth]{diag/response_get_network.png}
+					\caption{Respuesta GET Network}
+					\label{img: response get network}
+				\end{center}
+			\end{figure}
+		\end{itemize}
+	
+		\item Ruta \texttt{/networks/\{network\_id\}}:
+		
+		\begin{itemize}
+			\item \textbf{Método HTTP}: \texttt{DELETE}
+			\item \textbf{Descripción}: elimina una red del sistema, dado un identificador de red. 
+			\item \textbf{Parámetros}: \texttt{network\_id}, como identificador de red.
+			
+			\begin{figure}[h!]
+				\begin{center}
+					\includegraphics[width=0.4\textwidth]{img/response_delete_network.png}
+					\caption{Respuesta DELETE Network}
+					\label{img: response delete network}
+				\end{center}
+			\end{figure}
+		\end{itemize}
+	
+		\pagebreak
+		
+		\item Ruta \texttt{/networks/\{network\_id\}}:
+		
+		\begin{itemize}
+			\item \textbf{Método HTTP}: \texttt{PATCH}
+			\item \textbf{Descripción}: actualiza una red del sistema, dado un identificador de red. 
+			\item \textbf{Parámetros}: \texttt{network\_id}, como identificador de red.
+			\item \textbf{Respuesta}: equivalente a \ref{img: response get network}, con la información ya modificada.
+			
+			\begin{figure}[h!]
+				\begin{center}
+					\includegraphics[width=0.35\textwidth]{img/parameters_patch_networks.png}
+					\caption{Parámetros PATCH Network}
+					\label{img: parameters patch network}
+				\end{center}
+			\end{figure}
+		\end{itemize}
+	
+	\end{enumerate}
+	
+	\subsection{Colección \texttt{Interfaces}}
+	
+	\begin{enumerate}
+		\item Ruta \texttt{/networks/\{network\_id\}/interfaces}:
+	
+		\begin{itemize}
+			\item \textbf{Método HTTP}: \texttt{GET}
+			\item \textbf{Descripción}: devuelve un listado de interfaces asociadas a una red.
+			\item \textbf{Parámetros}: \texttt{network\_id}, como identificador de red. Similar a figura \ref{img: parameters get networks}.
+			
+			\begin{figure}[h!]
+				\begin{center}
+					\includegraphics[width=0.78\textwidth]{diag/response_get_interfaces.png}
+					\caption{Parámetros GET Interfaces}
+					\label{img: response get interfaces}
+				\end{center}
+			\end{figure}
+		\end{itemize}
+	
+		\pagebreak
+		
+		\item Ruta \texttt{/networks/\{network\_id\}/interfaces}:
+		
+		\begin{itemize}
+			\item \textbf{Método HTTP}: \texttt{POST}
+			\item \textbf{Descripción}: permite crear una interfaz monitorizada, asociada a una red.
+			\item \textbf{Parámetros}: \texttt{network\_id}, como identificador de red. Similar a figura \ref{img: parameters post networks}.
+		
+			\begin{figure}[h!]
+				\begin{center}
+					\includegraphics[width=0.4\textwidth]{img/parameters_post_interfaces.png}
+					\caption{Parámetros POST Interfaces}
+					\label{img: parameters post interfaces}
+				\end{center}
+			\end{figure}
+		
+			\begin{figure}[h!]
+				\begin{center}
+					\includegraphics[width=1\textwidth]{diag/response_post_interfaces.png}
+					\caption{Parámetros POST Interfaces}
+					\label{img: response post interfaces}
+				\end{center}
+			\end{figure}
+		\end{itemize}
+	
+		\pagebreak
+		
+		\item Ruta \texttt{/networks/\{network\_id\}/interfaces/\{interface\_id\}}:
+		
+		\begin{itemize}
+			\item \textbf{Método HTTP}: \texttt{GET}
+			\item \textbf{Descripción}: devuelve la información de una interfaz, asociada a una red.
+			\item \textbf{Parámetros}: \texttt{network\_id} e \texttt{interface\_id}, como identificadores.
+			\item \textbf{Respuesta}: similar a la obtenida en la respuesta de \texttt{POST} a \texttt{interfaces}, ver figura \ref{img: response post interfaces}.
+		\end{itemize}
+	
+		\item Ruta \texttt{/networks/\{network\_id\}/interfaces/\{interface\_id\}}:
+		
+		\begin{itemize}
+			\item \textbf{Método HTTP}: \texttt{DELETE}
+			\item \textbf{Descripción}: elimina una interfaz de red.
+			\item \textbf{Parámetros}: \texttt{network\_id} e \texttt{interface\_id}, como identificadores.
+			\item \textbf{Respuesta}: similar a la obtenida en el caso de \texttt{networks}, ver figura \ref{img: response delete network}.
+		\end{itemize}
+	
+		\item Ruta \texttt{/networks/\{network\_id\}/interfaces/\{interface\_id\}}:
+		
+		\begin{itemize}
+			\item \textbf{Método HTTP}: \texttt{PATCH}
+			\item \textbf{Descripción}: actualiza una interfaz del sistema, dado un identificador.
+			\item \textbf{Parámetros}: \texttt{network\_id} e \texttt{interface\_id}, como identificadores.
+			\item \textbf{Respuesta}: equivalente a \ref{img: response post interfaces}, con la información ya modificada.
+		\end{itemize}
+		
+		\begin{figure}[h!]
+			\begin{center}
+				\includegraphics[width=0.45\textwidth]{img/parameters_patch_interfaces.png}
+				\caption{Parámetros PATCH Interfaces}
+				\label{img: parameters patch interfaces}
+			\end{center}
+		\end{figure}
+	\end{enumerate}
+	
+	\pagebreak
+	
+	\subsection{Colección \texttt{Samples}}
+	
+	\subsection{Colección \texttt{Query samples}}
+	
+	\subsection{Colección \texttt{Forecast}}
 	
 	\pagebreak
 	
@@ -933,7 +1132,17 @@ services:
 		\label{bib: fastapi migrations}
 		\href{https://fastapi.tiangolo.com/tutorial/sql-databases/#migrations}{FastAPI Doc: SQL (Relational) Databases. Migrations}
 		
+		% 20
+		\item
+		\label{bib: prophet parameters}
+		\href{https://facebook.github.io/prophet/docs/diagnostics.html#hyperparameter-tuning}{Prophet Doc: Hyperparameter-tuning}
 		
+		% 21
+		\item
+		\label{bib: prophet trend flex}
+		\href{https://facebook.github.io/prophet/docs/trend_changepoints.html#adjusting-trend-flexibility}{Prophet Doc: Adjusting trend flexibility}
+		
+
 	\end{enumerate}
 
 	\vspace{20px}
