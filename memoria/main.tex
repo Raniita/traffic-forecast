@@ -1205,9 +1205,71 @@ services:
 	
 	\section{Cargar una topología de red}
 	
+	\noindent Otra forma de cargar muestras de monitorización a una red es utilizando la ruta: \\
+	 \texttt{/samples/\{network\_id\}/import\_topology}, ya que permite subir información de más de una interfaz de forma simultanea. Para ello, tenemos que subir un archivo \texttt{CSV} que tenga las siguientes columnas:
+	 
+	 \begin{itemize}
+	 	\item \texttt{timestamp}. Valor temporal de la muestra, cada 5 minutos.
+	 	\item \texttt{interface}. Nombre de la interfaz monitorizada.
+	 	\item \texttt{TX}. Valor de tráfico de red en la interfaz de transmisión.
+	 	\item \texttt{RX}. Valor de tráfico de red en la interfaz de recepción.
+	 \end{itemize}
+ 
+ 	\noindent Para este ejemplo, hemos generado un pequeño archivo de monitorización que vamos a subir a una red de monitorización que previamente tenemos creada (en este caso, red con identificación \texttt{100}). Una vez el sistema lea el archivo, creará las interfaces que sean necesarias para dar lugar a la topología. Una vez termine, subirá los datos de monitorización para cada una de las muestras. \\
+ 	
+ 	\begin{figure}[h!]
+ 		\begin{center}
+ 			\includegraphics[width=0.55\textwidth]{diag/request_topology_1.png}
+ 			\caption{Petición para cargar una topología de red en la red \texttt{100}.}
+ 			\label{img: request topology 1}
+ 		\end{center}
+ 	\end{figure}
+ 
+ 	\begin{figure}[h!]
+ 		\begin{center}
+ 			\includegraphics[width=0.7\textwidth]{img/response_topology_1.png}
+ 			\caption{Respuesta del servidor al cargar una topología de red.}
+ 			\label{img: response topology 1}
+ 		\end{center}
+ 	\end{figure}
+	
 	\pagebreak
 	
+	\noindent Para comprobar que se ha subido correctamente los datos, vamos al portal web de InfluxDB. En la figura \ref{img: influxdb topology 1} podemos ver como los datos se han subido correctamente. En esta captura también podemos comprobar como se agrupan los datos dentro de la base de datos de tipo serie temporal. 
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=1\textwidth]{diag/influxdb_topology_1.png}
+			\caption{Respuesta del servidor al cargar una topología de red.}
+			\label{img: influxdb topology 1}
+		\end{center}
+	\end{figure}
+	
 	\section{Consultar datos de monitorización}
+	
+	\noindent Otra funcionalidad importante del sistema es que además de poder cargar información de tráfico, podemos recuperar dicha información de modo que el servidor nos devuelva la información de monitorización asociada a la petición que nosotros le hemos realizado. Para ello, utilizamos la ruta \texttt{/query} con el método \texttt{GET}. \\
+	
+	\noindent En este caso, vamos a validar que el sistema correctamente nos puede dar la información de monitorización de una red con identificador \texttt{100}, que tiene una interfaz con identificador \texttt{171}, y elegimos que nos devuelva los datos de recepción (\texttt{field} equivalente a \texttt{RX}). Ver figura \ref{img: parameters query 1}. \\
+	
+	\noindent La respuesta del servidor puede ser en formato \texttt{JSON} o \texttt{CSV} en función del parámetro \texttt{to\_csv} de la petición. En la figura \ref{img: response query 1} podemos ver como el servidor nos devuelve los datos de la interfaz solicitada en formato \texttt{JSON}.
+	
+	\pagebreak
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.6\textwidth]{diag/parameters_query_1.png}
+			\caption{Petición para consultar datos de monitorización del sistema.}
+			\label{img: parameters query 1}
+		\end{center}
+	\end{figure}
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[width=0.45\textwidth]{img/response_query_1.png}
+			\caption{Respuesta del servidor al consultar datos de monitorización, salida en formato \texttt{JSON}.}
+			\label{img: response query 1}
+		\end{center}
+	\end{figure}
 	
 	\pagebreak
 	
@@ -1525,7 +1587,9 @@ services:
 			\label{img: anexo 7}
 		\end{figure}
 	
-		\noindent Una vez llegados a este punto, tenemos un dataset sintético de un año, en el que podemos modificar diferentes parámetros. De esta manera, podemos validar la predicción de tráfico de nuestra aplicación.
+		\noindent Una vez llegados a este punto, tenemos un dataset sintético de un año, en el que podemos modificar diferentes parámetros. De esta manera, podemos validar la predicción de tráfico de nuestra aplicación. \\
+		
+		\noindent Nota: las columnas del \texttt{CSV} generado son: \texttt{time} y \texttt{flow}
 		
 	\end{enumerate}
 	
