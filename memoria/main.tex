@@ -17,11 +17,6 @@
 \renewcommand{\lstlistingname}{Ejemplo}
 \renewcommand{\lstlistlistingname}{Listado de ejemplos}
 
-% https://tex.stackexchange.com/questions/60209/how-to-add-an-extra-level-of-sections-with-headings-below-subsubsection
-%\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
-%\setcounter{secnumdepth}{4}
-%\setcounter{tocdepth}{4}
-
 % Configuracion PDF metadata
 \hypersetup{
 	pdftitle= {Diseño y desarrollo de un microservicio para la monitorización y precicción de tráfico en red},
@@ -150,15 +145,73 @@
 	
 	\chapter{Introducción}
 	
-	\section{Contexto del trabajo}
+	\noindent Entendemos predicción de tráfico de red como estimar el tráfico que existirá en un instante futuro, en función del historio de tráfico de ese sistema. Esta práctica es muy interesante ya que en función de la escala de tiempo sobre que la trabajemos podemos tener diferentes casos de uso: [\ref{bib: apuntes OeIR}]
+	
+	\begin{itemize}
+		\item Escala de \textbf{minutos}. Detectar anomalías de tráfico. Anticipar picos de tráfico.
+		
+		\item Escala de \textbf{horas}. Adaptar el encaminamiento en función del tráfico.
+		
+		\item Escala de \textbf{años}. Permite planificar las capacidades de la red.
+	\end{itemize}
+	
+	\noindent Si queremos aprovechar estos casos de uso, tenemos que tener una plataforma capaz de almacenar los datos de tráfico y utilizar esos datos para realizar predicciones de tráfico en las diferentes escalas. \\
+	
+	\noindent Actualmente, no existe ninguna herramienta que destaque sobre otras para realizar este cometido. Si bien es cierto que herramientas de planificación de red tienen esta funcionalidad de predecir tráfico, normalmente son herramientas específicas para su sistema.
+	
+	%\section{Contexto del trabajo}
 	
 	\section{Motivación}
 	
-	\section{Descripción Global}
+	\noindent A raíz de la baja disponibilidad de herramientas que permitan la predicción de tráfico de red, se plantea la posibilidad de disponer de una herramienta que permita almacenar muestras de monitorización y que a partir de esas muestras se puedan realizar predicciones, tanto de corto alcance como de largo alcance. Sumado a esto, se propone que la herramienta sea independiente al fabricante, es decir, que no se desarrolle de manera específica para un único formato de datos o dispositivo en especifico. Pudiendo así extenderse a todos los casos de uso que así se necesiten. \\
+	
+	\noindent Por otro lado, se propone la idea de que la herramienta propuesta pueda funcionar como un microservicio, dando lugar a una API REST [\ref{bib: what is api}] que pueda ser consumida como servicio por otras aplicaciones. Esto permite que aplicaciones ya existentes puedan implementar la funcionalidad de predecir muestras de tráfico de manera sencilla. \\
+	
+	\pagebreak
+	
+	\noindent Además, en el ámbito de la planificación de red, resulta realmente importante tener una herramienta que pueda trabajar con predicciones a largo plazo, pudiendo estimar como va creciendo el tráfico conforme pasan los años, dando lugar a una mejor planificación de capacidades y un mejor análisis de inversiones del despliegue de la red. \\
+	
+	\noindent Es por estos motivos por los que creemos que esta herramienta planteada puede tener un gran impacto para realizar predicciones sencillas, pudiendo aprovechar los datos de red generados, sin tener que hacer un gran despliegue tecnológico para realizar un uso de ellos. \\
+	
+	%\section{Descripción Global}
 	
 	\section{Objetivos}
 	
+	\noindent Una vez comentadas las motivaciones que dan lugar a este proyecto, se definen una serie de objetivos a cumplir para obtener un resultado satisfactorio del mismo.
+	
+	\begin{itemize}
+		\item Diseñar una aplicación bajo la metodología de microservicio, permitiendo desplegar diferentes estancias de manera sencilla.
+		
+		\item Implementar una aplicación que siga metodologías de software que permitan mantener y extender la funcionalidad de la aplicación de manera fácil.
+		
+		\item Utilizar herramientas de documentación que permitan conocer la estructura de la aplicación, siguiendo el estándar de OpenAPI.
+		
+		\item Investigar herramientas para realizar predicciones de series temporales, que se adapten lo suficiente al caso especifico que tratamos en este proyecto.
+		
+		\item Permitir la ejecución de predicciones de tráfico. Se desea poder elegir los días a predecir, de modo que se puedan realizar predicciones tanto en corto como a largo plazo.
+		
+		\item Investigar las diferentes opciones de almacenamiento para muestras temporales, teniendo en cuenta que el volumen de datos a almacenar es alto. 
+	\end{itemize}
+	
 	\section{Resumen capítulos de la memoria}
+	
+	\noindent En este apartado se comentará brevemente la distribución de capítulos de la memoria. Además, se mencionará brevemente que temas se han abordado en cada uno de ellos. \\
+	
+	\begin{itemize}
+		\item \textbf{Capitulo 1}: \textit{Introducción}. Inicio del proyecto. Se presenta la introducción, una motivación y los objetivos planteados. \\
+		
+		\item \textbf{Capitulo 2}: \textit{Tecnologías empleadas}. Se presentan las tecnologías utilizadas para implementar el proyecto. Además, se comenta una forma de desplegar la aplicación en un entorno de producción. \\
+		
+		\pagebreak
+		
+		\item \textbf{Capitulo 3}: \textit{Diseño e implementación del sistema}. Se describe el diseño de la aplicación. También se comenta a grandes rasgos como se ha realizado la implementación, y cual es el resultado final, en lo que a funcionalidad se refiere. \\
+		
+		\item \textbf{Capitulo 4}: \textit{Validación del sistema}. Se comentan como se ha validado las diferentes funcionalidades del sistema. Se ven los pasos hasta llegar a una predicción de tráfico de un año. \\
+		
+		\item \textbf{Capitulo 5}: \textit{Conclusiones}. Se muestran las conclusiones obtenidas en la realización del proyecto, y además se proponen posibles lineas de investigación futuras. \\
+		
+		\item \textbf{Capitulo 6}: \textit{Bibliografía}. Aquí se muestran los diferentes recursos utilizados para la realización de este proyecto.
+	\end{itemize}
 	
 	\pagebreak
 	
@@ -294,11 +347,6 @@
 			\label{img: influxdb logo}
 		\end{center}
 	\end{figure}
-
-	\pagebreak
-	
-	%\section{Modelo de predicción}
-	% TODO: eliminar?
 	
 	\pagebreak
 	
@@ -350,7 +398,7 @@
 	\subsection{Prophet}
 	\label{sec: prophet}
 	
-	\noindent Prophet [\ref{bib: prophet doc}] es un framework del lenguaje de programación Python, desarrollado por \href{https://github.com/facebook/}{Meta}, que recoge una serie de procedimientos que permiten realizar predicciones de un dataset de series temporales, en el que se pueden encontrar diferentes efectos no lineales, llamados tendencias (como puede ser una tendencia anual, semanal, o mensual), además de otros efectos causados por fechas concretas. \\
+	\noindent Prophet [\ref{bib: prophet doc}] es un framework del lenguaje de programación Python, desarrollado por \href{https://github.com/facebook/}{Meta}, que recoge una serie de procedimientos que permiten realizar predicciones de un \texttt{dataset} de series temporales, en el que se pueden encontrar diferentes efectos no lineales, llamados tendencias (como puede ser una tendencia anual, semanal, o mensual), además de otros efectos causados por fechas concretas. \\
 	
 	\noindent Es un framework de predicción basado en inferencia estadística, lo que permite tener un rendimiento mayor que si utilizamos técnicas de Machine Learning para solucionar el mismo problema de predicción de datos. Además, es robusto a datos no disponibles y a modificaciones aleatorias sobre las tendencias. 
 	
@@ -374,14 +422,13 @@
 	
 	\noindent Por otro lado, también será necesario desplegar diferentes contenedores que tendrán alojadas las bases de datos que utilizaremos en el proyecto. En este caso, al utilizar dos bases de datos, tendremos que hacer uso de un contenedor para desplegar una base de datos SQL, y otro contenedor para desplegar una base de datos InfluxDB. \\ 
 	
-	\noindent Los contenedores Docker necesarios se desplegarán sobre una máquina host que tenga en funcionamiento el ``daemon'' de Docker. 
+	\noindent Los contenedores Docker necesarios se desplegarán sobre una máquina host que tenga en funcionamiento el ``daemon'' de Docker. Ver figura \ref{img: docker arch}.
 	
-	% TODO: revisar imagen
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=1\textwidth]{img/docker_capture.png}
-			\caption{Docker}
-			%\label{img: prophet logo}
+			\includegraphics[width=0.95\textwidth]{img/architecture-docker.png}
+			\caption{Arquitectura de Docker.}
+			\label{img: docker arch}
 		\end{center}
 	\end{figure}
 
@@ -452,17 +499,15 @@ services:
 	\noindent Traefik esta diseñado para ser simple de operar, pero con una gran capacidad de gestión en entornos complejos. Además, se integra perfectamente con la infraestructura ya existente y configurar el sistema de manera dinámica. Algunas de las tareas que realiza Traefik son: [\ref{bib: traefik webpage}] 
 	
 	\begin{itemize}
-		\item Gestionar middlewares necesarios para la aplicación (forzar protocolos específicos, configurar contraseña para el servicio...).
+		\item Gestionar ``middlewares'' necesarios para la aplicación (forzar protocolos específicos, configurar contraseña para el servicio...).
 		\item Funcionar con API Gateway, gestionando los dominios y certificados para cada uno de los microservicios desplegados.
 		\item Orquestador de nodo de entrada, gestionando la comunicación de tráfico de un dominio hacia el servicio asociado.
 	\end{itemize}
 
-	% TODO: revisar imagen
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[width=0.78\textwidth]{img/traefik_example.png}
 			\caption{Captura portal de gestión de Traefik. Detalle de enrutado hacia un servicio.}
-			%\label{img: prophet logo}
 		\end{center}
 	\end{figure}
 	
@@ -534,7 +579,7 @@ services:
 	
 	\chapter{Diseño e implementación del sistema}
 	
-	\noindent En este capítulo se va a comentar más en detalle la implementación del sistema propuesto para la monitorización y predicción de tráfico en una red. Tal y como vimos en el capitulo anterior, se va a utilizar el lenguaje de programación Python, con el framework de desarollo FastAPI.
+	\noindent En este capítulo se va a comentar más en detalle la implementación del sistema propuesto para la monitorización y predicción de tráfico en una red. Tal y como vimos en el capitulo anterior, se va a utilizar el lenguaje de programación Python, con el framework de desarrollo FastAPI.
 	
 	\section{Descripción REST API}
 	
@@ -560,8 +605,6 @@ services:
 	
 	\noindent A modo de resumen, recogemos en la siguiente tabla el funcionamiento esperado de la aplicación, en función del método HTTP recibido y el recurso sobre el que se ejecute la petición HTTP.
 	
-	% Please add the following required packages to your document preamble:
-	% \usepackage{graphicx}
 	\begin{table}[h!]
 		\centering
 		\resizebox{\columnwidth}{!}{%
@@ -605,7 +648,7 @@ services:
 
 	\pagebreak
 
-	\noindent \textbf{\large Métodos non CRUD} \\
+	\noindent \textbf{\large Métodos no CRUD} \\
 	
 	\noindent Por otro lado, la aplicación también estará compuesta por otros métodos que no encajan en el esquema CRUD. Estos métodos son:
 	
@@ -615,20 +658,23 @@ services:
 		\item Ejecución de una predicción. Permite generar una predicción de tráfico. Corresponde con el \texttt{endpoint}: \texttt{/forecast}
 	\end{itemize}
 	
-	% TODO: Imagen draw-io con la estructura de la app.
+	\vspace{22px}
+	
+	\noindent \textbf{\large Resumen arquitectura de la aplicación} \\
+	
+	\noindent En la figura \ref{img: app schema} podemos ver un resumen de la estructura de la aplicación propuesta. En verde aparecen las rutas que siguen una estructura CRUD, en azul las rutas que no tienen por qué seguir la estructura CRUD, y a la derecha podemos ver las dos bases de datos necesarias (una relacional y otra para series temporales de datos).
+	
 	\begin{figure}[h!]
-		\begin{center}
-			\includegraphics[width=1\textwidth]{diag/traffic_forecast_schema.png}
-			\caption{Diagrama resumen de la estructura de la aplicación.}
-			%\label{}
-		\end{center}
+		\includegraphics[width=1.1\textwidth, center]{diag/traffic_forecast_schema.png}
+		\caption{Diagrama resumen de la estructura de la aplicación.}
+		\label{img: app schema}
 	\end{figure}
 
 	\pagebreak
 	
 	\section{Implementación de la aplicación}
 	
-	\noindent Tal y como se adelantó en la sección \ref{sec: fastapi}, el lenguaje utilizado para implementar la aplicación es Python, utilizando el framework de desarrollo FastAPI. \\
+	\noindent Tal y como se adelantó en la sección \ref{sec: fastapi}, el lenguaje utilizado para implementar la aplicación es Python, utilizando el \texttt{framework} de desarrollo FastAPI. \\
 	
 	\noindent Para la implementación de la aplicación, se ha seguido la metodología de diseño ``\textit{Factory Pattern}''. Dicha metodología permite estructurar un proyecto software de modo que la implementación de nuevas funcionalidades sea sencilla y no implique modificar partes ya validadas del sistema. Esto se basa en que permitimos a una clase crear objetos derivados de esta, en función de las necesidades del sistema. A grandes rasgos, intentamos emular el funcionamiento de una producción en cadena de una fabrica. Podemos encontrar más información en: [\ref{bib: factory method}] [\ref{bib: fastapi doc bigger apps}]. \\
 	
@@ -674,7 +720,6 @@ services:
 	
 	\pagebreak
 	
-	%\noindent \textbf{\large OpenAPI Specification. Swagger} \\
 	\subsection{OpenAPI Specification. \texttt{Swagger}}
 	
 	\noindent Una de las ventajas que supone el uso de FastAPI, es que de manera automática genera la documentación asociada a OpenAPI de la aplicación, dando lugar a que el endpoint \texttt{/docs} nos redirige directamente a la aplicación web \texttt{Swagger}, que nos muestra de una manera sencilla todos los endpoints asociados de nuestra aplicación, permitiendo realizar peticiones y comprobando la funcionalidad de esta. \\
@@ -701,7 +746,7 @@ services:
 
 	\begin{figure}[h!]
 		\includegraphics[width=1.2\textwidth, center]{img/swagger_schemas_1.png}
-		\caption{Captura Swagger. Detalle de esquemas JSON de salida de \texttt{networks} e \texttt{interfaces}.}
+		\caption{Captura Swagger. Detalle esquemas JSON de salida de \texttt{networks} e \texttt{interfaces}.}
 		\label{img: swagger schemas 1}
 	\end{figure}
 	
@@ -713,8 +758,6 @@ services:
 	\noindent Por otro lado, debemos definir los datos y su representación dentro de nuestra aplicación. Esto nos permite adaptar la información en función del tipo de base de datos que vayamos a consultar, y en función del modelo a utilizar. Para ello, diferenciamos entre los modelos que estarán almacenados en la base de datos tipo SQL, y los datos almacenados en la base de datos tipo serie temporal.
 	
 	\subsection{Base de datos SQL}
-	
-	%\subsubsection{Modelos de datos}
 	
 	\noindent El primer modelo de datos de la aplicación, es el referido a la información de una red a monitorizar. La descripción del modelo la podemos ver en la figura \ref{img: modelo sql networks}.
 	
@@ -741,8 +784,6 @@ services:
 	\noindent Por último, la base de datos SQL utilizada para esta aplicación es PostgreSQL [\ref{bib: postgresql}], ya que además de ser Open Source, permite una gran escalabilidad, amoldándose a los recursos de la máquina en la que esté funcionando.
 	
 	\subsection{Base de datos InfluxDB}
-	
-	%\noindent \textbf{\large Modelo de datos} \\
 	
 	\noindent Para la aplicación a diseñar, se plantea la premisa de que en la base de datos InfluxDB solo se van a guardar los datos de cada muestra de monitorización de una interfaz. Además, se pueden tener tantas redes como sean necesarias, y dentro de cada red, tantas interfaces como creamos necesarias. \\
 	
@@ -774,7 +815,7 @@ services:
 			\item \texttt{/samples/<network\_id>/import\_interface/<interface\_id>}
 		\end{itemize}
 	
-		\item Ejecutamos una predicción de tráfico. Usamos el endpoint POST: \texttt{/forecast}.
+		\item Ejecutamos una predicción de tráfico. Usamos el endpoint POST: \texttt{/forecast}. El sistema recuperará las muestras de la interfaz solicitada, y además aplicará un percentil 95, permitiendo así un mejor \texttt{long term estimation}.
 	\end{enumerate}
 
 	\noindent Llegados a este punto, una vez ejecutada la predicción y en el caso de que la predicción pueda completarse, el sistema nos devolverá los puntos asociados con toda la serie temporal, incluidos los valores predichos por el sistema. Como característica adicional, se ha implementado la posibilidad de elegir si queremos la salida de los datos como CSV o como JSON.
@@ -1161,14 +1202,14 @@ services:
 	
 	\noindent En la figura \ref{img: request import if (validate)} podemos ver como se selecciona el archivo de muestras sintéticas, y además se realiza la petición para que las muestras se cargue con muestras de monitorización de recepción (ver detalle en el campo \texttt{field}). \\
 	
-	\noindent Una vez enviamos la petición, el servidor tarda aproximadamente 5-6 segundos en dar una respuesta. Para este caso, el \texttt{dataset} de dos años tiene un peso de 5.8 MB. En la figura X podemos ver la respuesta recibida por el servidor. \\
+	\noindent Una vez enviamos la petición, el servidor tarda aproximadamente 5-6 segundos en dar una respuesta. Para este caso, el \texttt{dataset} de dos años tiene un peso de 5.8 MB. En la figura \ref{img: response import if (validate)} podemos ver la respuesta recibida por el servidor. \\
 	
 	\pagebreak
 	
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[width=0.8\textwidth]{img/dataset_synt_1.png}
-			\caption{Dataset sintético de un año}
+			\caption{Representación datos sintéticos de dos años.}
 			\label{img: synthetic dataset two year}
 		\end{center}
 	\end{figure}
@@ -1352,113 +1393,115 @@ services:
 	
 	\begin{enumerate}
 		% 1
+		\item 
+		\label{bib: apuntes OeIR}
+		\href{https://teleco.upct.es/guia-docente/211101007}{Apuntes de la asignatura \texttt{Operación e Ingenieria de Red}, del Master Universitario en Ingenieria de Telecomunicaciones de la UPCT}
+		
+		% 2
 		\item
 		\label{bib: what is api}
 		\href{https://aws.amazon.com/es/what-is/api/}{¿Qué es una API?}
 		
-		% 2
+		% 3
 		\item
 		\label{bib: microservices}
 		\href{https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/microservices}{Microservice architecture style}
 		
-		
-		% 3
+		% 4
 		\item
 		\label{bib: relational database}
 		\href{https://cloud.google.com/learn/what-is-a-relational-database}{What is a relational database?}
-		
-		
-		% 4
+				
+		% 5
 		\item
 		\label{bib: postgresql}
 		\href{https://www.postgresql.org/}{PostgreSQL}
 		
-		% 5
+		% 6
 		\item
 		\label{bib: influxdb doc}
 		\href{https://www.stackhero.io/en/services/InfluxDB/documentations/Introduction#differences-between-influxdb-and-relational-sql-databases}{InfluxDB: Introduction}
 		
-		% 6
+		% 7
 		\item
 		\label{bib: influxdb doc vs sql}
 		\href{https://archive.docs.influxdata.com/influxdb/v1.2/concepts/crosswalk/}{InfluxDB: Comparison to SQL}
 		
-		% 7
+		% 8
 		\item
 		\label{bib: python doc}
 		\href{https://www.python.org/}{Python}
 		
-		% 8
+		% 9
 		\item
 		\label{bib: fastapi doc}
 		\href{https://fastapi.tiangolo.com/}{FastAPI framework}
 		
-		% 9
+		% 10
 		\item
 		\label{bib: openapi}
 		\href{https://github.com/OAI/OpenAPI-Specification}{GitHub: OpenAPI-Specification}
 		
-		% 10
+		% 11
 		\item
 		\label{bib: json schema}
 		\href{https://json-schema.org/}{JSON Schema}
 		
-		% 11
+		% 12
 		\item
 		\label{bib: prophet doc}
 		\href{https://facebook.github.io/prophet/}{Prophet}
 		
-		% 12
+		% 13
 		\item
 		\label{bib: docker compose doc}
 		\href{https://docs.docker.com/compose/}{Docker Compose Overview}
 		
-		% 13
+		% 14
 		\item
 		\label{bib: traefik webpage}
 		\href{https://traefik.io/traefik/}{Traefik Webpage}
 		
-		% 14
+		% 15
 		\item
 		\label{bib: traefik wiki}
 		\href{https://doc.traefik.io/traefik/}{Traefik Wiki}
 		
-		% 15
+		% 16
 		\item
 		\label{bib: factory method}
 		\href{https://www.geeksforgeeks.org/factory-method-python-design-patterns/}{Factory Method - Python Design Patterns}
 		
-		% 16
+		% 17
 		\item
 		\label{bib: fastapi doc bigger apps}
 		\href{https://fastapi.tiangolo.com/tutorial/bigger-applications/}{FastAPI Doc: Bigger Applications}
 		
-		% 17
+		% 18
 		\item
 		\label{bib: orm python}
 		\href{https://www.fullstackpython.com/object-relational-mappers-orms.html}{Object-relational Mappers (ORMs)}
 		
-		% 18
+		% 19
 		\item
 		\label{bib: fastapi orm}
 		\href{https://fastapi.tiangolo.com/tutorial/sql-databases/#orms}{FastAPI Doc: SQL (Relational) Databases. ORM}
 		
-		% 19
+		% 20
 		\item
 		\label{bib: fastapi migrations}
 		\href{https://fastapi.tiangolo.com/tutorial/sql-databases/#migrations}{FastAPI Doc: SQL (Relational) Databases. Migrations}
 		
-		% 20
+		% 21
 		\item
 		\label{bib: prophet parameters}
 		\href{https://facebook.github.io/prophet/docs/diagnostics.html#hyperparameter-tuning}{Prophet Doc: Hyperparameter-tuning}
 		
-		% 21
+		% 22
 		\item
 		\label{bib: prophet trend flex}
 		\href{https://facebook.github.io/prophet/docs/trend_changepoints.html#adjusting-trend-flexibility}{Prophet Doc: Adjusting trend flexibility}
 		
-
 	\end{enumerate}
 
 	\vspace{20px}
