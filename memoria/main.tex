@@ -122,8 +122,6 @@
 	\restoregeometry
 	%% END PORTADA UPCT	
 	
-	\pagebreak
-	
 	\tableofcontents
 	
 	\pagebreak
@@ -133,45 +131,47 @@
 	
 	\pagebreak
 	
-	\addcontentsline{toc}{section}{Índice de tablas}
-	\listoftables
-	
-	\pagebreak
-	
-	\addcontentsline{toc}{section}{Listado de ejemplos}
-	\lstlistoflistings
+	\clearpage
+	\begingroup
+		\let\cleardoublepage\relax  % for book
+		\addcontentsline{toc}{section}{Índice de tablas}
+		\listoftables
+		
+		\addcontentsline{toc}{section}{Listado de ejemplos}
+		\lstlistoflistings
+	\endgroup
 	
 	\pagebreak
 	
 	\chapter{Introducción}
 	
-	\noindent Entendemos predicción de tráfico de red como estimar el tráfico que existirá en un instante futuro, en función del historio de tráfico de ese sistema. Esta práctica es muy interesante ya que en función de la escala de tiempo sobre que la trabajemos podemos tener diferentes casos de uso: [\ref{bib: apuntes OeIR}]
+	\noindent Entendemos predicción de tráfico de red como estimar el tráfico que existirá en un instante futuro en dicha red, en función del historio de tráfico de ese sistema. Esta práctica es muy interesante ya que en función de la escala de tiempo sobre que la trabajemos podemos tener diferentes casos de uso: [\ref{bib: apuntes OeIR}]
 	
 	\begin{itemize}
 		\item Escala de \textbf{minutos}. Detectar anomalías de tráfico. Anticipar picos de tráfico.
 		
 		\item Escala de \textbf{horas}. Adaptar el encaminamiento en función del tráfico.
 		
-		\item Escala de \textbf{años}. Permite planificar las capacidades de la red.
+		\item Escala de \textbf{años}. Permite planificar las capacidades de la red a largo plazo.
 	\end{itemize}
 	
-	\noindent Si queremos aprovechar estos casos de uso, tenemos que tener una plataforma capaz de almacenar los datos de tráfico y utilizar esos datos para realizar predicciones de tráfico en las diferentes escalas. \\
+	\noindent Si queremos aprovechar estos casos de uso, tenemos que tener una plataforma capaz de almacenar los datos de tráfico y utilizar esos datos para realizar predicciones en las diferentes escalas. \\
 	
-	\noindent Actualmente, no existe ninguna herramienta que destaque sobre otras para realizar este cometido. Si bien es cierto que herramientas de planificación de red tienen esta funcionalidad de predecir tráfico, normalmente son herramientas específicas para su sistema.
+	\noindent Actualmente, no existe ninguna herramienta que destaque sobre otras para realizar este cometido. Si bien es cierto que existen herramientas de planificación de red tienen esta funcionalidad de predecir tráfico, normalmente son herramientas específicas para su sistema, y no permiten ser utilizadas como servicio por otras aplicaciones.
 	
 	%\section{Contexto del trabajo}
 	
 	\section{Motivación}
 	
-	\noindent A raíz de la baja disponibilidad de herramientas que permitan la predicción de tráfico de red, se plantea la posibilidad de disponer de una herramienta que permita almacenar muestras de monitorización y que a partir de esas muestras se puedan realizar predicciones, tanto de corto alcance como de largo alcance. Sumado a esto, se propone que la herramienta sea independiente al fabricante, es decir, que no se desarrolle de manera específica para un único formato de datos o dispositivo en especifico. Pudiendo así extenderse a todos los casos de uso que así se necesiten. \\
+	\noindent A raíz de la baja disponibilidad de herramientas que permitan la predicción de tráfico de red, se plantea la posibilidad de crear una herramienta que permita almacenar muestras de monitorización y que a partir de esas muestras se puedan realizar predicciones, tanto de corto alcance como de largo alcance. Sumado a esto, se propone que la herramienta sea independiente al fabricante, es decir, que no se desarrolle de manera específica para un único formato de datos o dispositivo en especifico. Pudiendo así extenderse a todos los casos de uso que así se necesiten. \\
 	
-	\noindent Por otro lado, se propone la idea de que la herramienta propuesta pueda funcionar como un microservicio, dando lugar a una API REST [\ref{bib: what is api}] que pueda ser consumida como servicio por otras aplicaciones. Esto permite que aplicaciones ya existentes puedan implementar la funcionalidad de predecir muestras de tráfico de manera sencilla. \\
+	\noindent En el ámbito de la planificación de red, resulta realmente importante tener una herramienta que pueda trabajar con predicciones a largo plazo, pudiendo estimar como va creciendo el tráfico conforme pasan los años, dando lugar a una mejor planificación de capacidades y un mejor análisis de inversiones del despliegue de la red. \\
 	
 	\pagebreak
 	
-	\noindent Además, en el ámbito de la planificación de red, resulta realmente importante tener una herramienta que pueda trabajar con predicciones a largo plazo, pudiendo estimar como va creciendo el tráfico conforme pasan los años, dando lugar a una mejor planificación de capacidades y un mejor análisis de inversiones del despliegue de la red. \\
+	\noindent Por otro lado, se propone la idea de que la herramienta propuesta pueda funcionar como un microservicio, dando lugar a una API REST [\ref{bib: what is api}] que pueda ser consumida como servicio por otras aplicaciones. Esto permite que aplicaciones ya existentes puedan implementar la funcionalidad de predecir muestras de tráfico de manera sencilla. \\
 	
-	\noindent Es por estos motivos por los que creemos que esta herramienta planteada puede tener un gran impacto para realizar predicciones sencillas, pudiendo aprovechar los datos de red generados, sin tener que hacer un gran despliegue tecnológico para realizar un uso de ellos. \\
+	\noindent Es por estos motivos por los que creemos que esta herramienta planteada puede tener un gran impacto para realizar predicciones sencillas, pudiendo aprovechar los datos de monitorización red, sin tener que hacer un gran despliegue tecnológico para realizar un uso de ellos. \\
 	
 	%\section{Descripción Global}
 	
@@ -200,7 +200,7 @@
 	\begin{itemize}
 		\item \textbf{Capitulo 1}: \textit{Introducción}. Inicio del proyecto. Se presenta la introducción, una motivación y los objetivos planteados. \\
 		
-		\item \textbf{Capitulo 2}: \textit{Tecnologías empleadas}. Se presentan las tecnologías utilizadas para implementar el proyecto. Además, se comenta una forma de desplegar la aplicación en un entorno de producción. \\
+		\item \textbf{Capitulo 2}: \textit{Tecnologías empleadas}. Se presentan las tecnologías utilizadas para implementar el proyecto. Además, se comenta como desplegar la aplicación en un entorno de producción. \\
 		
 		\pagebreak
 		
@@ -217,11 +217,11 @@
 	
 	\chapter{Tecnologías empleadas}
 	
-	\noindent En este capítulo, se van a presentar las diferentes tecnologías utilizadas para la implementación de la aplicación.
+	\noindent En este capítulo, se van a presentar y comentar las diferentes tecnologías utilizadas para la implementación de la aplicación.
 	
 	\section{Arquitectura y microservicios}
 	
-	\noindent En primer lugar, se va a comentar acerca de la arquitectura escogida. En este caso, se decide realizar una implementación basada en microservicios utilizando una REST API. \\
+	\noindent En primer lugar, se va a comentar acerca de la arquitectura escogida. En este caso, se decide realizar una implementación basada en microservicios utilizando una API REST. \\
 	
 	
 	\noindent \textbf{\large Arquitectura basada en \textbf{microservicios}} \\
