@@ -1380,9 +1380,35 @@ services:
 	
 	\pagebreak
 	
-	\chapter{Conclusiones}
+	\chapter{Conclusiones y propuestas futuras}
 	
-	\section{Propuestas futuras}
+	\noindent En este capítulo vamos a comentar las conclusiones obtenidas durante la realización del presente trabajo. \\
+	
+	\noindent En primer lugar, se ha profundizado en el concepto de microservicios y APIs, permitiendo desplegar una aplicación que está alineada completamente con estos conceptos. Además, se ha demostrado que el despliegue tanto en un entorno de desarrollo, como en un entorno de producción, es relativamente sencillo ya que hacemos uso de la herramienta \texttt{Docker} y \texttt{docker-compose}. \\
+	
+	\noindent Por otro lado, gracias al framework FastAPI, la aplicación tiene implementadas herramientas de documentación del estándar de OpenAPI. Esto es importante ya que permite que otras aplicaciones puedan hacer uso de la API como servicio, de modo que aplicaciones más grandes puedan aumentar su funcionalidad de manera sencilla, simplemente conectándose con el servicio propuesto en este trabajo. Además, esta documentación también ha sido clave para la validación del desarrollo, ya que permite ejecutar peticiones y comprobar la funcionalidad de la aplicación. \\
+
+	\noindent En el tema de bases de datos, se ha podido comprobar la importancia de elegir las bases de datos en función del tipo de dato que queremos almacenar en nuestra aplicación. Es por esto por lo que datos relacionados entre sí, es ideal usar una base de datos tipo SQL. Para las muestras de monitorización, que son mucho más volumen de información, y están referidas a un instante temporal; es importante disponer de una base de datos que pueda manejar esta información. Es por ello, por lo que elegimos InfluxDB para almacenar series temporales, y como hemos podido comprobar que su desempeño es brillante y muy adecuado para la tarea encomendada. \\
+	
+	\noindent En relación a la predicción de tráfico de red, se realizó la investigación acerca de las opciones para predecir series temporales, y si bien es cierto que de primeras \texttt{Prophet} era prometedor, una vez terminada la aplicación, se puede comprobar el potencial de esta herramienta, ya que permite tener las predicciones en poco tiempo, con un \texttt{dataset} de entrenamiento bajo, y además, permite configurar de manera dinámica los días a predecir. Esta característica es muy importante, ya que nos permite realizar predicciones a diferentes escalas temporales, y dependiendo de la escala, podemos dar una utilidad a los datos ofrecidos por la aplicación. \\
+	
+	\noindent En resumen, podemos concluir que el presente trabajo ha cumplido con los objetivos propuestos, ya que satisfactoriamente se ha desarrollado una aplicación capaz de almacenar datos de red y generar una predicción en función de dichos datos, además de cumplir los requisitos de software establecidos para facilitar la integración de la herramienta con otros servicios. \\
+	
+	%\pagebreak
+	
+	\noindent \textbf{\large Propuestas futuras} \\
+	
+	\noindent Algunas de las líneas de investigación que pueden resultar interesantes para continuar con este proyecto, son las siguientes:
+	
+	\begin{itemize}
+		\item Extender la funcionalidad de la aplicación para permitir la importación de datos de monitorización de herramientas de planificación de red. De este modo, se le daría un valor añadido a la funcionalidad de predicción, ya que se podría explotar la información generada por herramientas más profesionales.
+		
+		\item Añadir la funcionalidad de que los \texttt{endpoints} que requieren más tiempo de ejecución (como por ejemplo, el de predicción) utilicen la metodología de \texttt{SSE} (\textbf{S}erver \textbf{S}ide \textbf{E}vent), esto permite a la aplicación informar al cliente del progreso para completar la petición realizada al servidor. Esto es muy interesante ya que permitiría una mejor implementación en aplicaciones que consuman el servicio propuesto, ya que pueden estimar el tiempo de procesado, y mostrar a un usuario en que estado se encuentra la petición.
+		
+		\item Incluir nuevos parámetros en las peticiones de predicción o consultas al sistema, permitiendo ser más selectivos con la información, además de poder integrar nuevas funcionalidades como modificar el percentil a aplicar, buscar la hora cargada, etc. 
+		
+		\item Profundizar en despliegues basados en tecnología ``cloud'' con Kubernetes, facilitando el despliegue de los microservicios, además de permitir el autoescalado de los recursos. De modo que si una instancia de nuestra aplicación en un momento determinado requiere más recursos, puede tenerlos de manera automática, agilizando de esta manera la ejecución de la predicción.
+	\end{itemize}
 	
 	\pagebreak
 	
@@ -1549,7 +1575,7 @@ services:
 	\chapter*{Anexos}
 	\addcontentsline{toc}{chapter}{Anexos}
 	
-	\section*{Anexo I. Generación dataset sintético}
+	\section*{Anexo I. Generación \texttt{dataset} sintético}
 	\addcontentsline{toc}{section}{Anexo I. Generación dataset sintético}
 	\label{sec: anexo 1 dataset}
 	
