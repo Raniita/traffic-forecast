@@ -159,8 +159,6 @@
 	
 	\noindent Actualmente, no existe ninguna herramienta que destaque sobre otras para realizar este cometido. Si bien es cierto que existen herramientas de planificación de red tienen esta funcionalidad de predecir tráfico, normalmente son herramientas específicas para su sistema, y no permiten ser utilizadas como servicio por otras aplicaciones.
 	
-	%\section{Contexto del trabajo}
-	
 	\section{Motivación}
 	
 	\noindent A raíz de la baja disponibilidad de herramientas que permitan la predicción de tráfico de red, se plantea la posibilidad de crear una herramienta que permita almacenar muestras de monitorización y que a partir de esas muestras se puedan realizar predicciones, tanto de corto alcance como de largo alcance. Sumado a esto, se propone que la herramienta sea independiente al fabricante, es decir, que no se desarrolle de manera específica para un único formato de datos o dispositivo en especifico. Pudiendo así extenderse a todos los casos de uso que así se necesiten. \\
@@ -172,8 +170,6 @@
 	\noindent Por otro lado, se propone la idea de que la herramienta propuesta pueda funcionar como un microservicio, dando lugar a una API REST [\ref{bib: what is api}] que pueda ser consumida como servicio por otras aplicaciones. Esto permite que aplicaciones ya existentes puedan implementar la funcionalidad de predecir muestras de tráfico de manera sencilla. \\
 	
 	\noindent Es por estos motivos por los que creemos que esta herramienta planteada puede tener un gran impacto para realizar predicciones sencillas, pudiendo aprovechar los datos de monitorización red, sin tener que hacer un gran despliegue tecnológico para realizar un uso de ellos. \\
-	
-	%\section{Descripción Global}
 	
 	\section{Objetivos}
 	
@@ -237,7 +233,7 @@
 		
 		\item Cada servicio es responsable de la persistencia de sus datos.
 		
-		\item Los servicios se comunican entre sí utilizando APIs
+		\item Los servicios se comunican entre sí utilizando API (\textit{Application Programming Interface}).
 		
 		\item Además, como ventaja, los servicios no tienen por qué estar implementados todos en el mismo lenguaje de programación.
 	\end{itemize}
@@ -263,7 +259,7 @@
 		\item API de REST. Solución más popular. El cliente envía solicitudes al servidor como datos, utilizando métodos HTTP. Es una opción muy flexible.
 	\end{itemize}
 	
-	\noindent En en caso de nuestra aplicación, se decidió utilizar el tipo REST API, ya que permite una sencilla implementación de cara al cliente que quiera utilizar dicha interfaz.
+	\noindent En en caso de nuestra aplicación, se decidió utilizar el tipo API REST, ya que permite una sencilla implementación de cara al cliente que quiera utilizar dicha interfaz.
 	
 	\begin{figure}[h!]
 		\begin{center}
@@ -284,14 +280,14 @@
 	
 	\begin{itemize}
 		\item Datos clásicos. Como por ejemplo, la información asociada a una red a monitorizar.
-		\item Datos de tipo ''time series''. Como por ejemplo, las muestras de monitorización de una red.
+		\item Datos de tipo ''serie temporal''. Como por ejemplo, las muestras de monitorización de una red.
 	\end{itemize}
 
-	\noindent En primer lugar, se diseña una base de datos tipo SQL para almacenar los ''datos clásicos''. Y por otro lado, se diseña una base de datos diferente, especializada para el almacenamiento de datos tipo ''time series'', en este caso, se elige una base de datos llamada InfluxDB.
+	\noindent En primer lugar, se diseña una base de datos tipo relacional para almacenar los ''datos clásicos''. Y por otro lado, se diseña una base de datos diferente, especializada para el almacenamiento de datos tipo ''serie de datos'', en este caso, se elige una base de datos llamada InfluxDB.
 	
-	\subsection{Base de datos tipo relacional/SQL}
+	\subsection{Base de datos tipo relacional}
 	
-	\noindent SQL es una base de datos de tipo relacional. Dichas bases de datos, suponen una colección de información que organizan los datos en una serie de ''relaciones'' cuando la información es almacenada en una o varias ''tablas''. Por lo tanto, las relaciones suponen conexiones entre diferentes tablas, permitiendo así una asociación entre información diferente. [\ref{bib: relational database}] \\
+	\noindent Un ejemplo de base de datos de tipo relacional es SQL. Dicha base de datos, supone una colección de información que organizan los datos en una serie de ''relaciones'' cuando la información es almacenada en una o varias ''tablas''. Por lo tanto, las relaciones suponen conexiones entre diferentes tablas, permitiendo así una asociación entre información diferente. [\ref{bib: relational database}] \\
 	
 	\noindent Por ejemplo, si vemos la figura \ref{img: example sql}, podemos comprobar como se realizan las relaciones entre las diferentes tablas (Ratings, Users, Movies o Tags), se realiza mediante uno de los campos definidos en la propia tabla. Por ejemplo, el campo ''user\_id'' de la tabla Ratings, permite una relación con la tabla Users, con el campo ''id''.
 	
@@ -309,9 +305,9 @@
 	
 	\pagebreak
 	
-	\subsection{Base de datos tipo ``time series''/InfluxDB} 
+	\subsection{Base de datos tipo ``serie temporal''} 
 	
-	\noindent InfluxDB es una base de datos diseñada para trabajar con datos tipo time-series. Si bien es cierto que SQL puede gestionar este tipo de datos, no fue creado estrictamente para este objetivo. En este caso, InfluxDB esta diseñado para almacenar grandes volúmenes de datos, y además realizar análisis en tiempo real sobre esos datos. \\
+	\noindent InfluxDB es una base de datos diseñada para trabajar con datos tipo serie temporal (\texttt{time series}). Si bien es cierto que SQL puede gestionar este tipo de datos, no fue creado estrictamente para este objetivo. En este caso, InfluxDB esta diseñado para almacenar grandes volúmenes de datos, y además realizar análisis en tiempo real sobre esos datos. \\
 	
 	\noindent En comparación con SQL, en InfluxDB un ``timestamp'' identifica un punto en cualquier serie de datos. Esto sería equivalente a SQL, si la clave primaria de una tabla es establecida por el sistema y siempre es equivalente al tiempo. Además, InfluxDB permite reconocer el ``schema'' de manera dinámica, además de que no estas obligado a definir el ``schema'' y seguirlo, es decir, se permiten cambios dentro de la misma serie de datos. [\ref{bib: influxdb doc vs sql}] \\
 	
@@ -320,7 +316,7 @@
 	\begin{itemize}
 		\item Perfecto para almacenar datos de telemetría, como métricas de aplicaciones o sensores IoT.
 		\item Los datos son comprimidos automáticamente para ser eficientes con el espacio disponible.
-		\item Se realizan tareas automáticas de ``downsampling'' para reducir el uso de disco.
+		\item Se realizan tareas automáticas de ``down sampling'' para reducir el uso de disco.
 		\item Lenguaje para hacer consultas que permite analizar en profundidad los datos almacenados.
 		\item Disponible una aplicación web para realizar consultas y comprobar los datos disponibles en la base de datos.
 	\end{itemize}
@@ -379,7 +375,7 @@
 	\noindent FastAPI [\ref{bib: fastapi doc}] es un framework moderno y rápido para construir APIs utilizando la versión de Python 3.7+. Algunas de las características más destacadas son:
 	
 	\begin{itemize}
-		\item Rápido: rendimiento muy alto, prácticamente a la par con otros lenguajes de programación destinados al desarrollo de backend (como NodeJS o Go).
+		\item Rápido: rendimiento muy alto, prácticamente a la par con otros lenguajes de programación destinados al desarrollo de \texttt{backend} (como NodeJS o Go).
 		\item Intuitivo: soporta auto completado en el código.
 		\item Robusto: código pensado para entornos de producción, además de incluir documentación automática (usando Swagger o ReDoc).
 		\item Basado en estándares: al utilizar estándares de tipo de datos, permite ser totalmente compatible con los estándares de \href{https://github.com/OAI/OpenAPI-Specification}{OpenAPI} [\ref{bib: openapi}] y \href{https://json-schema.org/}{JSON Schema} [\ref{bib: json schema}].
@@ -427,7 +423,7 @@
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[width=0.95\textwidth]{img/architecture-docker.png}
-			\caption{Arquitectura de Docker.}
+			\caption{Arquitectura de Docker. [\ref{bib_img: docker architecture}]}
 			\label{img: docker arch}
 		\end{center}
 	\end{figure}
@@ -436,7 +432,7 @@
 	
 	\noindent \textbf{\large Docker Compose} \\
 	
-	\noindent Compose es una herramienta de Docker que permite definir y ejecutar instancias multi contenedores de Docker [\ref{bib: docker compose doc}]. Con la herramienta Compose, podemos utilizar un archivo YAML para describir y configurar los contenedores que vamos a utilizar, dando lugar a que con un único comando puedas crear y ejecutar todos los servicios de la aplicación, y con la misma configuración. \\
+	\noindent Compose es una herramienta de Docker que permite definir y ejecutar instancias multicontenedores de Docker [\ref{bib: docker compose doc}]. Con la herramienta Compose, podemos utilizar un archivo YAML para describir y configurar los contenedores que vamos a utilizar, dando lugar a que con un único comando puedas crear y ejecutar todos los servicios de la aplicación, y con la misma configuración. \\
 	
 	\noindent Compose funciona para los diferentes entornos: producción, desarrollo, y o pruebas. Además, tiene disponibles comandos para hacer más sencilla la tarea de iniciar o parar servicios, o ver la salida de consola producida por los contenedores. \\
 	
@@ -507,7 +503,7 @@ services:
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[width=0.78\textwidth]{img/traefik_example.png}
-			\caption{Captura portal de gestión de Traefik. Detalle de enrutado hacia un servicio.}
+			\caption{Captura portal de gestión de Traefik. Detalle del enrutado hacia un servicio. [\ref{bib_img: traefik capture}]}
 		\end{center}
 	\end{figure}
 	
@@ -579,11 +575,11 @@ services:
 	
 	\chapter{Diseño e implementación del sistema}
 	
-	\noindent En este capítulo se va a comentar más en detalle la implementación del sistema propuesto para la monitorización y predicción de tráfico en una red. Tal y como vimos en el capitulo anterior, se va a utilizar el lenguaje de programación Python, con el framework de desarrollo FastAPI.
+	\noindent En este capítulo se va a comentar más en detalle la implementación del sistema propuesto para la monitorización y predicción de tráfico de red. Tal y como vimos en el capitulo anterior, se va a utilizar el lenguaje de programación Python, con el framework de desarrollo FastAPI.
 	
-	\section{Descripción REST API}
+	\section{Descripción API REST}
 	
-	\noindent Tal y como pudimos ver en la sección \ref{sec: api}, para la aplicación propuesta hemos elegido que siga la estructura de REST API, ya que es la más sencilla de implementar y la más flexible. \\
+	\noindent Tal y como pudimos ver en la sección \ref{sec: api}, para la aplicación propuesta hemos elegido que siga la estructura de API REST, ya que es la más sencilla de implementar y la más flexible. \\
 	
 	\noindent Para nuestro caso particular de monitorización del tráfico de una red, se han detectado tres ``agentes'' involucrados dentro del sistema. Dichos agentes son los siguientes:
 	
@@ -710,13 +706,13 @@ services:
 
 	\noindent De esta manera, en el caso de querer añadir una funcionalidad nueva, solo tendríamos que modificar los archivos pertinentes. Las modificaciones en archivos ya existentes serían mínimas. Permitiendo de esta manera un fácil mantenimiento y desarrollo sobre la aplicación. \\
 	
-	\subsection{Migración de base de datos SQL}
+	\subsection{Migración de base de datos tipo relacional}
 	
 	\noindent Para permitir que sea sencillo extender los modelos de datos de la aplicación es necesario tener en cuenta que va a suceder si en algún momento decidimos cambiar algo de dichos modelos y que tenemos que hacer para que esos cambios se apliquen correctamente en la base de datos que estemos utilizando. Es por esto por lo que aparecen dos herramientas muy importantes: \texttt{ORM} y \texttt{migrations}.  \\
 	
 	\noindent En primer lugar, \texttt{ORM} (Object-relational Mappers) permite una abstracción de alto nivel que da lugar a describir un modelo de datos de SQL en Python, en vez de utilizar lenguaje SQL directamente. Además, permite acceder a la información de la base de datos de manera más sencilla, ya que para el programa es como si el modelo de datos fuera un objeto, pero internamente se están realizando las consultas SQL que sean necesarias. [\ref{bib: orm python}] [\ref{bib: fastapi orm}] \\
 	
-	\noindent En segundo lugar, \texttt{migrations} permite tener un control de versiones dentro de los modelos de datos que estemos usando en la aplicación. Además, permite aplicar automaticamente modificaciones en los modelos de datos, de modo que al ejecutar la aplicación, la base de datos actualizará su estructura (por ejemplo, añadir una nueva columna en una tabla) en función del modelo de datos que hayamos actualizado del \texttt{ORM}. [\ref{bib: fastapi migrations}]
+	\noindent En segundo lugar, \texttt{migrations} permite tener un control de versiones dentro de los modelos de datos que estemos usando en la aplicación. Además, permite aplicar automáticamente modificaciones en los modelos de datos, de modo que al ejecutar la aplicación, la base de datos actualizará su estructura (por ejemplo, añadir una nueva columna en una tabla) en función del modelo de datos que hayamos actualizado del \texttt{ORM}. [\ref{bib: fastapi migrations}]
 	
 	\pagebreak
 	
@@ -866,7 +862,6 @@ services:
 		\item Ruta \texttt{/networks}:
 		
 		\begin{itemize}
-			%\item \textbf{Ruta}: \texttt{/networks}
 			\item \textbf{Método HTTP}: \texttt{GET}
 			\item \textbf{Descripción}: permite listar todas las redes monitorizadas del sistema.
 			
@@ -1528,6 +1523,12 @@ services:
 		\label{bib: prophet trend flex}
 		\href{https://facebook.github.io/prophet/docs/trend_changepoints.html#adjusting-trend-flexibility}{Prophet Doc: Adjusting trend flexibility}
 		
+		% 22
+		\item
+		\label{bib: cisco white paper}
+		\href{https://www.cisco.com/c/en/us/solutions/collateral/executive-perspectives/annual-internet-report/white-paper-c11-741490.html}{Cisco Annual Internet Report (2018-2023) White paper}
+		
+		
 	\end{enumerate}
 
 	\vspace{20px}
@@ -1567,6 +1568,15 @@ services:
 		\label{bib_img: prophet logo}
 		\href{https://facebook.github.io/prophet/}{Prophet}
 		
+		% 7
+		\item
+		\label{bib_img: docker architecture}
+		\href{https://docs.docker.com/get-started/overview/}{Docker Docs: Get Started}
+		
+		% 8
+		\item
+		\label{bib_img: traefik capture}
+		\href{https://traefik.io/traefik/}{Traefik website}
 		
 	\end{enumerate}
 	
@@ -1616,7 +1626,7 @@ services:
 		\begin{itemize}
 			\item Ruido. Sumamos ruido blanco a la muestra sintética, de este modo podemos aumentar la varianza de los datos.
 			
-			\item Tendencia. Aplicamos un crecimiento exponencial a la serie temporal. En el caso de tráfico en red, buscamos seguir el dato de CAGR (Tasa de crecimiento anual compuesto), propuesto por Cisco (enlace here), por lo que lo implementamos con una exponencial de crecimiento 27\%.
+			\item Tendencia. Aplicamos un crecimiento exponencial a la serie temporal. En el caso de tráfico en red, buscamos seguir el dato de CAGR (Tasa de crecimiento anual compuesto), propuesto por Cisco [\ref{bib: cisco white paper}], por lo que lo implementamos con una exponencial de crecimiento 27\%.
 			
 		\end{itemize}
 	
