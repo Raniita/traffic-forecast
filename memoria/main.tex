@@ -622,7 +622,7 @@ services:
 	
 	\noindent Para el caso del agente \texttt{interfaces}, definimos el funcionamiento de la aplicación. Entendemos una interfaz como aquellas interfaces de red que queremos monitorizar su tráfico dentro de una red, que previamente ya ha sido dada de alta en el sistema. \\
 	
-	\noindent Cómo compromiso de diseño, se entiende que cada tendremos que dar de alta dos interfaces en el sistema, una interfaz para monitorizar los datos de transmisión (desde ahora, TX) y otra interfaz para monitorizar los datos de recepción (desde ahora, RX). De esta manera, tendríamos completamente monitorizada la interfaz de red. \\
+	\noindent Cómo compromiso de diseño, se entiende que de cada interfaz tendremos que dar de alta dos interfaces en el sistema, una interfaz para monitorizar los datos de transmisión (desde ahora, TX) y otra interfaz para monitorizar los datos de recepción (desde ahora, RX). De esta manera, tendríamos completamente monitorizada la interfaz de red. \\
 	
 	\noindent Una interfaz monitorizada puede tener muchas muestras guardadas en el sistema, dichas muestras serán almacenadas en la base de datos para datos temporales (en nuestro caso InfluxDB). \\
 	
@@ -708,7 +708,7 @@ services:
 	
 	\subsection{Migración de base de datos tipo relacional}
 	
-	\noindent Para permitir que sea sencillo extender los modelos de datos de la aplicación es necesario tener en cuenta que va a suceder si en algún momento decidimos cambiar algo de dichos modelos y que tenemos que hacer para que esos cambios se apliquen correctamente en la base de datos que estemos utilizando. Es por esto por lo que aparecen dos herramientas muy importantes: \texttt{ORM} y \texttt{migrations}.  \\
+	\noindent Para permitir que sea sencillo extender los modelos de datos de la aplicación es necesario tener en cuenta qué va a suceder si en algún momento decidimos cambiar algo de dichos modelos y qué tenemos que hacer para que esos cambios se apliquen correctamente en la base de datos que estemos utilizando. Es por esto por lo que aparecen dos herramientas muy importantes: \texttt{ORM} y \texttt{migrations}.  \\
 	
 	\noindent En primer lugar, \texttt{ORM} (Object-relational Mappers) permite una abstracción de alto nivel que da lugar a describir un modelo de datos de SQL en Python, en vez de utilizar lenguaje SQL directamente. Además, permite acceder a la información de la base de datos de manera más sencilla, ya que para el programa es como si el modelo de datos fuera un objeto, pero internamente se están realizando las consultas SQL que sean necesarias. [\ref{bib: orm python}] [\ref{bib: fastapi orm}] \\
 	
@@ -718,7 +718,7 @@ services:
 	
 	\subsection{OpenAPI Specification. \texttt{Swagger}}
 	
-	\noindent Una de las ventajas que supone el uso de FastAPI, es que de manera automática genera la documentación asociada a OpenAPI de la aplicación, dando lugar a que el endpoint \texttt{/docs} nos redirige directamente a la aplicación web \texttt{Swagger}, que nos muestra de una manera sencilla todos los endpoints asociados de nuestra aplicación, permitiendo realizar peticiones y comprobando la funcionalidad de esta. \\
+	\noindent Una de las ventajas que supone el uso de FastAPI, es que de manera automática genera la documentación asociada a OpenAPI de la aplicación, dando lugar a que el endpoint \texttt{/docs} nos redirige directamente a la aplicación web \texttt{Swagger}, que nos muestra de una manera sencilla todos los \texttt{endpoints} asociados de nuestra aplicación, permitiendo realizar peticiones y comprobando la funcionalidad de estas. \\
 	
 	\noindent De esta manera, si navegamos a dicha ruta (\texttt{/docs}), podemos ver como nos aparece una web similar a la de la figura \ref{img: swagger 1}.
 	
@@ -751,12 +751,13 @@ services:
 	
 	\section{Modelos de datos}
 	
-	\noindent Por otro lado, debemos definir los datos y su representación dentro de nuestra aplicación. Esto nos permite adaptar la información en función del tipo de base de datos que vayamos a consultar, y en función del modelo a utilizar. Para ello, diferenciamos entre los modelos que estarán almacenados en la base de datos tipo SQL, y los datos almacenados en la base de datos tipo serie temporal.
+	\noindent Por otro lado, debemos definir los datos y su representación dentro de nuestra aplicación. Esto nos permite adaptar la información en función del tipo de base de datos que vayamos a consultar, y en función del modelo a utilizar. Para ello, diferenciamos entre los modelos que estarán almacenados en la base de datos de tipo relacional, y los datos almacenados en la base de datos de tipo serie temporal.
 	
 	\subsection{Base de datos SQL}
 	
 	\noindent El primer modelo de datos de la aplicación, es el referido a la información de una red a monitorizar. La descripción del modelo la podemos ver en la figura \ref{img: modelo sql networks}.
 	
+	%TODO: revisar imagen
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[width=0.45\textwidth]{img/model_sql_networks.png}
@@ -767,6 +768,7 @@ services:
 	
 	\noindent El segundo modelo de datos de la aplicación, es el referido a la información de una interfaz a monitorizar, que esta dentro de una red monitorizada. La descripción del modelo la podemos ver en la figura \ref{img: modelo sql interfaces}.
 	
+	% TODO: revisar imagen
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[width=0.45\textwidth]{img/model_sql_interfaces.png}
@@ -775,7 +777,7 @@ services:
 		\end{center}
 	\end{figure}
 	
-	\noindent Se establece una relación del modo que una interfaz solo puede pertenecer a una red monitorizada, y que además, una red monitorizada puede tener muchas interfaces. Dicha relación se realiza mediante el campo ''id\_net'' de la tabla Interfaces. \\
+	\noindent Se establece una relación del modo que una interfaz solo puede pertenecer a una red monitorizada, y que además, una red monitorizada puede tener muchas interfaces. Dicha relación se realiza mediante el campo ``id\_net'' de la tabla Interfaces. \\
 	
 	\noindent Por último, la base de datos SQL utilizada para esta aplicación es PostgreSQL [\ref{bib: postgresql}], ya que además de ser Open Source, permite una gran escalabilidad, amoldándose a los recursos de la máquina en la que esté funcionando.
 	
@@ -786,10 +788,10 @@ services:
 	\noindent En resumen, definimos el modelo de datos que tiene que seguir nuestra aplicación:
 	
 	\begin{itemize}
-		\item ``measurement'': equivalente a una red a monitorizar, valor almacenado en Networks::influx\_net.
+		\item ``measurement'': equivalente a una red a monitorizar, valor almacenado en \\ \texttt{Networks::influx\_net}.
 		\item ``fields'': nombre del valor a monitorizado, en este caso el default es \textit{link\_count}.
-		\item ``tags'': solo tenemos un tag llamado \textit{interface}, su objetivo es identificar a que interfaz pertenece el punto de monitorización. El valor puede estar ser Interfaces::influx\_if\_rx o Interfaces::influx\_if\_tx.
-		\item ``points'': corresponde con el valor numérico del ``field''. En este caso, corresponde con el valor númerico de link\_count en ese periodo de 5 minutos.
+		\item ``tags'': solo tenemos un tag llamado \textit{interface}, su objetivo es identificar a que interfaz pertenece el punto de monitorización. El valor puede estar ser \texttt{Interfaces::influx\_if\_rx} o \texttt{Interfaces::influx\_if\_tx}.
+		\item ``points'': corresponde con el valor numérico del ``field''. En este caso, corresponde con el valor númerico de \textit{link\_count} en ese periodo de 5 minutos.
 	\end{itemize}
 
 	\section{Predicción de tráfico de red}
@@ -797,7 +799,7 @@ services:
 	
 	\noindent Uno de los objetivos más importantes que tiene satisfacer la aplicación es la posibilidad de predecir tráfico de red a partir de muestras de monitorización almacenadas en el sistema. Para ello, tal y como introducimos en \ref{sec: prophet}, vamos a utilizar la herramienta de predicción Prophet. \\
 	
-	\noindent En primer lugar, se decide que la predicción de tráfico va a consumir información que esta almacenada en el sistema. Por lo tanto, es necesario crear una red a la que monitorizar, y añadir muestras asociadas a la monitorización. En resumen, si quisiéramos ejecutar una predicción de tráfico desde cero, tendríamos que seguir los siguientes pasos dentro de la aplicación:
+	\noindent En primer lugar, se decide que la predicción de tráfico va a consumir información que está almacenada en el sistema. Por lo tanto, es necesario crear una red a la que monitorizar, y añadir muestras asociadas a la monitorización. En resumen, si quisiéramos ejecutar una predicción de tráfico desde cero, tendríamos que seguir los siguientes pasos dentro de la aplicación:
 	
 	\begin{enumerate}
 		\item Creamos una red a monitorizar. Utilizaremos el endpoint POST: \texttt{/networks}.
@@ -854,7 +856,7 @@ services:
 	
 	\section{Rutas HTTP (\texttt{endpoints})}
 	
-	\noindent En esta sección se pretende recapitular todos los \texttt{endpoints} disponibles en la aplicación, además de sus esquemas de entrada y de salida. Es importante recordar que la aplicación tiene la aplicación documental \texttt{Swagger} implementada, por lo que accediendo a la ruta \texttt{/doc}, podemos ver toda la documentación asociada a la API.
+	\noindent En esta sección se pretende recapitular todos los \texttt{endpoints} disponibles en la aplicación, además de sus esquemas de entrada y de salida. Es importante recordar que la aplicación tiene la herramienta documental \texttt{Swagger} implementada, por lo que accediendo a la ruta \texttt{/doc}, podemos ver toda la documentación asociada a la API.
 	
 	\subsection{Colección \texttt{Networks}}
 	
@@ -1064,7 +1066,7 @@ services:
 		
 		\begin{itemize}
 			\item \textbf{Método HTTP}: \texttt{POST}
-			\item \textbf{Descripción}: permite subir un archivo tipo \texttt{.csv} que contenga muestras de tráfico de una única interfaz, especificando si es de tipo \texttt{RX} o \texttt{TX}. El sistema subirá la información de las muestras a la base de datos, asociadas a la interfaz de red que especificamos como parámetro.
+			\item \textbf{Descripción}: permite subir un archivo tipo \texttt{.csv} que contenga muestras de tráfico de una única interfaz, especificando si es de tipo \texttt{RX} o \texttt{TX}. Las columnas permitidas del \texttt{.csv} son: \texttt{time} y \texttt{flow}. El sistema subirá la información de las muestras a la base de datos, asociadas a la interfaz de red que especificamos como parámetro.
 			\item \textbf{Parámetros}: \texttt{network\_id} e \texttt{interface\_id}, como identificadores tanto de red como de interfaz monitorizada.
 			\item \textbf{Respuesta}: una vez cargados los datos de monitorización, el servidor devuelve un mensaje confirmando que se han subido correctamente los datos.
 		\end{itemize}
@@ -1128,7 +1130,7 @@ services:
 	
 	\chapter{Validación del sistema}
 	
-	\noindent En este capítulo vamos a demostrar y validar el funcionamiento del sistemas, además de verificar que este cumple con los objetivos propuestos para el trabajo. A modo de resumen, las pruebas realizadas son las siguientes:
+	\noindent En este capítulo vamos a demostrar y validar el funcionamiento del sistema, además de verificar que este cumple con los objetivos propuestos para el trabajo. A modo de resumen, las pruebas realizadas son las siguientes:
 	
 	\begin{enumerate}
 		\item Crear una red a monitorizar.
@@ -1176,9 +1178,9 @@ services:
 
 	\pagebreak
 	
-	\noindent A la red que acabamos de crear (\texttt{net-1}, con id \texttt{30}), le añadimos una interfaz de red monitorizada con el identificador \texttt{55}. Dicha interfaz de red monitorizada tiene por nombre \texttt{if-5}. Ver figura \ref{img: request create if (validate)}.
+	\noindent A la red que acabamos de crear (\texttt{net-1}, con id \texttt{30}), le añadimos una interfaz de red monitorizada con el identificador \texttt{55}. Dicha interfaz de red monitorizada tiene por nombre \texttt{if-5}. Ver figura \ref{img: request create if (validate)}. \\
 	
-	\noindent La respuesta recibida por el servidor ante esta petición, la podemos ver en la figura \ref{img: response create if (validate)}.
+	\noindent La respuesta recibida por el servidor ante esta petición la podemos ver en la figura \ref{img: response create if (validate)}.
 	
 	\begin{figure}[h!]
 		\begin{center}
@@ -1191,7 +1193,7 @@ services:
 	\section{Cargar muestras en interfaz de red}
 	\label{sec: load data if}
 	
-	\noindent El siguiente paso para validar el sistema es cargar datos de monitorización al sistema. Para ello se planteó la opción de generar un \texttt{dataset} de datos sintéticos en el que se puedan aplicar ciertos efectos de tendencia o estacionales, de modo que se pueda validar la correcta predicción del tráfico. Los pasos que se han seguido para generar dicho \texttt{dataset} se pueden ver en anexo I (\ref{sec: anexo 1 dataset}). \\
+	\noindent El siguiente paso para validar el sistema es cargar datos de monitorización. Para ello se propuso la opción de generar un \texttt{dataset} de datos sintéticos en el que se puedan aplicar ciertos efectos de tendencia o estacionales, de modo que se pueda validar la correcta predicción del tráfico. Los pasos que se han seguido para generar dicho \texttt{dataset} se pueden ver en anexo I (\ref{sec: anexo 1 dataset}). \\
 	
 	\noindent En este caso, utilizamos un \texttt{dataset} de dos años con muestras de tráfico cada 5 minutos. En la figura \ref{img: synthetic dataset two year} podemos ver que forma tiene los datos de monitorización. Este \texttt{dataset} lo subimos al sistema para que se añadan a la interfaz monitorizada con identificación \texttt{55}. \\
 	
@@ -1201,6 +1203,7 @@ services:
 	
 	\pagebreak
 	
+	% TODO: revisar ejes del plot
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[width=0.8\textwidth]{img/dataset_synt_1.png}
@@ -1227,7 +1230,7 @@ services:
 		\end{center}
 	\end{figure}
 
-	\noindent En este punto, es interesante comprobar si de verdad se han subido los datos de monitorización al sistema. Recapitulando en los modelos de datos, los datos de monitorización están almacenados en la base de datos InfluxDB, por lo que podemos hacer uso del portal web que viene por defecto en la aplicación para comprobar si se han subido los datos correctamente. Una vez accedemos al portal web, y seleccionamos el \texttt{bucket} de nuestra aplicación, procedemos a buscar los datos de monitorización que acabamos de subir. En la figura \ref{img: influxdb data 1} podemos ver una captura de pantalla de la aplicación web de InfluxDB y los datos de monitorización.
+	\noindent Llegados a este punto, es interesante comprobar si de verdad se han subido los datos de monitorización al sistema. Recapitulando de los modelos de datos, los datos de monitorización están almacenados en la base de datos InfluxDB, por lo que podemos hacer uso del portal web que viene por defecto en la aplicación para comprobar si se han subido los datos correctamente. Una vez accedemos al portal web, y seleccionamos el \texttt{bucket} de nuestra aplicación, procedemos a buscar los datos de monitorización que acabamos de subir. En la figura \ref{img: influxdb data 1} podemos ver una captura de pantalla de la aplicación web de InfluxDB y los datos de monitorización que acabamos de subir.
 	
 	\begin{figure}[h!]
 		\begin{center}
@@ -1241,7 +1244,7 @@ services:
 	
 	\section{Cargar una topología de red}
 	
-	\noindent Otra forma de cargar muestras de monitorización a una red es utilizando la ruta: \\
+	\noindent Por otro lado, otra forma de cargar muestras de monitorización a una red es utilizando la ruta: \\
 	 \texttt{/samples/\{network\_id\}/import\_topology}, ya que permite subir información de más de una interfaz de forma simultanea. Para ello, tenemos que subir un archivo \texttt{CSV} que tenga las siguientes columnas:
 	 
 	 \begin{itemize}
@@ -1251,19 +1254,19 @@ services:
 	 	\item \texttt{RX}. Valor de tráfico de red en la interfaz de recepción.
 	 \end{itemize}
  
- 	\noindent Para este ejemplo, hemos generado un pequeño archivo de monitorización que vamos a subir a una red de monitorización que previamente tenemos creada (en este caso, red con identificación \texttt{100}). Una vez el sistema lea el archivo, creará las interfaces que sean necesarias para dar lugar a la topología. Una vez termine, subirá los datos de monitorización para cada una de las muestras. \\
+ 	\noindent Para este ejemplo, hemos generado un pequeño archivo de monitorización que vamos a subir a una red de monitorización que previamente tenemos creada (en este caso, red con identificación \texttt{100}). Una vez el sistema lea el archivo, creará las interfaces que sean necesarias para dar lugar a la topología. Una vez termine, subirá los datos de monitorización para cada una de las interfaces. \\
  	
  	\begin{figure}[h!]
  		\begin{center}
  			\includegraphics[width=0.55\textwidth]{diag/request_topology_1.png}
- 			\caption{Petición para cargar una topología de red en la red \texttt{100}.}
+ 			\caption{Petición para cargar una topología en la red \texttt{100}.}
  			\label{img: request topology 1}
  		\end{center}
  	\end{figure}
  
  	\begin{figure}[h!]
  		\begin{center}
- 			\includegraphics[width=0.7\textwidth]{img/response_topology_1.png}
+ 			\includegraphics[width=0.75\textwidth]{img/response_topology_1.png}
  			\caption{Respuesta del servidor al cargar una topología de red.}
  			\label{img: response topology 1}
  		\end{center}
@@ -1271,7 +1274,7 @@ services:
 	
 	\pagebreak
 	
-	\noindent Para comprobar que se ha subido correctamente los datos, vamos al portal web de InfluxDB. En la figura \ref{img: influxdb topology 1} podemos ver como los datos se han subido correctamente. En esta captura también podemos comprobar como se agrupan los datos dentro de la base de datos de tipo serie temporal. 
+	\noindent Para comprobar que se ha subido correctamente los datos, accedemos al portal web de InfluxDB. En la figura \ref{img: influxdb topology 1} podemos ver como los datos se han subido correctamente. En esta captura también podemos comprobar como se agrupan los datos dentro de la base de datos de tipo serie temporal. 
 	
 	\begin{figure}[h!]
 		\begin{center}
@@ -1379,7 +1382,7 @@ services:
 	
 	\noindent En este capítulo vamos a comentar las conclusiones obtenidas durante la realización del presente trabajo. \\
 	
-	\noindent En primer lugar, se ha profundizado en el concepto de microservicios y APIs, permitiendo desplegar una aplicación que está alineada completamente con estos conceptos. Además, se ha demostrado que el despliegue tanto en un entorno de desarrollo, como en un entorno de producción, es relativamente sencillo ya que hacemos uso de la herramienta \texttt{Docker} y \texttt{docker-compose}. \\
+	\noindent En primer lugar, se ha profundizado en el concepto de microservicios y APIs, permitiendo desplegar una aplicación que está alineada completamente con estos conceptos. Además, se ha demostrado que el despliegue tanto en un entorno de desarrollo, como en un entorno de producción, es relativamente sencillo ya que hacemos uso de las herramientas \texttt{Docker} y \texttt{docker-compose}. \\
 	
 	\noindent Por otro lado, gracias al framework FastAPI, la aplicación tiene implementadas herramientas de documentación del estándar de OpenAPI. Esto es importante ya que permite que otras aplicaciones puedan hacer uso de la API como servicio, de modo que aplicaciones más grandes puedan aumentar su funcionalidad de manera sencilla, simplemente conectándose con el servicio propuesto en este trabajo. Además, esta documentación también ha sido clave para la validación del desarrollo, ya que permite ejecutar peticiones y comprobar la funcionalidad de la aplicación. \\
 
@@ -1594,10 +1597,11 @@ services:
 	\noindent Para dar lugar a un \texttt{dataset} sintético, se utiliza el lenguaje de programación Python, y se siguen los siguientes pasos: 
 	
 	\begin{enumerate}
-		\item Generamos un archivo de dos columnas que simulan el tráfico de red en una interfaz durante un día. \\
+		\item Generamos un archivo tipo \texttt{.csv} de dos columnas (\texttt{time} y \texttt{flow}) que simulan el tráfico de red en una interfaz durante un día. \\
 		
-		En este caso, tenemos dos opciones, la primera sería generar un dato de tráfico cada hora (ver figura \ref{img: anexo 1}), y la segunda generar un dato de tráfico cada 5 minutos (ver figura \ref{img: anexo 2}). Este último sería la opción más cercana a la realidad, ya que los datos de tráfico que aporta SNMP se obtienen cada 5 minutos por convenio.
+		\noindent En este caso, tenemos dos opciones, la primera sería generar un dato de tráfico cada hora (ver figura \ref{img: anexo 1}), y la segunda generar un dato de tráfico cada 5 minutos (ver figura \ref{img: anexo 2}). Este último sería la opción más cercana a la realidad, ya que los datos de tráfico que aporta SNMP se obtienen cada 5 minutos por convenio.
 		
+		% TODO: revisar ejes
 		\begin{figure}[h!]
 			\includegraphics[width=0.8\textwidth, center]{img/anexo_1.png}
 			\caption{Simulación de tráfico de red. Un día, dividido por horas.}
@@ -1606,6 +1610,7 @@ services:
 	
 		\pagebreak
 		
+		% TODO: revisar ejes
 		\begin{figure}[h!]
 			\includegraphics[width=0.85\textwidth, center]{img/anexo_2.png}
 			\caption{Simulación de tráfico de red. Un día, dividido por \texttt{slots} de 5 minutos.}
@@ -1614,6 +1619,7 @@ services:
 	
 		\item A partir de estos datos, generamos una semana. En esta etapa, añadimos la primera regla: los fines de semana el tráfico se ve reducido, en comparación con el resto de la semana. Ver figura \ref{img: anexo 3}.
 		
+		% TODO: revisar ejes
 		\begin{figure}[h!]
 			\includegraphics[width=0.85\textwidth, center]{img/anexo_3.png}
 			\caption{Simulación de tráfico de red. Una semana con \texttt{slots} de 5 minutos. Reducción de tráfico en el fin de semana}
@@ -1624,14 +1630,15 @@ services:
 		
 		\item A los datos anteriores, podemos añadir las reglas de: 
 		\begin{itemize}
-			\item Ruido. Sumamos ruido blanco a la muestra sintética, de este modo podemos aumentar la varianza de los datos.
+			\item \textbf{Ruido}. Sumamos ruido blanco a la muestra sintética, de este modo podemos aumentar la varianza de los datos.
 			
-			\item Tendencia. Aplicamos un crecimiento exponencial a la serie temporal. En el caso de tráfico en red, buscamos seguir el dato de CAGR (Tasa de crecimiento anual compuesto), propuesto por Cisco [\ref{bib: cisco white paper}], por lo que lo implementamos con una exponencial de crecimiento 27\%.
+			\item \textbf{Tendencia}. Aplicamos un crecimiento exponencial a la serie temporal. En el caso de tráfico en red, buscamos seguir el dato de CAGR (Tasa de crecimiento anual compuesto), propuesto por Cisco [\ref{bib: cisco white paper}], por lo que lo implementamos con una exponencial de crecimiento 27\%.
 			
 		\end{itemize}
 	
 		\noindent El resultado al aplicar estas reglas se puede ver en la figura \ref{img: anexo 4}.
 		
+		% TODO: revisar ejes
 		\begin{figure}[h!]
 			\includegraphics[width=0.9\textwidth, center]{img/anexo_4.png}
 			\caption{Simulación de tráfico de red. Una semana con \texttt{slots} de 5 minutos. Reducción de tráfico en fin de semana, tendencia exponencial y ruido blanco.}
@@ -1646,12 +1653,14 @@ services:
 		
 		\pagebreak
 		
+		% TODO: revisar ejes
 		\begin{figure}[h!]
 			\includegraphics[width=0.9\textwidth, center]{img/anexo_5.png}
 			\caption{Simulación de tráfico de red. Un mes de datos, manteniendo reglas aplicadas.}
 			\label{img: anexo 5}
 		\end{figure}
 	
+		% TODO: revisar ejes
 		\begin{figure}[h!]
 			\includegraphics[width=0.9\textwidth, center]{img/anexo_6.png}
 			\caption{Simulación de tráfico de red. Un año de datos, se añade la regla del incremento de tráfico en verano.}
@@ -1660,16 +1669,14 @@ services:
 	
 		\pagebreak
 	
+		% TODO: revisar ejes
 		\begin{figure}[h!]
 			\includegraphics[width=0.9\textwidth, center]{img/anexo_7.png}
 			\caption{Simulación de tráfico de red. Un año de datos, se aplica el percentil 95 para cada día.}
 			\label{img: anexo 7}
 		\end{figure}
 	
-		\noindent Una vez llegados a este punto, tenemos un dataset sintético de un año, en el que podemos modificar diferentes parámetros. De esta manera, podemos validar la predicción de tráfico de nuestra aplicación. \\
-		
-		\noindent Nota: las columnas del \texttt{CSV} generado son: \texttt{time} y \texttt{flow}
-		
+		\noindent Una vez llegados a este punto, tenemos un \texttt{dataset} sintético de un año (en formato \texttt{.csv}), en el que podemos modificar diferentes parámetros. De esta manera, podemos validar la predicción de tráfico de nuestra aplicación. \\
 	\end{enumerate}
 	
 \end{document}
