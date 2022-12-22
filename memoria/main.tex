@@ -496,7 +496,7 @@ services:
 	
 	\begin{itemize}
 		\item Gestionar ``middlewares'' necesarios para la aplicación (forzar protocolos específicos, configurar contraseña para el servicio...).
-		\item Funcionar con API Gateway, gestionando los dominios y certificados para cada uno de los microservicios desplegados.
+		\item Funcionar como API ``gateway'', gestionando los dominios y certificados para cada uno de los microservicios desplegados.
 		\item Orquestador de nodo de entrada, gestionando la comunicación de tráfico de un dominio hacia el servicio asociado.
 	\end{itemize}
 
@@ -755,31 +755,66 @@ services:
 	
 	\subsection{Base de datos SQL}
 	
-	\noindent El primer modelo de datos de la aplicación, es el referido a la información de una red a monitorizar. La descripción del modelo la podemos ver en la figura \ref{img: modelo sql networks}.
+	\noindent El primer modelo de datos de la aplicación, es el referido a la información de una red a monitorizar. La descripción del modelo la podemos ver en la tabla \ref{tab: modelo sql networks}.
 	
-	%TODO: revisar imagen
-	\begin{figure}[h!]
-		\begin{center}
-			\includegraphics[width=0.45\textwidth]{img/model_sql_networks.png}
-			\caption{Modelo de datos para las redes a monitorizar. Equivale con la tabla ''networks''.}
-			\label{img: modelo sql networks}
-		\end{center}
-	\end{figure}
+	%\begin{figure}[h!]
+	%	\begin{center}
+	%		\includegraphics[width=0.45\textwidth]{img/model_sql_networks.png}
+	%		\caption{Modelo de datos para las redes a monitorizar. Equivale con la tabla ''networks''.}
+	%		\label{img: modelo sql networks}
+	%	\end{center}
+	%\end{figure}
 	
-	\noindent El segundo modelo de datos de la aplicación, es el referido a la información de una interfaz a monitorizar, que esta dentro de una red monitorizada. La descripción del modelo la podemos ver en la figura \ref{img: modelo sql interfaces}.
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{|l|}
+			\hline
+			\multicolumn{1}{|c|}{\textit{\textbf{Networks}}} \\ \hline
+			\texttt{id\_network}: Int, Public Key, Unique                 \\ \hline
+			\texttt{name}: String                                     \\ \hline
+			\texttt{description}: String                              \\ \hline
+			\texttt{ip\_red}: String                                  \\ \hline
+			\texttt{influx\_net}: String                              \\ \hline
+		\end{tabular}
+		\caption{Modelo de datos para las redes a monitorizar. Equivale con la tabla ``networks''.}
+		\label{tab: modelo sql networks}
+	\end{table}
 	
-	% TODO: revisar imagen
-	\begin{figure}[h!]
-		\begin{center}
-			\includegraphics[width=0.45\textwidth]{img/model_sql_interfaces.png}
-			\caption{Modelos de datos para las interfaces a monitorizar. Equivale con la tabla ''interfaces''}
-			\label{img: modelo sql interfaces}
-		\end{center}
-	\end{figure}
+	\vspace{12px}
 	
-	\noindent Se establece una relación del modo que una interfaz solo puede pertenecer a una red monitorizada, y que además, una red monitorizada puede tener muchas interfaces. Dicha relación se realiza mediante el campo ``id\_net'' de la tabla Interfaces. \\
+	\noindent El segundo modelo de datos de la aplicación, es el referido a la información de una interfaz a monitorizar, que esta dentro de una red monitorizada. La descripción del modelo la podemos ver en la tabla \ref{tab: modelo sql interfaces}.
+	
+	%\begin{figure}[h!]
+	%	\begin{center}
+	%		\includegraphics[width=0.45\textwidth]{img/model_sql_interfaces.png}
+	%		\caption{Modelo de datos para las interfaces a monitorizar. Equivale con la tabla ''interfaces''}
+	%		\label{img: modelo sql interfaces}
+	%	\end{center}
+	%\end{figure}
+	
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{|l|}
+			\hline
+			\multicolumn{1}{|c|}{\textit{\textbf{Interfaces}}} \\ \hline
+			\texttt{id\_interface}: Int, Public Key, Unique             \\ \hline
+			\texttt{name}: String                                       \\ \hline
+			\texttt{description}: String                                \\ \hline
+			\texttt{influx\_if\_rx}: String                             \\ \hline
+			\texttt{influx\_if\_tx}: String                             \\ \hline
+			\texttt{network}: Int, Foreign Key                          \\ \hline
+		\end{tabular}
+		\caption{Modelo de datos para las interfaces a monitorizar. Equivale con la tabla ``interfaces''.}
+		\label{tab: modelo sql interfaces}
+	\end{table}
+	
+	\vspace{12px}
+	
+	\noindent Se establece una relación del modo que una interfaz solo puede pertenecer a una red monitorizada, y que además, una red monitorizada puede tener muchas interfaces. Dicha relación se realiza mediante el campo ``id\_network'' de la tabla Interfaces. \\
 	
 	\noindent Por último, la base de datos SQL utilizada para esta aplicación es PostgreSQL [\ref{bib: postgresql}], ya que además de ser Open Source, permite una gran escalabilidad, amoldándose a los recursos de la máquina en la que esté funcionando.
+	
+	\pagebreak
 	
 	\subsection{Base de datos InfluxDB}
 	
@@ -1202,11 +1237,10 @@ services:
 	\noindent Una vez enviamos la petición, el servidor tarda aproximadamente 5-6 segundos en dar una respuesta. Para este caso, el \texttt{dataset} de dos años tiene un peso de 5.8 MB. En la figura \ref{img: response import if (validate)} podemos ver la respuesta recibida por el servidor. \\
 	
 	\pagebreak
-	
-	% TODO: revisar ejes del plot
+
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.8\textwidth]{img/dataset_synt_1.png}
+			\includegraphics[width=0.75\textwidth]{img/dataset_synt_1.png}
 			\caption{Representación datos sintéticos de dos años.}
 			\label{img: synthetic dataset two year}
 		\end{center}
@@ -1601,7 +1635,6 @@ services:
 		
 		\noindent En este caso, tenemos dos opciones, la primera sería generar un dato de tráfico cada hora (ver figura \ref{img: anexo 1}), y la segunda generar un dato de tráfico cada 5 minutos (ver figura \ref{img: anexo 2}). Este último sería la opción más cercana a la realidad, ya que los datos de tráfico que aporta SNMP se obtienen cada 5 minutos por convenio.
 		
-		% TODO: revisar ejes
 		\begin{figure}[h!]
 			\includegraphics[width=0.8\textwidth, center]{img/anexo_1.png}
 			\caption{Simulación de tráfico de red. Un día, dividido por horas.}
@@ -1610,7 +1643,6 @@ services:
 	
 		\pagebreak
 		
-		% TODO: revisar ejes
 		\begin{figure}[h!]
 			\includegraphics[width=0.85\textwidth, center]{img/anexo_2.png}
 			\caption{Simulación de tráfico de red. Un día, dividido por \texttt{slots} de 5 minutos.}
@@ -1619,7 +1651,6 @@ services:
 	
 		\item A partir de estos datos, generamos una semana. En esta etapa, añadimos la primera regla: los fines de semana el tráfico se ve reducido, en comparación con el resto de la semana. Ver figura \ref{img: anexo 3}.
 		
-		% TODO: revisar ejes
 		\begin{figure}[h!]
 			\includegraphics[width=0.85\textwidth, center]{img/anexo_3.png}
 			\caption{Simulación de tráfico de red. Una semana con \texttt{slots} de 5 minutos. Reducción de tráfico en el fin de semana}
@@ -1638,7 +1669,6 @@ services:
 	
 		\noindent El resultado al aplicar estas reglas se puede ver en la figura \ref{img: anexo 4}.
 		
-		% TODO: revisar ejes
 		\begin{figure}[h!]
 			\includegraphics[width=0.9\textwidth, center]{img/anexo_4.png}
 			\caption{Simulación de tráfico de red. Una semana con \texttt{slots} de 5 minutos. Reducción de tráfico en fin de semana, tendencia exponencial y ruido blanco.}
@@ -1653,14 +1683,12 @@ services:
 		
 		\pagebreak
 		
-		% TODO: revisar ejes
 		\begin{figure}[h!]
 			\includegraphics[width=0.9\textwidth, center]{img/anexo_5.png}
 			\caption{Simulación de tráfico de red. Un mes de datos, manteniendo reglas aplicadas.}
 			\label{img: anexo 5}
 		\end{figure}
 	
-		% TODO: revisar ejes
 		\begin{figure}[h!]
 			\includegraphics[width=0.9\textwidth, center]{img/anexo_6.png}
 			\caption{Simulación de tráfico de red. Un año de datos, se añade la regla del incremento de tráfico en verano.}
@@ -1669,7 +1697,6 @@ services:
 	
 		\pagebreak
 	
-		% TODO: revisar ejes
 		\begin{figure}[h!]
 			\includegraphics[width=0.9\textwidth, center]{img/anexo_7.png}
 			\caption{Simulación de tráfico de red. Un año de datos, se aplica el percentil 95 para cada día.}
