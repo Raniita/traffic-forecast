@@ -145,7 +145,7 @@
 	
 	\chapter{Introducción}
 	
-	\noindent Entendemos predicción de tráfico de red como estimar el tráfico que existirá en un instante futuro en dicha red, en función del historio de tráfico de ese sistema. Esta práctica es muy interesante ya que en función de la escala de tiempo sobre que la trabajemos podemos tener diferentes casos de uso: [\ref{bib: apuntes OeIR}]
+	\noindent Entendemos predicción de tráfico de red como la estimación del tráfico que existirá en un instante futuro en dicha red, en función del historio de tráfico de ese sistema. Esta práctica es muy interesante ya que, en función de la escala de tiempo sobre que la que trabajemos, podemos tener diferentes casos de uso: [\ref{bib: apuntes OeIR}]
 	
 	\begin{itemize}
 		\item Escala de \textbf{minutos}. Detectar anomalías de tráfico. Anticipar picos de tráfico.
@@ -161,15 +161,15 @@
 	
 	\section{Motivación}
 	
-	\noindent A raíz de la baja disponibilidad de herramientas que permitan la predicción de tráfico de red, se plantea la posibilidad de crear una herramienta que permita almacenar muestras de monitorización y que a partir de esas muestras se puedan realizar predicciones, tanto de corto alcance como de largo alcance. Sumado a esto, se propone que la herramienta sea independiente al fabricante, es decir, que no se desarrolle de manera específica para un único formato de datos o dispositivo en especifico. Pudiendo así extenderse a todos los casos de uso que así se necesiten. \\
+	\noindent A raíz de la baja disponibilidad de herramientas que permitan la predicción de tráfico de red, se plantea la posibilidad de crear una herramienta que permita almacenar muestras de monitorización y que, a partir de esas muestras, se puedan realizar predicciones, tanto de corto alcance como de largo alcance. Sumado a esto, se propone que la herramienta sea independiente al fabricante, es decir, que no se desarrolle de manera específica para un único formato de datos o dispositivo en específico; esto permite que sea extrapolable a todos los casos de uso que así se necesiten. \\
 	
-	\noindent En el ámbito de la planificación de red, resulta realmente importante tener una herramienta que pueda trabajar con predicciones a largo plazo, pudiendo estimar como va creciendo el tráfico conforme pasan los años, dando lugar a una mejor planificación de capacidades y un mejor análisis de inversiones del despliegue de la red. \\
+	\noindent En el ámbito de la planificación de red, resulta muy importante tener una herramienta que pueda trabajar con predicciones a largo plazo, pudiendo estimar cómo va creciendo el tráfico conforme pasan los años; esto implicaría una mejor planificación de capacidades y un mejor análisis de inversiones del despliegue de la red. \\
 	
 	\pagebreak
 	
-	\noindent Por otro lado, se propone la idea de que la herramienta propuesta pueda funcionar como un microservicio, dando lugar a una API REST [\ref{bib: what is api}] que pueda ser consumida como servicio por otras aplicaciones. Esto permite que aplicaciones ya existentes puedan implementar la funcionalidad de predecir muestras de tráfico de manera sencilla. \\
+	\noindent Por otro lado, se propone la idea de una herramienta que pueda funcionar como un microservicio, dando lugar a una API REST [\ref{bib: what is api}], que pueda ser consumida como servicio por otras aplicaciones. Esto permite que aplicaciones ya existentes puedan implementar la funcionalidad de predecir muestras de tráfico de manera sencilla. \\
 	
-	\noindent Es por estos motivos por los que creemos que esta herramienta planteada puede tener un gran impacto para realizar predicciones sencillas, pudiendo aprovechar los datos de monitorización red, sin tener que hacer un gran despliegue tecnológico para realizar un uso de ellos. \\
+	\noindent Es por todos estos motivos por los que creemos que esta herramienta puede tener un gran impacto para realizar predicciones sencillas, pudiendo aprovechar los datos de monitorización de red, sin tener que hacer un gran despliegue tecnológico para realizar un uso de ellos. \\
 	
 	\section{Objetivos}
 	
@@ -191,22 +191,22 @@
 	
 	\section{Resumen capítulos de la memoria}
 	
-	\noindent En este apartado se comentará brevemente la distribución de capítulos de la memoria. Además, se mencionará brevemente que temas se han abordado en cada uno de ellos. \\
+	\noindent En este apartado se comentará brevemente la distribución de capítulos de la memoria. Además, se mencionará brevemente qué temas se han abordado en cada uno de ellos. \\
 	
 	\begin{itemize}
-		\item \textbf{Capitulo 1}: \textit{Introducción}. Inicio del proyecto. Se presenta la introducción, una motivación y los objetivos planteados. \\
+		\item \textbf{Capítulo 1}: \textit{Introducción}. Inicio del proyecto. Se presenta la introducción, una motivación y los objetivos planteados. \\
 		
-		\item \textbf{Capitulo 2}: \textit{Tecnologías empleadas}. Se presentan las tecnologías utilizadas para implementar el proyecto. Además, se comenta como desplegar la aplicación en un entorno de producción. \\
+		\item \textbf{Capítulo 2}: \textit{Tecnologías empleadas}. Se presentan las tecnologías utilizadas para implementar el proyecto. Además, se comenta cómo desplegar la aplicación en un entorno de producción. \\
 		
 		\pagebreak
 		
-		\item \textbf{Capitulo 3}: \textit{Diseño e implementación del sistema}. Se describe el diseño de la aplicación. También se comenta a grandes rasgos como se ha realizado la implementación, y cual es el resultado final, en lo que a funcionalidad se refiere. \\
+		\item \textbf{Capítulo 3}: \textit{Diseño e implementación del sistema}. Se describe el diseño de la aplicación. También se comenta a grandes rasgos cómo se ha realizado la implementación, y cuál es el resultado final, en lo que a funcionalidad se refiere. \\
 		
-		\item \textbf{Capitulo 4}: \textit{Validación del sistema}. Se comentan como se ha validado las diferentes funcionalidades del sistema. Se ven los pasos hasta llegar a una predicción de tráfico de un año. \\
+		\item \textbf{Capítulo 4}: \textit{Validación del sistema}. Se comentan cómo se han validado las diferentes funcionalidades del sistema. Se ven los pasos hasta llegar a una predicción de tráfico de un año. \\
 		
-		\item \textbf{Capitulo 5}: \textit{Conclusiones}. Se muestran las conclusiones obtenidas en la realización del proyecto, y además se proponen posibles lineas de investigación futuras. \\
+		\item \textbf{Capítulo 5}: \textit{Conclusiones}. Se muestran las conclusiones obtenidas en la realización del proyecto, y además se proponen posibles líneas de investigación futuras. \\
 		
-		\item \textbf{Capitulo 6}: \textit{Bibliografía}. Aquí se muestran los diferentes recursos utilizados para la realización de este proyecto.
+		\item \textbf{Capítulo 6}: \textit{Bibliografía}. Aquí se muestran los diferentes recursos utilizados para la realización de este proyecto.
 	\end{itemize}
 	
 	\pagebreak
@@ -222,7 +222,7 @@
 	
 	\noindent \textbf{\large Arquitectura basada en \textbf{microservicios}} \\
 	
-	\noindent Lo primero, es entender en que consiste un microservicio. Para ello, podemos definirlo como los sistemas que cumplen las siguientes premisas: [\ref{bib: microservices}]
+	\noindent Lo primero, es entender en qué consiste un microservicio. Para ello, podemos definirlo como los sistemas que cumplen las siguientes premisas: [\ref{bib: microservices}]
 	
 	\begin{itemize}
 		\item Los microservicios son sistemas pequeños, independientes y poco ``acoplados'' (ver figura \ref{img: microservice architecture}).
@@ -279,17 +279,17 @@
 	\noindent En la aplicación de monitorización, distinguimos entre datos de dos tipos:
 	
 	\begin{itemize}
-		\item Datos clásicos. Como por ejemplo, la información asociada a una red a monitorizar.
-		\item Datos de tipo ''serie temporal''. Como por ejemplo, las muestras de monitorización de una red.
+		\item Datos clásicos. Por ejemplo, la información asociada a una red a monitorizar.
+		\item Datos de tipo ``serie temporal''. Por ejemplo, las muestras de monitorización de una red.
 	\end{itemize}
 
-	\noindent En primer lugar, se diseña una base de datos tipo relacional para almacenar los ''datos clásicos''. Y por otro lado, se diseña una base de datos diferente, especializada para el almacenamiento de datos tipo ''serie de datos'', en este caso, se elige una base de datos llamada InfluxDB.
+	\noindent En primer lugar, se diseña una base de datos tipo relacional para almacenar los ``datos clásicos''. Y por otro lado, se diseña una base de datos diferente, especializada para el almacenamiento de datos tipo ``serie de datos''; en este caso, se elige una base de datos llamada InfluxDB.
 	
 	\subsection{Base de datos tipo relacional}
 	
-	\noindent Un ejemplo de base de datos de tipo relacional es SQL. Dicha base de datos, supone una colección de información que organizan los datos en una serie de ''relaciones'' cuando la información es almacenada en una o varias ''tablas''. Por lo tanto, las relaciones suponen conexiones entre diferentes tablas, permitiendo así una asociación entre información diferente. [\ref{bib: relational database}] \\
+	\noindent Un ejemplo de base de datos de tipo relacional es SQL. Dicha base de datos se comporta como una colección de información, la cual organiza los datos en una serie de ``relaciones'', y estas se almacenan en una o varias ``tablas''. Por lo tanto, las relaciones suponen conexiones entre diferentes tablas, permitiendo así una asociación entre diferente información. [\ref{bib: relational database}] \\
 	
-	\noindent Por ejemplo, si vemos la figura \ref{img: example sql}, podemos comprobar como se realizan las relaciones entre las diferentes tablas (Ratings, Users, Movies o Tags), se realiza mediante uno de los campos definidos en la propia tabla. Por ejemplo, el campo ''user\_id'' de la tabla Ratings, permite una relación con la tabla Users, con el campo ''id''.
+	\noindent Por ejemplo, si vemos la figura \ref{img: example sql}, podemos comprobar cómo se realizan las relaciones entre las diferentes tablas (Ratings, Users, Movies o Tags): se realiza mediante uno de los campos definidos en la propia tabla. Por ejemplo, el campo ``user\_id'' de la tabla Ratings, permite una relación con la tabla Users, con el campo ``id''.
 	
 	\begin{figure}[h!]
 		\begin{center}
@@ -309,7 +309,7 @@
 	
 	\noindent InfluxDB es una base de datos diseñada para trabajar con datos tipo serie temporal (\texttt{time series}). Si bien es cierto que SQL puede gestionar este tipo de datos, no fue creado estrictamente para este objetivo. En este caso, InfluxDB esta diseñado para almacenar grandes volúmenes de datos, y además realizar análisis en tiempo real sobre esos datos. \\
 	
-	\noindent En comparación con SQL, en InfluxDB un ``timestamp'' identifica un punto en cualquier serie de datos. Esto sería equivalente a SQL, si la clave primaria de una tabla es establecida por el sistema y siempre es equivalente al tiempo. Además, InfluxDB permite reconocer el ``schema'' de manera dinámica, además de que no estas obligado a definir el ``schema'' y seguirlo, es decir, se permiten cambios dentro de la misma serie de datos. [\ref{bib: influxdb doc vs sql}] \\
+	\noindent En comparación con SQL, en InfluxDB un ``timestamp'' identifica un punto en cualquier serie de datos. Esto sería equivalente a SQL, si la clave primaria de una tabla es establecida por el sistema y siempre es equivalente al tiempo. Además, InfluxDB permite reconocer el ``schema'' de manera dinámica, además de que no obliga al usuario a definir el ``schema'' y seguirlo, es decir, se permiten cambios dentro de la misma serie de datos. [\ref{bib: influxdb doc vs sql}] \\
 	
 	\noindent Algunas de las razones destacadas para elegir InfluxDB son: [\ref{bib: influxdb doc}]
 	
