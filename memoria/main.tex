@@ -9,6 +9,9 @@
 \usepackage{listings}
 \usepackage{courier}
 
+% Break lines inside \url
+\usepackage{xurl}
+
 \usepackage[dvipsnames]{xcolor}
 
 % Portada Oficial
@@ -19,10 +22,10 @@
 
 % Configuracion PDF metadata
 \hypersetup{
-	pdftitle= {Diseño y desarrollo de un microservicio para la monitorización y precicción de tráfico en red},
+	pdftitle= {Diseño y desarrollo de un microservicio para la gestión de información de monitorización y predicciones de tráfico en red},
 	pdfauthor = {Enrique Fernández Sánchez},
-	pdfsubject = {Gestión de datos de monitorización y predicción de tráfico en red},
-	pdfkeywords = {Microservicio, Monitorización, Predicción, Python, FastAPI, Network Forecast}
+	pdfsubject = {Aplicación de gestión de datos de monitorización y predicción de tráfico en red},
+	pdfkeywords = {microservice, monitoring, traffic forecast, Python, FastAPI, network forecast}
 }
 
 % Configuracion colores hiperenlaces
@@ -145,14 +148,14 @@
 	
 	\chapter{Introducción}
 	
-	\noindent Entendemos predicción de tráfico de red como estimar el tráfico que existirá en un instante futuro en dicha red, en función del historio de tráfico de ese sistema. Esta práctica es muy interesante ya que en función de la escala de tiempo sobre que la trabajemos podemos tener diferentes casos de uso: [\ref{bib: apuntes OeIR}]
+	\noindent Entendemos predicción de tráfico de red como la estimación del tráfico que existirá en un instante futuro en dicha red, en función del histórico de tráfico de ese sistema. En función de la escala de tiempo sobre que la que trabajemos, podemos tener diferentes casos de uso: [\ref{bib: apuntes OeIR}]
 	
 	\begin{itemize}
-		\item Escala de \textbf{minutos}. Detectar anomalías de tráfico. Anticipar picos de tráfico.
+		\item Escala de \textbf{minutos}. Detectar anomalías de tráfico. Anticipar picos de tráfico y situaciones de congestión.
 		
 		\item Escala de \textbf{horas}. Adaptar el encaminamiento en función del tráfico.
 		
-		\item Escala de \textbf{años}. Permite planificar las capacidades de la red a largo plazo.
+		\item Escala de \textbf{meses}. Permite planificar las capacidades de la red a largo plazo.
 	\end{itemize}
 	
 	\noindent Si queremos aprovechar estos casos de uso, tenemos que tener una plataforma capaz de almacenar los datos de tráfico y utilizar esos datos para realizar predicciones en las diferentes escalas. \\
@@ -161,15 +164,15 @@
 	
 	\section{Motivación}
 	
-	\noindent A raíz de la baja disponibilidad de herramientas que permitan la predicción de tráfico de red, se plantea la posibilidad de crear una herramienta que permita almacenar muestras de monitorización y que a partir de esas muestras se puedan realizar predicciones, tanto de corto alcance como de largo alcance. Sumado a esto, se propone que la herramienta sea independiente al fabricante, es decir, que no se desarrolle de manera específica para un único formato de datos o dispositivo en especifico. Pudiendo así extenderse a todos los casos de uso que así se necesiten. \\
+	\noindent A raíz de la baja disponibilidad de herramientas que permitan la predicción de tráfico de red, se plantea la posibilidad de crear una herramienta que permita almacenar muestras de monitorización y que, a partir de esas muestras, se puedan realizar predicciones, tanto de corto alcance como de largo alcance. Sumado a esto, se propone que la herramienta sea independiente al fabricante, es decir, que no se desarrolle de manera específica para un único formato de datos o dispositivo en específico; esto permite que sea extrapolable a todos los casos de uso que así se necesiten. \\
 	
-	\noindent En el ámbito de la planificación de red, resulta realmente importante tener una herramienta que pueda trabajar con predicciones a largo plazo, pudiendo estimar como va creciendo el tráfico conforme pasan los años, dando lugar a una mejor planificación de capacidades y un mejor análisis de inversiones del despliegue de la red. \\
+	\noindent En el ámbito de la planificación de red, resulta muy importante tener una herramienta que pueda trabajar con predicciones a largo plazo, pudiendo estimar cómo va creciendo el tráfico conforme pasan los años; esto implicaría una mejor planificación de capacidades y un mejor análisis de inversiones del despliegue de la red. \\
 	
 	\pagebreak
 	
-	\noindent Por otro lado, se propone la idea de que la herramienta propuesta pueda funcionar como un microservicio, dando lugar a una API REST [\ref{bib: what is api}] que pueda ser consumida como servicio por otras aplicaciones. Esto permite que aplicaciones ya existentes puedan implementar la funcionalidad de predecir muestras de tráfico de manera sencilla. \\
+	\noindent Por otro lado, se propone la idea de una herramienta que pueda funcionar como un microservicio, dando lugar a una API REST [\ref{bib: what is api}], que pueda ser consumida como servicio por otras aplicaciones. Esto permite que aplicaciones ya existentes puedan implementar la funcionalidad de predecir muestras de tráfico de manera sencilla. \\
 	
-	\noindent Es por estos motivos por los que creemos que esta herramienta planteada puede tener un gran impacto para realizar predicciones sencillas, pudiendo aprovechar los datos de monitorización red, sin tener que hacer un gran despliegue tecnológico para realizar un uso de ellos. \\
+	\noindent Es por todos estos motivos por los que creemos que esta herramienta puede tener un gran impacto para realizar predicciones sencillas, pudiendo aprovechar los datos de monitorización de red, sin tener que hacer un gran despliegue tecnológico para realizar un uso de ellos. \\
 	
 	\section{Objetivos}
 	
@@ -184,29 +187,29 @@
 		
 		\item Investigar herramientas para realizar predicciones de series temporales, que se adapten lo suficiente al caso especifico que tratamos en este proyecto.
 		
-		\item Permitir la ejecución de predicciones de tráfico. Se desea poder elegir los días a predecir, de modo que se puedan realizar predicciones tanto en corto como a largo plazo.
+		\item Permitir la ejecución de predicciones de tráfico. Se desea poder elegir los intervalos de tiempo a predecir, de modo que se puedan realizar predicciones tanto en corto como a largo plazo.
 		
 		\item Investigar las diferentes opciones de almacenamiento para muestras temporales, teniendo en cuenta que el volumen de datos a almacenar es alto. 
 	\end{itemize}
 	
 	\section{Resumen capítulos de la memoria}
 	
-	\noindent En este apartado se comentará brevemente la distribución de capítulos de la memoria. Además, se mencionará brevemente que temas se han abordado en cada uno de ellos. \\
+	\noindent En este apartado se comentará brevemente la distribución de capítulos de la memoria. Además, se mencionará brevemente qué temas se han abordado en cada uno de ellos. \\
 	
 	\begin{itemize}
-		\item \textbf{Capitulo 1}: \textit{Introducción}. Inicio del proyecto. Se presenta la introducción, una motivación y los objetivos planteados. \\
+		\item \textbf{Capítulo 1}: \textit{Introducción}. Inicio del proyecto. Se presenta la introducción, una motivación y los objetivos planteados. \\
 		
-		\item \textbf{Capitulo 2}: \textit{Tecnologías empleadas}. Se presentan las tecnologías utilizadas para implementar el proyecto. Además, se comenta como desplegar la aplicación en un entorno de producción. \\
+		\item \textbf{Capítulo 2}: \textit{Tecnologías empleadas}. Se presentan las tecnologías utilizadas para implementar el proyecto. Además, se comenta cómo desplegar la aplicación en un entorno de producción. \\
 		
 		\pagebreak
 		
-		\item \textbf{Capitulo 3}: \textit{Diseño e implementación del sistema}. Se describe el diseño de la aplicación. También se comenta a grandes rasgos como se ha realizado la implementación, y cual es el resultado final, en lo que a funcionalidad se refiere. \\
+		\item \textbf{Capítulo 3}: \textit{Diseño e implementación del sistema}. Se describe el diseño de la aplicación. También se comenta a grandes rasgos cómo se ha realizado la implementación, y cuál es el resultado final, en lo que a funcionalidad se refiere. \\
 		
-		\item \textbf{Capitulo 4}: \textit{Validación del sistema}. Se comentan como se ha validado las diferentes funcionalidades del sistema. Se ven los pasos hasta llegar a una predicción de tráfico de un año. \\
+		\item \textbf{Capítulo 4}: \textit{Validación del sistema}. Se comentan cómo se han validado las diferentes funcionalidades del sistema. Se ven los pasos hasta llegar a una predicción de tráfico de un año. \\
 		
-		\item \textbf{Capitulo 5}: \textit{Conclusiones}. Se muestran las conclusiones obtenidas en la realización del proyecto, y además se proponen posibles lineas de investigación futuras. \\
+		\item \textbf{Capítulo 5}: \textit{Conclusiones}. Se muestran las conclusiones obtenidas en la realización del proyecto, y además se proponen posibles líneas de investigación futuras. \\
 		
-		\item \textbf{Capitulo 6}: \textit{Bibliografía}. Aquí se muestran los diferentes recursos utilizados para la realización de este proyecto.
+		\item \textbf{Capítulo 6}: \textit{Bibliografía}. Aquí se muestran los diferentes recursos utilizados para la realización de este proyecto.
 	\end{itemize}
 	
 	\pagebreak
@@ -222,7 +225,7 @@
 	
 	\noindent \textbf{\large Arquitectura basada en \textbf{microservicios}} \\
 	
-	\noindent Lo primero, es entender en que consiste un microservicio. Para ello, podemos definirlo como los sistemas que cumplen las siguientes premisas: [\ref{bib: microservices}]
+	\noindent Lo primero, es entender en qué consiste un microservicio. Para ello, podemos definirlo como los sistemas que cumplen las siguientes premisas: [\ref{bib: microservices}]
 	
 	\begin{itemize}
 		\item Los microservicios son sistemas pequeños, independientes y poco ``acoplados'' (ver figura \ref{img: microservice architecture}).
@@ -250,20 +253,20 @@
 	\noindent Dependiendo de la implementación de la API que se realice, distinguimos cuatro tipos de API:
 	
 	\begin{itemize}
-		\item API de SOAP. Utilizan un protocolo de acceso a objetos. Los interlocutores intercambian mensajes XML. En general, es una solución poco flexible.
-		
+		\item API de SOAP. [\ref{bib: soap}] Protocolo tradicional de servicios web. Se basa en acceso a objetos mediante mensajes XML, encapsulados en el protocolo HTTP. Es necesario que ambos interlocutores conozcan la estructura de objetos del servicio web, y que ambos utilicen la misma versión. Normalmente se utilizan ficheros WSDL (Web Services Description Language) que permiten conocer el servicio y el conjunto de operaciones ofrecidas por este [\ref{bib: soap wsdl}]. El usuario depende de este archivo para conocer qué puedes hacer en la aplicación. En general, es una solución poco flexible, ya que es necesario conocer cómo esta implementado servicio para poder realizar peticiones, además de ser complejo de programar; es por esto por lo que se ha sustituido por otras implementaciones más flexibles y sencillas de integrar.
+  
 		\item API de RPC. Basado en llamadas de procedimientos remotos. El cliente ejecuta una función en el servidor, y este responde con la salida de la función.
 		
 		\item API de WebSocket. Solución moderna de desarrollo de API, que utiliza objetos JSON y un canal bidireccional para realizar la comunicación entre el cliente y el servidor.
 		
-		\item API de REST. Solución más popular. El cliente envía solicitudes al servidor como datos, utilizando métodos HTTP. Es una opción muy flexible.
+		\item API de REST. Solución más popular. Es un servicio orientado a los recursos, el cliente envía peticiones al servidor utilizando métodos HTTP. Es una opción muy flexible, ya que son sencillos tanto de programar como de mantener, además de que escalan fácilmente.
 	\end{itemize}
 	
 	\noindent En en caso de nuestra aplicación, se decidió utilizar el tipo API REST, ya que permite una sencilla implementación de cara al cliente que quiera utilizar dicha interfaz.
 	
 	\begin{figure}[h!]
 		\begin{center}
-			\includegraphics[width=0.85\textwidth]{img/microservice_architecture.png}
+			\includegraphics[width=0.59\textwidth]{img/microservice_architecture.png}
 			\caption{Comparativa entre arquitectura de microservicios y arquitectura ``monolítica''. [\ref{bib_img: microservice architecture}]}
 			\label{img: microservice architecture}
 		\end{center}
@@ -279,17 +282,17 @@
 	\noindent En la aplicación de monitorización, distinguimos entre datos de dos tipos:
 	
 	\begin{itemize}
-		\item Datos clásicos. Como por ejemplo, la información asociada a una red a monitorizar.
-		\item Datos de tipo ''serie temporal''. Como por ejemplo, las muestras de monitorización de una red.
+		\item Datos clásicos. Por ejemplo, la información asociada a una red a monitorizar.
+		\item Datos de tipo ``serie temporal''. Por ejemplo, las muestras de monitorización de una red.
 	\end{itemize}
 
-	\noindent En primer lugar, se diseña una base de datos tipo relacional para almacenar los ''datos clásicos''. Y por otro lado, se diseña una base de datos diferente, especializada para el almacenamiento de datos tipo ''serie de datos'', en este caso, se elige una base de datos llamada InfluxDB.
+	\noindent En primer lugar, se diseña una base de datos tipo relacional para almacenar los ``datos clásicos''. Y por otro lado, se diseña una base de datos diferente, especializada para el almacenamiento de datos tipo ``serie de datos''; en este caso, se elige una base de datos llamada InfluxDB.
 	
 	\subsection{Base de datos tipo relacional}
 	
-	\noindent Un ejemplo de base de datos de tipo relacional es SQL. Dicha base de datos, supone una colección de información que organizan los datos en una serie de ''relaciones'' cuando la información es almacenada en una o varias ''tablas''. Por lo tanto, las relaciones suponen conexiones entre diferentes tablas, permitiendo así una asociación entre información diferente. [\ref{bib: relational database}] \\
+	\noindent Un ejemplo de base de datos de tipo relacional es SQL. Dicha base de datos se comporta como una colección de información, la cual organiza los datos en una serie de ``relaciones'', y estas se almacenan en una o varias ``tablas''. Por lo tanto, las relaciones suponen conexiones entre diferentes tablas, permitiendo así una asociación entre diferente información. [\ref{bib: relational database}] \\
 	
-	\noindent Por ejemplo, si vemos la figura \ref{img: example sql}, podemos comprobar como se realizan las relaciones entre las diferentes tablas (Ratings, Users, Movies o Tags), se realiza mediante uno de los campos definidos en la propia tabla. Por ejemplo, el campo ''user\_id'' de la tabla Ratings, permite una relación con la tabla Users, con el campo ''id''.
+	\noindent Por ejemplo, si vemos la figura \ref{img: example sql}, podemos comprobar cómo se realizan las relaciones entre las diferentes tablas (Ratings, Users, Movies o Tags): se realiza mediante uno de los campos definidos en la propia tabla. Por ejemplo, el campo ``user\_id'' de la tabla Ratings, permite una relación con la tabla Users, con el campo ``id''.
 	
 	\begin{figure}[h!]
 		\begin{center}
@@ -309,12 +312,12 @@
 	
 	\noindent InfluxDB es una base de datos diseñada para trabajar con datos tipo serie temporal (\texttt{time series}). Si bien es cierto que SQL puede gestionar este tipo de datos, no fue creado estrictamente para este objetivo. En este caso, InfluxDB esta diseñado para almacenar grandes volúmenes de datos, y además realizar análisis en tiempo real sobre esos datos. \\
 	
-	\noindent En comparación con SQL, en InfluxDB un ``timestamp'' identifica un punto en cualquier serie de datos. Esto sería equivalente a SQL, si la clave primaria de una tabla es establecida por el sistema y siempre es equivalente al tiempo. Además, InfluxDB permite reconocer el ``schema'' de manera dinámica, además de que no estas obligado a definir el ``schema'' y seguirlo, es decir, se permiten cambios dentro de la misma serie de datos. [\ref{bib: influxdb doc vs sql}] \\
+	\noindent En comparación con SQL, en InfluxDB un ``timestamp'' identifica un punto en cualquier serie de datos. Esto sería equivalente a SQL, si la clave primaria de una tabla es establecida por el sistema y siempre es equivalente al tiempo. Además, InfluxDB permite reconocer el ``schema'' de manera dinámica, además de que no obliga al usuario a definir el ``schema'' y seguirlo, es decir, se permiten cambios dentro de la misma serie de datos. [\ref{bib: influxdb doc vs sql}] \\
 	
 	\noindent Algunas de las razones destacadas para elegir InfluxDB son: [\ref{bib: influxdb doc}]
 	
 	\begin{itemize}
-		\item Perfecto para almacenar datos de telemetría, como métricas de aplicaciones o sensores IoT.
+		\item Concebido para almacenar datos de telemetría, como métricas de aplicaciones o sensores IoT, lo que es idóneo para nuestros casos de uso de interés.
 		\item Los datos son comprimidos automáticamente para ser eficientes con el espacio disponible.
 		\item Se realizan tareas automáticas de ``down sampling'' para reducir el uso de disco.
 		\item Lenguaje para hacer consultas que permite analizar en profundidad los datos almacenados.
@@ -352,7 +355,7 @@
 	
 	\subsection{Python}
 	
-	\noindent Python [\ref{bib: python doc}] es un lenguaje de programación orientado a objetos, interpretado y de alto nivel con tipado dinámico. Es muy atractivo ya que permite un desarrollo rápido de aplicaciones, además de ser muy adecuado para realizar tareas de ``scripting''. Python es un lenguaje simple y sencillo de aprender. Por otro lado, dispone de multitud de ``librerías'' o ``módulos'' publicados por usuarios, dando lugar a una gran comunidad y una gran variedad de alternativas para implementar soluciones. \\
+	\noindent Python [\ref{bib: python doc}] es un lenguaje de programación orientado a objetos, interpretado y de alto nivel con tipado dinámico. Es muy atractivo ya que permite un desarrollo rápido de aplicaciones, además de ser muy adecuado para realizar tareas de ``scripting''. Python es un lenguaje simple y sencillo de aprender. Por otro lado, dispone de multitud de \textit{librerías} o \textit{módulos} publicados por usuarios, dando lugar a una gran comunidad y una gran variedad de alternativas para implementar soluciones. \\
 	
 	\noindent Actualmente, Python destaca como lenguaje de programación en los siguientes ámbitos:
 	\begin{itemize}
@@ -377,7 +380,8 @@
 	\begin{itemize}
 		\item Rápido: rendimiento muy alto, prácticamente a la par con otros lenguajes de programación destinados al desarrollo de \texttt{backend} (como NodeJS o Go).
 		\item Intuitivo: soporta auto completado en el código.
-		\item Robusto: código pensado para entornos de producción, además de incluir documentación automática (usando Swagger o ReDoc).
+		\item Robusto: código pensado para entornos de producción, además de incluir documentación automática (usando Swagger UI [\ref{bib: swagger ui github}] o ReDoc [\ref{bib: redoc github}]).
+  
 		\item Basado en estándares: al utilizar estándares de tipo de datos, permite ser totalmente compatible con los estándares de \href{https://github.com/OAI/OpenAPI-Specification}{OpenAPI} [\ref{bib: openapi}] y \href{https://json-schema.org/}{JSON Schema} [\ref{bib: json schema}].
 	\end{itemize}
 	
@@ -394,9 +398,9 @@
 	\subsection{Prophet}
 	\label{sec: prophet}
 	
-	\noindent Prophet [\ref{bib: prophet doc}] es un framework del lenguaje de programación Python, desarrollado por \href{https://github.com/facebook/}{Meta}, que recoge una serie de procedimientos que permiten realizar predicciones de un \texttt{dataset} de series temporales, en el que se pueden encontrar diferentes efectos no lineales, llamados tendencias (como puede ser una tendencia anual, semanal, o mensual), además de otros efectos causados por fechas concretas. \\
+	\noindent Prophet [\ref{bib: prophet doc}] es un framework del lenguaje de programación Python, desarrollado por \href{https://github.com/facebook/}{Meta}; recoge una serie de procedimientos que permiten realizar predicciones de un \texttt{dataset} de series temporales, en el que se pueden encontrar diferentes efectos no lineales, llamados tendencias (como puede ser una tendencia anual, semanal, o mensual), además de otros efectos causados por fechas concretas. \\
 	
-	\noindent Es un framework de predicción basado en inferencia estadística, lo que permite tener un rendimiento mayor que si utilizamos técnicas de Machine Learning para solucionar el mismo problema de predicción de datos. Además, es robusto a datos no disponibles y a modificaciones aleatorias sobre las tendencias. 
+	\noindent Prophet está basado en inferencia estadística, lo que permite tener un rendimiento mayor al que tendríamos si utilizáramos técnicas de \textit{Machine Learning} para solucionar el mismo problema de predicción de datos. Además, es robusto a datos no disponibles y a modificaciones aleatorias sobre las tendencias. 
 	
 	\begin{figure}[h!]
 		\begin{center}
@@ -410,7 +414,7 @@
 	
 	\section[Despliegue en producción]{Tecnologías utilizadas en un despliegue en producción}
 	
-	\noindent Otro de los aspectos importantes para la realización de este proyecto, es el hecho de que la aplicación desarrollada debe ser apta para desplegarse en un entorno de producción y funcionar correctamente para que sea implementada como microservicio por otras aplicaciones. Es por este motivo por el que nos decantamos por implementar este microservicio dentro de un contenedor. \\
+	\noindent Otro de los aspectos importantes para la realización de este proyecto es el hecho de que la aplicación desarrollada debe ser apta para desplegarse en un entorno de producción y funcionar correctamente para que sea implementada como microservicio por otras aplicaciones. Es por este motivo por el que nos decantamos por implementar este microservicio dentro de un contenedor. \\
 	
 	\noindent \textbf{\large Docker} \\
 
@@ -432,7 +436,7 @@
 	
 	\noindent \textbf{\large Docker Compose} \\
 	
-	\noindent Compose es una herramienta de Docker que permite definir y ejecutar instancias multicontenedores de Docker [\ref{bib: docker compose doc}]. Con la herramienta Compose, podemos utilizar un archivo YAML para describir y configurar los contenedores que vamos a utilizar, dando lugar a que con un único comando puedas crear y ejecutar todos los servicios de la aplicación, y con la misma configuración. \\
+	\noindent Compose es una herramienta de Docker que permite definir y ejecutar instancias multicontenedores de Docker [\ref{bib: docker compose doc}]. Con la herramienta Compose, podemos utilizar un archivo YAML para describir y configurar los contenedores que vamos a utilizar, dando lugar a que, con un único comando, el usuario pueda crear y ejecutar todos los servicios de la aplicación, y con la misma configuración. \\
 	
 	\noindent Compose funciona para los diferentes entornos: producción, desarrollo, y o pruebas. Además, tiene disponibles comandos para hacer más sencilla la tarea de iniciar o parar servicios, o ver la salida de consola producida por los contenedores. \\
 	
@@ -440,7 +444,6 @@
 	
 	\begin{lstlisting}[style=yaml, caption={Archivo configuración de contenedores para entorno de desarrollo.}]
 version: '3.8'
-
 services:
   traffic_forecast:
     build: ./backend
@@ -612,7 +615,7 @@ services:
 				&                                                                                                      &                                                                                     &                                                                                                          &                                                                                   
 			\end{tabular}%
 		}
-		\caption{CRUD \texttt{networks} (* equivale a ``acceso denegado'')}
+		\caption{CRUD \texttt{networks} (* equivale a \textit{acceso denegado})}
 		\label{tab:crud networks}
 	\end{table}
 
@@ -620,11 +623,11 @@ services:
 
 	\noindent \textbf{\large CRUD: \texttt{interfaces}} \\
 	
-	\noindent Para el caso del agente \texttt{interfaces}, definimos el funcionamiento de la aplicación. Entendemos una interfaz como aquellas interfaces de red que queremos monitorizar su tráfico dentro de una red, que previamente ya ha sido dada de alta en el sistema. \\
+	\noindent Para el caso del agente \texttt{interfaces}, definimos el funcionamiento de la aplicación. Entendemos una \texttt{interface} como aquellas interfaces de red que queremos monitorizar su tráfico dentro de una red, que previamente ya ha sido dada de alta en el sistema. \\
 	
-	\noindent Cómo compromiso de diseño, se entiende que de cada interfaz tendremos que dar de alta dos interfaces en el sistema, una interfaz para monitorizar los datos de transmisión (desde ahora, TX) y otra interfaz para monitorizar los datos de recepción (desde ahora, RX). De esta manera, tendríamos completamente monitorizada la interfaz de red. \\
+	\noindent Como compromiso de diseño, se entiende que, de cada interfaz, tendremos que dar de alta dos interfaces en el sistema, una interfaz para monitorizar los datos de transmisión (desde ahora, TX) y otra interfaz para monitorizar los datos de recepción (desde ahora, RX). De esta manera, tendríamos completamente monitorizada la interfaz de red. \\
 	
-	\noindent Una interfaz monitorizada puede tener muchas muestras guardadas en el sistema, dichas muestras serán almacenadas en la base de datos para datos temporales (en nuestro caso InfluxDB). \\
+	\noindent Una interfaz monitorizada puede tener muchas muestras guardadas en el sistema; dichas muestras serán almacenadas en la base de datos para datos temporales (en nuestro caso InfluxDB). \\
 	
 	\noindent Al igual que en el caso de \texttt{networks}, debemos asignar un \texttt{endpoint} asociado a la colección de los métodos CRUD de \texttt{interfaces}. En este caso, el \texttt{endpoint} asociado de la colección será: ``\texttt{/networks/<id\_net>/interfaces}''. \\
 	
@@ -638,7 +641,7 @@ services:
 				\begin{tabular}[c]{@{}l@{}}Interfaz en particular:\\ \\ \texttt{/networks/\textless{}id\_net\textgreater{}/interfaces/\textless{}id\_if\textgreater{}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}Información \\ de una interfaz \\ en particular.\end{tabular} & *                                                                                                  & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Modificamos \\ la información \\ de una interfaz.\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Eliminamos \\ una interfaz\end{tabular}} \\ \hline
 			\end{tabular}%
 		}
-		\caption{CRUD \texttt{interfaces} (* equivale a ``acceso denegado'')}
+		\caption{CRUD \texttt{interfaces} (* equivale a \textit{acceso denegado})}
 		\label{tab:crud interfaces}
 	\end{table}
 
@@ -659,9 +662,11 @@ services:
 	\noindent \textbf{\large Resumen arquitectura de la aplicación} \\
 	
 	\noindent En la figura \ref{img: app schema} podemos ver un resumen de la estructura de la aplicación propuesta. En verde aparecen las rutas que siguen una estructura CRUD, en azul las rutas que no tienen por qué seguir la estructura CRUD, y a la derecha podemos ver las dos bases de datos necesarias (una relacional y otra para series temporales de datos).
-	
+
+    \vspace{22px}
+ 
 	\begin{figure}[h!]
-		\includegraphics[width=1.1\textwidth, center]{diag/traffic_forecast_schema.png}
+		\includegraphics[width=0.85\textwidth, center]{diag/traffic_forecast_schema.png}
 		\caption{Diagrama resumen de la estructura de la aplicación.}
 		\label{img: app schema}
 	\end{figure}
@@ -672,9 +677,9 @@ services:
 	
 	\noindent Tal y como se adelantó en la sección \ref{sec: fastapi}, el lenguaje utilizado para implementar la aplicación es Python, utilizando el \texttt{framework} de desarrollo FastAPI. \\
 	
-	\noindent Para la implementación de la aplicación, se ha seguido la metodología de diseño ``\textit{Factory Pattern}''. Dicha metodología permite estructurar un proyecto software de modo que la implementación de nuevas funcionalidades sea sencilla y no implique modificar partes ya validadas del sistema. Esto se basa en que permitimos a una clase crear objetos derivados de esta, en función de las necesidades del sistema. A grandes rasgos, intentamos emular el funcionamiento de una producción en cadena de una fabrica. Podemos encontrar más información en: [\ref{bib: factory method}] [\ref{bib: fastapi doc bigger apps}]. \\
+	\noindent Para la implementación de la aplicación, se ha seguido la metodología de diseño ``\textit{Factory Pattern}''. Dicha metodología permite estructurar un proyecto software de modo que la implementación de nuevas funcionalidades sea sencilla y no implique modificar partes ya validadas del sistema. Esto se basa en que permitimos a una clase crear objetos derivados de esta, en función de las necesidades del sistema. A grandes rasgos, intentamos emular el funcionamiento de una producción en cadena de una fábrica. Podemos encontrar más información en: [\ref{bib: factory method}] [\ref{bib: fastapi doc bigger apps}]. \\
 	
-	\noindent A consecuencia de esta metodología, el proyecto se estructura según la imagen \ref{img: folder structure}. Dicha estructura tiene como raíz la carpeta \texttt{backend}, y esta se divide tal que:
+	\noindent A raíz de esta metodología, el proyecto se estructura según la imagen \ref{img: folder structure}. Dicha estructura tiene como raíz la carpeta \texttt{backend}, y esta se divide tal que:
 	
 	\begin{itemize}
 		\item \texttt{migrations}. Carpeta que contiene las utilidades asociadas a la migración de la base de datos SQL. Permite realizar modificaciones en los modelos de datos y que dichas modificaciones se apliquen en la base de datos final.
@@ -704,11 +709,11 @@ services:
 		\end{center}
 	\end{figure}
 
-	\noindent De esta manera, en el caso de querer añadir una funcionalidad nueva, solo tendríamos que modificar los archivos pertinentes. Las modificaciones en archivos ya existentes serían mínimas. Permitiendo de esta manera un fácil mantenimiento y desarrollo sobre la aplicación. \\
+	\noindent De esta manera, en el caso de querer añadir una funcionalidad nueva, solo tendríamos que modificar los archivos pertinentes. Las modificaciones en archivos ya existentes serían mínimas, permitiendo de esta manera un fácil mantenimiento y desarrollo sobre la aplicación. \\
 	
 	\subsection{Migración de base de datos tipo relacional}
 	
-	\noindent Para permitir que sea sencillo extender los modelos de datos de la aplicación es necesario tener en cuenta qué va a suceder si en algún momento decidimos cambiar algo de dichos modelos y qué tenemos que hacer para que esos cambios se apliquen correctamente en la base de datos que estemos utilizando. Es por esto por lo que aparecen dos herramientas muy importantes: \texttt{ORM} y \texttt{migrations}.  \\
+	\noindent Para permitir que sea sencillo extender los modelos de datos de la aplicación es necesario tener en cuenta qué va a suceder si en algún momento decidimos cambiar algo de dichos modelos, y qué tenemos que hacer para que esos cambios se apliquen correctamente en la base de datos que estemos utilizando. Es por esto por lo que aparecen dos herramientas muy importantes: \texttt{ORM} y \texttt{migrations}.  \\
 	
 	\noindent En primer lugar, \texttt{ORM} (Object-relational Mappers) permite una abstracción de alto nivel que da lugar a describir un modelo de datos de SQL en Python, en vez de utilizar lenguaje SQL directamente. Además, permite acceder a la información de la base de datos de manera más sencilla, ya que para el programa es como si el modelo de datos fuera un objeto, pero internamente se están realizando las consultas SQL que sean necesarias. [\ref{bib: orm python}] [\ref{bib: fastapi orm}] \\
 	
@@ -718,7 +723,7 @@ services:
 	
 	\subsection{OpenAPI Specification. \texttt{Swagger}}
 	
-	\noindent Una de las ventajas que supone el uso de FastAPI, es que de manera automática genera la documentación asociada a OpenAPI de la aplicación, dando lugar a que el endpoint \texttt{/docs} nos redirige directamente a la aplicación web \texttt{Swagger}, que nos muestra de una manera sencilla todos los \texttt{endpoints} asociados de nuestra aplicación, permitiendo realizar peticiones y comprobando la funcionalidad de estas. \\
+	\noindent Una de las ventajas que supone el uso de FastAPI es que, de manera automática, genera la documentación asociada a OpenAPI de la aplicación, dando lugar a que el endpoint \texttt{/docs} redirige directamente al usuario a la aplicación web \texttt{Swagger}; ésta muestra, de una manera sencilla, todos los \texttt{endpoints} asociados de nuestra aplicación, permitiendo realizar peticiones y comprobando la funcionalidad de estas. \\
 	
 	\noindent De esta manera, si navegamos a dicha ruta (\texttt{/docs}), podemos ver como nos aparece una web similar a la de la figura \ref{img: swagger 1}.
 	
@@ -728,9 +733,9 @@ services:
 		\label{img: swagger 1}
 	\end{figure}
 
-	\noindent A modo de ejemplo, si hiciéramos \textit{click} en uno de los \texttt{endpoints}, podremos comprobar como se nos despliega información asociada. Por ejemplo, del esquema de datos de entrada, o el esquema de datos de salida, al igual que los códigos HTTP esperados. En la figura \ref{img: swagger 2}, podemos ver el detalle de la información necesaria para crear una red. \\
+	\noindent A modo de ejemplo, si hiciéramos \textit{click} en uno de los \texttt{endpoints}, podremos comprobar cómo se despliega información asociada. Por ejemplo, del esquema de datos de entrada, o el esquema de datos de salida, al igual que los códigos HTTP esperados. En la figura \ref{img: swagger 2}, podemos ver el detalle de la información necesaria para crear una red. \\
 	
-	\noindent Además, una de las funcionalidades más interesantes que nos aporta Swagger, es la documentación necesaria sobre los esquemas de los JSON de salida de la aplicación. Esto es muy importante ya que nos permitiría conectar con otras aplicaciones, y presentar la información recibida. En la figura \ref{img: swagger schemas 1}, podemos ver un detalle de algunos de los esquemas que se utilizan en la aplicación.
+	\noindent Además, una de las funcionalidades más interesantes que nos aporta Swagger, es la documentación necesaria sobre los esquemas de los JSON de salida de la aplicación. Esto es muy importante, ya que nos permitiría conectar con otras aplicaciones, y presentar la información recibida. En la figura \ref{img: swagger schemas 1}, podemos ver un detalle de algunos de los esquemas que se utilizan en la aplicación.
 	
 	\pagebreak
 	
@@ -751,11 +756,11 @@ services:
 	
 	\section{Modelos de datos}
 	
-	\noindent Por otro lado, debemos definir los datos y su representación dentro de nuestra aplicación. Esto nos permite adaptar la información en función del tipo de base de datos que vayamos a consultar, y en función del modelo a utilizar. Para ello, diferenciamos entre los modelos que estarán almacenados en la base de datos de tipo relacional, y los datos almacenados en la base de datos de tipo serie temporal.
+	\noindent Debemos definir los datos y su representación dentro de nuestra aplicación. Esto nos permite adaptar la información en función del tipo de base de datos que vayamos a consultar, y en función del modelo a utilizar. Para ello, diferenciamos entre los modelos que estarán almacenados en la base de datos de tipo relacional, y los datos almacenados en la base de datos de tipo serie temporal.
 	
 	\subsection{Base de datos SQL}
 	
-	\noindent El primer modelo de datos de la aplicación, es el referido a la información de una red a monitorizar. La descripción del modelo la podemos ver en la tabla \ref{tab: modelo sql networks}.
+	\noindent El primer modelo de datos de la aplicación es el referido a la información de una red a monitorizar. La descripción del modelo la podemos ver en la tabla \ref{tab: modelo sql networks}.
 	
 	%\begin{figure}[h!]
 	%	\begin{center}
@@ -776,13 +781,13 @@ services:
 			\texttt{ip\_red}: String                                  \\ \hline
 			\texttt{influx\_net}: String                              \\ \hline
 		\end{tabular}
-		\caption{Modelo de datos para las redes a monitorizar. Equivale con la tabla ``networks''.}
+		\caption{Modelo de datos para las redes a monitorizar. Equivale con la tabla \textit{networks}.}
 		\label{tab: modelo sql networks}
 	\end{table}
 	
 	\vspace{12px}
 	
-	\noindent El segundo modelo de datos de la aplicación, es el referido a la información de una interfaz a monitorizar, que esta dentro de una red monitorizada. La descripción del modelo la podemos ver en la tabla \ref{tab: modelo sql interfaces}.
+	\noindent El segundo modelo de datos de la aplicación es el referido a la información de una interfaz a monitorizar, que está dentro de una red monitorizada. La descripción del modelo la podemos ver en la tabla \ref{tab: modelo sql interfaces}.
 	
 	%\begin{figure}[h!]
 	%	\begin{center}
@@ -804,13 +809,13 @@ services:
 			\texttt{influx\_if\_tx}: String                             \\ \hline
 			\texttt{network}: Int, Foreign Key                          \\ \hline
 		\end{tabular}
-		\caption{Modelo de datos para las interfaces a monitorizar. Equivale con la tabla ``interfaces''.}
+		\caption{Modelo de datos para las interfaces a monitorizar. Equivale con la tabla \textit{interfaces}.}
 		\label{tab: modelo sql interfaces}
 	\end{table}
 	
 	\vspace{12px}
 	
-	\noindent Se establece una relación del modo que una interfaz solo puede pertenecer a una red monitorizada, y que además, una red monitorizada puede tener muchas interfaces. Dicha relación se realiza mediante el campo ``id\_network'' de la tabla Interfaces. \\
+	\noindent Se establece una relación tal que una interfaz solo puede pertenecer a una red monitorizada, y que, además, una red monitorizada puede tener muchas interfaces. Dicha relación se realiza mediante el campo ``id\_network'' de la tabla Interfaces. \\
 	
 	\noindent Por último, la base de datos SQL utilizada para esta aplicación es PostgreSQL [\ref{bib: postgresql}], ya que además de ser Open Source, permite una gran escalabilidad, amoldándose a los recursos de la máquina en la que esté funcionando.
 	
@@ -818,21 +823,21 @@ services:
 	
 	\subsection{Base de datos InfluxDB}
 	
-	\noindent Para la aplicación a diseñar, se plantea la premisa de que en la base de datos InfluxDB solo se van a guardar los datos de cada muestra de monitorización de una interfaz. Además, se pueden tener tantas redes como sean necesarias, y dentro de cada red, tantas interfaces como creamos necesarias. \\
+	\noindent Para la aplicación a diseñar, se plantea la premisa de que, en la base de datos InfluxDB, solo se van a guardar los datos de cada muestra de monitorización de una interfaz. Además, se pueden tener tantas redes como sean necesarias, y dentro de cada red, tantas interfaces como creamos necesarias. \\
 	
 	\noindent En resumen, definimos el modelo de datos que tiene que seguir nuestra aplicación:
 	
 	\begin{itemize}
 		\item ``measurement'': equivalente a una red a monitorizar, valor almacenado en \\ \texttt{Networks::influx\_net}.
-		\item ``fields'': nombre del valor a monitorizado, en este caso el default es \textit{link\_count}.
-		\item ``tags'': solo tenemos un tag llamado \textit{interface}, su objetivo es identificar a que interfaz pertenece el punto de monitorización. El valor puede estar ser \texttt{Interfaces::influx\_if\_rx} o \texttt{Interfaces::influx\_if\_tx}.
+		\item ``fields'': nombre del valor a monitorizar, en este caso, el default es \textit{link\_count}.
+		\item ``tags'': solo tenemos un tag llamado \textit{interface}; su objetivo es identificar a qué interfaz pertenece el punto de monitorización. El valor puede ser \texttt{Interfaces::influx\_if\_rx} o \texttt{Interfaces::influx\_if\_tx}.
 		\item ``points'': corresponde con el valor numérico del ``field''. En este caso, corresponde con el valor númerico de \textit{link\_count} en ese periodo de 5 minutos.
 	\end{itemize}
 
 	\section{Predicción de tráfico de red}
 	\label{sec: prophet info}
 	
-	\noindent Uno de los objetivos más importantes que tiene satisfacer la aplicación es la posibilidad de predecir tráfico de red a partir de muestras de monitorización almacenadas en el sistema. Para ello, tal y como introducimos en \ref{sec: prophet}, vamos a utilizar la herramienta de predicción Prophet. \\
+	\noindent Uno de los objetivos más importantes que tiene que satisfacer la aplicación es la posibilidad de predecir tráfico de red, a partir de muestras de monitorización almacenadas en el sistema. Para ello, tal y como introducimos en \ref{sec: prophet}, vamos a utilizar la herramienta de predicción Prophet. \\
 	
 	\noindent En primer lugar, se decide que la predicción de tráfico va a consumir información que está almacenada en el sistema. Por lo tanto, es necesario crear una red a la que monitorizar, y añadir muestras asociadas a la monitorización. En resumen, si quisiéramos ejecutar una predicción de tráfico desde cero, tendríamos que seguir los siguientes pasos dentro de la aplicación:
 	
@@ -851,7 +856,7 @@ services:
 		\item Ejecutamos una predicción de tráfico. Usamos el endpoint POST: \texttt{/forecast}. El sistema recuperará las muestras de la interfaz solicitada, y además aplicará un percentil 95, permitiendo así un mejor \texttt{long term estimation}.
 	\end{enumerate}
 
-	\noindent Llegados a este punto, una vez ejecutada la predicción y en el caso de que la predicción pueda completarse, el sistema nos devolverá los puntos asociados con toda la serie temporal, incluidos los valores predichos por el sistema. Como característica adicional, se ha implementado la posibilidad de elegir si queremos la salida de los datos como CSV o como JSON.
+	\noindent Llegados a este punto, una vez ejecutada la predicción, y en el caso de que la predicción pueda completarse, el sistema nos devolverá los puntos asociados con toda la serie temporal, incluidos los valores predichos por el sistema. Como característica adicional, se ha implementado la posibilidad de elegir si queremos la salida de los datos como CSV o como JSON.
 
 	\pagebreak
 
@@ -860,7 +865,7 @@ services:
 	\begin{itemize}
 		\item \texttt{id\_network}. Identificador de red, se obtiene una vez creas la red a monitorizar o haciendo un GET a \texttt{/networks}.
 		
-		\item \texttt{id\_interface}. Identificador de interfaz de red, es necesario que este asociado con una red a monitorizar. Se obtiene una vez se crea la interfaz, o bien haciendo un GET a \texttt{/networks/<id\_network>/interfaces}.
+		\item \texttt{id\_interface}. Identificador de interfaz de red, es necesario que esté asociado con una red a monitorizar. Se obtiene una vez se crea la interfaz, o bien haciendo un GET a \texttt{/networks/<id\_network>/interfaces}.
 		
 		\item \texttt{field}. Permite seleccionar el tráfico de una interfaz, elegimos entre recepción (``\texttt{RX}'') o transmisión (``\texttt{TX}'').
 		
@@ -869,9 +874,9 @@ services:
 		\item \texttt{options}. Opciones configurables del modelo de predicción de tráfico. [\ref{bib: prophet parameters}]
 		
 		\begin{itemize}
-			\item \texttt{holidays\_region}. Permite elegir que días festivos se aplican en la predicción. Esto permite detectar sucesos en días de festividad de las diferentes regiones. En el caso de España, tendremos que utilizar ``\texttt{ES}''.
+			\item \texttt{holidays\_region}. Permite elegir qué días festivos se aplican en la predicción. Esto permite detectar sucesos en días de festividad de las diferentes regiones. En el caso de España, tendremos que utilizar ``\texttt{ES}''.
 			
-			\item \texttt{flexibility\_trend}. Parámetro que más impacto tiene en la predicción. Determina la flexibilidad respecto a una tendencia, es decir, cuanto puede cambiar una tendencia en los diferentes puntos. El valor por defecto es \texttt{0.05}, aunque se puede modificar en un rango de \texttt{[0.001, 0.5]}. Es un parámetro que afecta a la penalización por regulación. [\ref{bib: prophet trend flex}]
+			\item \texttt{flexibility\_trend}. Parámetro que más impacto tiene en la predicción. Determina la flexibilidad respecto a una tendencia, es decir, cuánto puede cambiar una tendencia en los diferentes puntos. El valor por defecto es \texttt{0.05}, aunque se puede modificar en un rango de \texttt{[0.001, 0.5]}. Es un parámetro que afecta a la penalización por regulación. [\ref{bib: prophet trend flex}]
 			
 			\item \texttt{flexibility\_season}. Controla la flexibilidad de los efectos estacionales. El valor por defecto es \texttt{10}, aunque se puede modificar en un rango de \texttt{[0.01, 10]}.
 			
@@ -1264,7 +1269,7 @@ services:
 		\end{center}
 	\end{figure}
 
-	\noindent Llegados a este punto, es interesante comprobar si de verdad se han subido los datos de monitorización al sistema. Recapitulando de los modelos de datos, los datos de monitorización están almacenados en la base de datos InfluxDB, por lo que podemos hacer uso del portal web que viene por defecto en la aplicación para comprobar si se han subido los datos correctamente. Una vez accedemos al portal web, y seleccionamos el \texttt{bucket} de nuestra aplicación, procedemos a buscar los datos de monitorización que acabamos de subir. En la figura \ref{img: influxdb data 1} podemos ver una captura de pantalla de la aplicación web de InfluxDB y los datos de monitorización que acabamos de subir.
+	\noindent Llegados a este punto, es interesante comprobar si se han subido correctamente los datos de monitorización al sistema. Recapitulando de los modelos de datos, los datos de monitorización están almacenados en la base de datos InfluxDB, por lo que podemos hacer uso del portal web que viene por defecto en la aplicación para comprobar si se han subido bien los datos. Una vez accedemos al portal web, y seleccionamos el \texttt{bucket} de nuestra aplicación, procedemos a buscar los datos de monitorización que acabamos de subir. En la figura \ref{img: influxdb data 1} podemos ver una captura de pantalla de la aplicación web de InfluxDB y los datos de monitorización que acabamos de subir.
 	
 	\begin{figure}[h!]
 		\begin{center}
@@ -1308,7 +1313,7 @@ services:
 	
 	\pagebreak
 	
-	\noindent Para comprobar que se ha subido correctamente los datos, accedemos al portal web de InfluxDB. En la figura \ref{img: influxdb topology 1} podemos ver como los datos se han subido correctamente. En esta captura también podemos comprobar como se agrupan los datos dentro de la base de datos de tipo serie temporal. 
+	\noindent Para comprobar que se ha subido correctamente los datos, accedemos al portal web de InfluxDB. En la figura \ref{img: influxdb topology 1} podemos ver cómo los datos se han subido correctamente. En esta captura también podemos comprobar cómo se agrupan los datos dentro de la base de datos de tipo serie temporal. 
 	
 	\begin{figure}[h!]
 		\begin{center}
@@ -1320,11 +1325,11 @@ services:
 	
 	\section{Consultar datos de monitorización}
 	
-	\noindent Otra funcionalidad importante del sistema es que además de poder cargar información de tráfico, podemos recuperar dicha información de modo que el servidor nos devuelva la información de monitorización asociada a la petición que nosotros le hemos realizado. Para ello, utilizamos la ruta \texttt{/query} con el método \texttt{GET}. \\
+	\noindent Otra funcionalidad importante del sistema es que, además de poder cargar información de tráfico, podemos recuperar dicha información de modo que el servidor nos devuelva la información de monitorización asociada a la petición que nosotros le hemos realizado. Para ello, utilizamos la ruta \texttt{/query} con el método \texttt{GET}. \\
 	
-	\noindent En este caso, vamos a validar que el sistema correctamente nos puede dar la información de monitorización de una red con identificador \texttt{100}, que tiene una interfaz con identificador \texttt{171}, y elegimos que nos devuelva los datos de recepción (\texttt{field} equivalente a \texttt{RX}). Ver figura \ref{img: parameters query 1}. \\
+	\noindent En este caso, vamos a validar que el sistema nos puede dar correctamente la información de monitorización de una red con identificador \texttt{100}, que tiene una interfaz con identificador \texttt{171}, y elegimos que nos devuelva los datos de recepción (\texttt{field} equivalente a \texttt{RX}). Ver figura \ref{img: parameters query 1}. \\
 	
-	\noindent La respuesta del servidor puede ser en formato \texttt{JSON} o \texttt{CSV} en función del parámetro \texttt{to\_csv} de la petición. En la figura \ref{img: response query 1} podemos ver como el servidor nos devuelve los datos de la interfaz solicitada en formato \texttt{JSON}.
+	\noindent La respuesta del servidor puede ser en formato \texttt{JSON} o \texttt{CSV} en función del parámetro \texttt{to\_csv} de la petición. En la figura \ref{img: response query 1} podemos ver cómo el servidor nos devuelve los datos de la interfaz solicitada en formato \texttt{JSON}.
 	
 	\pagebreak
 	
@@ -1414,19 +1419,19 @@ services:
 	
 	\chapter{Conclusiones y propuestas futuras}
 	
-	\noindent En este capítulo vamos a comentar las conclusiones obtenidas durante la realización del presente trabajo. \\
+	\noindent En este capítulo, vamos a comentar las conclusiones obtenidas durante la realización del presente trabajo. \\
 	
-	\noindent En primer lugar, se ha profundizado en el concepto de microservicios y APIs, permitiendo desplegar una aplicación que está alineada completamente con estos conceptos. Además, se ha demostrado que el despliegue tanto en un entorno de desarrollo, como en un entorno de producción, es relativamente sencillo ya que hacemos uso de las herramientas \texttt{Docker} y \texttt{docker-compose}. \\
+	\noindent En primer lugar, se ha profundizado en el concepto de microservicios y APIs, permitiendo desplegar una aplicación que está alineada completamente con estos conceptos. Además, se ha demostrado que el despliegue, tanto en un entorno de desarrollo, como en un entorno de producción, es relativamente sencillo ya que hacemos uso de las herramientas \texttt{Docker} y \texttt{docker-compose}. \\
 	
 	\noindent Por otro lado, gracias al framework FastAPI, la aplicación tiene implementadas herramientas de documentación del estándar de OpenAPI. Esto es importante ya que permite que otras aplicaciones puedan hacer uso de la API como servicio, de modo que aplicaciones más grandes puedan aumentar su funcionalidad de manera sencilla, simplemente conectándose con el servicio propuesto en este trabajo. Además, esta documentación también ha sido clave para la validación del desarrollo, ya que permite ejecutar peticiones y comprobar la funcionalidad de la aplicación. \\
 
-	\noindent En el tema de bases de datos, se ha podido comprobar la importancia de elegir las bases de datos en función del tipo de dato que queremos almacenar en nuestra aplicación. Es por esto por lo que datos relacionados entre sí, es ideal usar una base de datos tipo SQL. Para las muestras de monitorización, que son mucho más volumen de información, y están referidas a un instante temporal; es importante disponer de una base de datos que pueda manejar esta información. Es por ello, por lo que elegimos InfluxDB para almacenar series temporales, y como hemos podido comprobar que su desempeño es brillante y muy adecuado para la tarea encomendada. \\
+	\noindent En el tema de bases de datos, se ha podido comprobar la importancia de elegir las bases de datos en función del tipo de dato que queremos almacenar en nuestra aplicación. Es por esto por lo que, en el caso de datos relacionados entre sí, es ideal usar una base de datos tipo SQL. Para las muestras de monitorización, que suponen un mayor volumen de información, y están referidas a un instante temporal, es importante disponer de una base de datos que pueda manejar esta información. Es por ello, por lo que elegimos InfluxDB para almacenar series temporales, y, además, se ha podido comprobar que su desempeño es brillante y muy adecuado para la tarea encomendada. \\
 	
-	\noindent En relación a la predicción de tráfico de red, se realizó la investigación acerca de las opciones para predecir series temporales, y si bien es cierto que de primeras \texttt{Prophet} era prometedor, una vez terminada la aplicación, se puede comprobar el potencial de esta herramienta, ya que permite tener las predicciones en poco tiempo, con un \texttt{dataset} de entrenamiento bajo, y además, permite configurar de manera dinámica los días a predecir. Esta característica es muy importante, ya que nos permite realizar predicciones a diferentes escalas temporales, y dependiendo de la escala, podemos dar una utilidad a los datos ofrecidos por la aplicación. \\
+	\noindent En relación a la predicción de tráfico de red, se realizó la investigación acerca de las opciones para predecir series temporales. Si bien es cierto que, de primeras, \texttt{Prophet} era prometedor, una vez terminada la aplicación, se puede concluir que esta herramienta tiene un gran potencial, ya que permite tener las predicciones en poco tiempo, con un \texttt{dataset} de entrenamiento bajo, y además, permite configurar de manera dinámica los días a predecir. Esta característica es muy importante, ya que nos permite realizar predicciones a diferentes escalas temporales, y dependiendo de la escala, podemos dar una utilidad a los datos ofrecidos por la aplicación. \\
 	
-	\noindent En resumen, podemos concluir que el presente trabajo ha cumplido con los objetivos propuestos, ya que satisfactoriamente se ha desarrollado una aplicación capaz de almacenar datos de red y generar una predicción en función de dichos datos, además de cumplir los requisitos de software establecidos para facilitar la integración de la herramienta con otros servicios. \\
+	\pagebreak
 	
-	%\pagebreak
+	\noindent En resumen, podemos concluir que el presente trabajo ha cumplido con los objetivos propuestos, ya que se ha desarrollado satisfactoriamente una aplicación capaz de almacenar datos de red y generar una predicción en función de dichos datos, además de cumplir los requisitos de software establecidos para facilitar la integración de la herramienta con otros servicios. \\
 	
 	\noindent \textbf{\large Propuestas futuras} \\
 	
@@ -1435,7 +1440,7 @@ services:
 	\begin{itemize}
 		\item Extender la funcionalidad de la aplicación para permitir la importación de datos de monitorización de herramientas de planificación de red. De este modo, se le daría un valor añadido a la funcionalidad de predicción, ya que se podría explotar la información generada por herramientas más profesionales.
 		
-		\item Añadir la funcionalidad de que los \texttt{endpoints} que requieren más tiempo de ejecución (como por ejemplo, el de predicción) utilicen la metodología de \texttt{SSE} (\textbf{S}erver \textbf{S}ide \textbf{E}vent), esto permite a la aplicación informar al cliente del progreso para completar la petición realizada al servidor. Esto es muy interesante ya que permitiría una mejor implementación en aplicaciones que consuman el servicio propuesto, ya que pueden estimar el tiempo de procesado, y mostrar a un usuario en que estado se encuentra la petición.
+		\item Añadir la funcionalidad de que los \texttt{endpoints} que requieren más tiempo de ejecución (como por ejemplo, el de predicción) utilicen la metodología de \texttt{SSE} (\textbf{S}erver \textbf{S}ide \textbf{E}vent), esto permite a la aplicación informar al cliente del progreso para completar la petición realizada al servidor. Esto es muy interesante, ya que permitiría una mejor implementación en aplicaciones que consuman el servicio propuesto, ya que pueden estimar el tiempo de procesado, y mostrar a un usuario en que estado se encuentra la petición.
 		
 		\item Incluir nuevos parámetros en las peticiones de predicción o consultas al sistema, permitiendo ser más selectivos con la información, además de poder integrar nuevas funcionalidades como modificar el percentil a aplicar, buscar la hora cargada, etc. 
 		
@@ -1448,123 +1453,142 @@ services:
 	
 	\subsection*{Enlaces y referencias}
 	\addcontentsline{toc}{section}{Enlaces y referencias}
-	
+ 
 	\begin{enumerate}
 		% 1
 		\item 
 		\label{bib: apuntes OeIR}
-		\href{https://teleco.upct.es/guia-docente/211101007}{Apuntes de la asignatura \texttt{Operación e Ingenieria de Red}, del Master Universitario en Ingenieria de Telecomunicaciones de la UPCT}
-		
+        \textit{Apuntes de la asignatura \texttt{Operación e Ingeniería de Red}, del Máster Universitario en Ingeniería de Telecomunicaciones de la UPCT}: \url{https://teleco.upct.es/guia-docente/211101007}
+
 		% 2
 		\item
 		\label{bib: what is api}
-		\href{https://aws.amazon.com/es/what-is/api/}{¿Qué es una API?}
-		
-		% 3
+        \textit{¿Qué es una API?}: \url{https://aws.amazon.com/es/what-is/api/}
+
+        % 3
 		\item
-		\label{bib: microservices}
-		\href{https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/microservices}{Microservice architecture style}
-		
-		% 4
+		\label{bib: soap}
+        \textit{SOAP (Simple Object Access Protocol)}: \url{https://www.f5.com/es_es/services/resources/glossary/simple-object-access-protocol-soap}
+
+        % 4
 		\item
-		\label{bib: relational database}
-		\href{https://cloud.google.com/learn/what-is-a-relational-database}{What is a relational database?}
-				
+		\label{bib: soap wsdl}
+        \textit{WSDL (Web Services Description Language)}: \url{https://www.tutorialworks.com/wsdl/}
+  
 		% 5
 		\item
-		\label{bib: postgresql}
-		\href{https://www.postgresql.org/}{PostgreSQL}
+		\label{bib: microservices}
+        \textit{Microsoft Learn: Microservice architecture style}: \url{https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/microservices}
 		
 		% 6
 		\item
-		\label{bib: influxdb doc}
-		\href{https://www.stackhero.io/en/services/InfluxDB/documentations/Introduction#differences-between-influxdb-and-relational-sql-databases}{InfluxDB: Introduction}
-		
+		\label{bib: relational database}
+        \textit{What is a relational database?}: \url{https://cloud.google.com/learn/what-is-a-relational-database}
+				
 		% 7
 		\item
-		\label{bib: influxdb doc vs sql}
-		\href{https://archive.docs.influxdata.com/influxdb/v1.2/concepts/crosswalk/}{InfluxDB: Comparison to SQL}
+		\label{bib: postgresql}
+        \textit{PostgreSQL}: \url{https://www.postgresql.org/}
 		
 		% 8
 		\item
-		\label{bib: python doc}
-		\href{https://www.python.org/}{Python}
+		\label{bib: influxdb doc}
+        \textit{InfluxDB: Introduction}: \url{https://www.stackhero.io/en/services/InfluxDB/documentations/Introduction}
 		
 		% 9
 		\item
-		\label{bib: fastapi doc}
-		\href{https://fastapi.tiangolo.com/}{FastAPI framework}
+		\label{bib: influxdb doc vs sql}
+        \textit{InfluxDB: Comparison to SQL}: \url{https://docs.influxdata.com/enterprise_influxdb/v1.10/concepts/crosswalk/}
 		
 		% 10
 		\item
-		\label{bib: openapi}
-		\href{https://github.com/OAI/OpenAPI-Specification}{GitHub: OpenAPI-Specification}
+		\label{bib: python doc}
+        \textit{Python}: \url{https://www.python.org/}
 		
 		% 11
 		\item
-		\label{bib: json schema}
-		\href{https://json-schema.org/}{JSON Schema}
-		
-		% 12
+		\label{bib: fastapi doc}
+        \textit{FastAPI framework}: \url{https://fastapi.tiangolo.com/}
+
+        % 12
 		\item
-		\label{bib: prophet doc}
-		\href{https://facebook.github.io/prophet/}{Prophet}
-		
-		% 13
+		\label{bib: swagger ui github}
+        \textit{GitHub: Swagger UI}: \url{https://github.com/swagger-api/swagger-ui}
+
+        % 13
 		\item
-		\label{bib: docker compose doc}
-		\href{https://docs.docker.com/compose/}{Docker Compose Overview}
+		\label{bib: redoc github}
+        \textit{GitHub: ReDoc}: \url{https://github.com/Redocly/redoc}
 		
 		% 14
 		\item
-		\label{bib: traefik webpage}
-		\href{https://traefik.io/traefik/}{Traefik Webpage}
+		\label{bib: openapi}
+        \textit{GitHub: OpenAPI-Specification}: \url{https://github.com/OAI/OpenAPI-Specification}
 		
 		% 15
 		\item
-		\label{bib: traefik wiki}
-		\href{https://doc.traefik.io/traefik/}{Traefik Wiki}
+		\label{bib: json schema}
+        \textit{JSON Schema}: \url{https://json-schema.org/}
 		
 		% 16
 		\item
-		\label{bib: factory method}
-		\href{https://www.geeksforgeeks.org/factory-method-python-design-patterns/}{Factory Method - Python Design Patterns}
+		\label{bib: prophet doc}
+        \textit{Prophet}: \url{https://facebook.github.io/prophet/}
 		
 		% 17
 		\item
-		\label{bib: fastapi doc bigger apps}
-		\href{https://fastapi.tiangolo.com/tutorial/bigger-applications/}{FastAPI Doc: Bigger Applications}
+		\label{bib: docker compose doc}
+        \textit{Docker Compose Overview}: \url{https://docs.docker.com/compose/}
 		
 		% 18
 		\item
-		\label{bib: orm python}
-		\href{https://www.fullstackpython.com/object-relational-mappers-orms.html}{Object-relational Mappers (ORMs)}
+		\label{bib: traefik webpage}
+        \textit{Traefik Webpage}: \url{https://traefik.io/traefik/}
 		
 		% 19
 		\item
-		\label{bib: fastapi orm}
-		\href{https://fastapi.tiangolo.com/tutorial/sql-databases/#orms}{FastAPI Doc: SQL (Relational) Databases. ORM}
-		
-		% 20
+		\label{bib: traefik wiki}
+        \textit{Traefik Wiki}: \url{https://doc.traefik.io/traefik/}
+
+        % 20
 		\item
-		\label{bib: fastapi migrations}
-		\href{https://fastapi.tiangolo.com/tutorial/sql-databases/#migrations}{FastAPI Doc: SQL (Relational) Databases. Migrations}
+		\label{bib: factory method}
+        \textit{Factory Method - Python Design Patterns}: \url{https://www.geeksforgeeks.org/factory-method-python-design-patterns/}
 		
 		% 21
 		\item
-		\label{bib: prophet parameters}
-		\href{https://facebook.github.io/prophet/docs/diagnostics.html#hyperparameter-tuning}{Prophet Doc: Hyperparameter-tuning}
+		\label{bib: fastapi doc bigger apps}
+        \textit{FastAPI Doc: Bigger Applications}: \url{https://fastapi.tiangolo.com/tutorial/bigger-applications/}
 		
 		% 22
+		\item
+		\label{bib: orm python}
+        \textit{Object-relational Mappers (ORMs)}: \url{https://www.fullstackpython.com/object-relational-mappers-orms.html}
+		
+		% 23
+		\item
+		\label{bib: fastapi orm}
+        \textit{FastAPI Doc: SQL (Relational) Databases. ORM}: \url{https://fastapi.tiangolo.com/tutorial/sql-databases/#orms}
+		
+		% 24
+		\item
+		\label{bib: fastapi migrations}
+        \textit{FastAPI Doc: SQL (Relational) Databases. Migrations}: \url{https://fastapi.tiangolo.com/tutorial/sql-databases/#migrations}
+		
+		% 25
+		\item
+		\label{bib: prophet parameters}
+        \textit{Prophet Doc: Hyperparameter-tuning}: \url{https://facebook.github.io/prophet/docs/diagnostics.html#hyperparameter-tuning}
+		
+		% 26
 		\item
 		\label{bib: prophet trend flex}
-		\href{https://facebook.github.io/prophet/docs/trend_changepoints.html#adjusting-trend-flexibility}{Prophet Doc: Adjusting trend flexibility}
+        \textit{Prophet Doc: Adjusting trend flexibility}: \url{https://facebook.github.io/prophet/docs/trend_changepoints.html#adjusting-trend-flexibility}
 		
-		% 22
+		% 27
 		\item
 		\label{bib: cisco white paper}
-		\href{https://www.cisco.com/c/en/us/solutions/collateral/executive-perspectives/annual-internet-report/white-paper-c11-741490.html}{Cisco Annual Internet Report (2018-2023) White paper}
-		
+        \textit{Cisco Annual Internet Report (2018-2023) White paper}: \url{https://www.cisco.com/c/en/us/solutions/collateral/executive-perspectives/annual-internet-report/white-paper-c11-741490.html}
 		
 	\end{enumerate}
 
@@ -1574,46 +1598,45 @@ services:
 	\addcontentsline{toc}{section}{Imagenes}
 
 	\begin{enumerate}
-		
 		% 1
 		\item
 		\label{bib_img: microservice architecture}
-		\href{https://xbsoftware.com/blog/microservices-vs-monolithic-architecture/}{Monolithic vs Microservices Architecture}
+        \textit{Monolithic vs Microservices Architecture}: \url{https://xbsoftware.com/blog/microservices-vs-monolithic-architecture/}
 		
 		% 2
 		\item
 		\label{bib_img: example sql}
-		\href{https://xbsoftware.com/blog/main-types-of-database-management-systems/}{Relational Databases}
+        \textit{Relational Databases}: \url{https://xbsoftware.com/blog/main-types-of-database-management-systems/}
 		
 		% 3
 		\item
 		\label{bib_img: influxdb logo}
-		\href{https://www.influxdata.com/}{InfluxDB}
+        \textit{InfluxDB}: \url{https://www.influxdata.com/}
 		
 		% 4
 		\item
 		\label{bib_img: python logo}
-		\href{https://www.python.org/}{Python}
+        \textit{Python}: \url{https://www.python.org/}
 		
 		% 5
 		\item
 		\label{bib_img: fastapi logo}
-		\href{https://fastapi.tiangolo.com/}{FastAPI}
+        \textit{FastAPI}: \url{https://fastapi.tiangolo.com/}
 		
 		% 6
 		\item
 		\label{bib_img: prophet logo}
-		\href{https://facebook.github.io/prophet/}{Prophet}
+        \textit{Prophet}: \url{https://facebook.github.io/prophet/}
 		
 		% 7
 		\item
 		\label{bib_img: docker architecture}
-		\href{https://docs.docker.com/get-started/overview/}{Docker Docs: Get Started}
+        \textit{Docker Docs: Get Started}: \url{https://docs.docker.com/get-started/overview/}
 		
 		% 8
 		\item
 		\label{bib_img: traefik capture}
-		\href{https://traefik.io/traefik/}{Traefik website}
+        \textit{Traefik website}: \url{https://traefik.io/traefik/}
 		
 	\end{enumerate}
 	
@@ -1663,7 +1686,7 @@ services:
 		\begin{itemize}
 			\item \textbf{Ruido}. Sumamos ruido blanco a la muestra sintética, de este modo podemos aumentar la varianza de los datos.
 			
-			\item \textbf{Tendencia}. Aplicamos un crecimiento exponencial a la serie temporal. En el caso de tráfico en red, buscamos seguir el dato de CAGR (Tasa de crecimiento anual compuesto), propuesto por Cisco [\ref{bib: cisco white paper}], por lo que lo implementamos con una exponencial de crecimiento 27\%.
+			\item \textbf{Tendencia}. Aplicamos un crecimiento exponencial a la serie temporal. En el caso de tráfico en red, buscamos seguir el dato de CAGR (tasa de crecimiento anual compuesto), propuesto por Cisco [\ref{bib: cisco white paper}], por lo que lo implementamos con una exponencial de crecimiento 27\%.
 			
 		\end{itemize}
 	
