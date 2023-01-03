@@ -48,20 +48,291 @@
     \begin{frame}{Introducción}
     
         \begin{itemize}
-            \item \textit{Abstract}: 
+            \item \textit{Abstract}: Aplicación que permite almacenar muestras de monitorización de tráfico en red, y a su vez, generar predicciones futuras del tráfico de red, en función de la información almacenada.
         \end{itemize}
     
         \begin{block}{Objetivos del proyecto}
             \begin{itemize}
-                \item 
+                \item Diseñar una aplicación siguiendo la metodología de microservicio.
+                
+                \item Investigar herramientas de predicción de series temporales.
+                
+                \item Investigar opciones de almacenamiento para muestras temporales.
+                
+                \item Utilizar herramientas de documentación que permitan conocer la estructura de la aplicación.\\
+                
             \end{itemize}
         \end{block}
     \end{frame}
 
 	% ---------------------
-
 	
+	\section{Tecnologías empleadas}
 
+	\begin{frame}{Microservicios \& API}
+		\begin{exampleblock}{Definición microservicio}
+			content...
+		\end{exampleblock}
+		
+		\begin{alertblock}{API}
+			content...
+		\end{alertblock}
+	\end{frame}
+
+	% ---------------------
+	
+	\begin{frame}{Bases de datos}
+		\begin{columns}
+			\begin{column}{0.5\textwidth}
+				\begin{block}{Tipo relacional}
+					asdasdasda
+				\end{block}
+			\end{column}
+			
+			
+			\begin{column}{0.5\textwidth}
+				\begin{block}{Tipo serie temporal}
+					content...
+				\end{block}
+			\end{column}
+		\end{columns}
+	\end{frame}
+	
+	% ---------------------
+	
+	\begin{frame}{Lenguaje de programación \& frameworks}
+		\begin{columns}
+			\begin{column}{0.5\textwidth}
+				\begin{exampleblock}{Python}
+					Lenguaje de programación orientado a objetos, interpretado y de alto nivel. Muy popular en los siguientes ambitos:
+					
+					\begin{itemize}
+						\item Aplicaciones web.
+						
+						\item Data Science
+						
+						\item Inteligencia Artificial
+					\end{itemize}
+					
+					\begin{figure}[h!]
+						\begin{center}
+							\includegraphics[width=0.7\textwidth]{img/python_logo.png}
+							\caption{asd}
+							%\label{img: microservice architecture}
+						\end{center}
+					\end{figure}
+				\end{exampleblock}
+			\end{column}
+		
+			\begin{column}{0.5\textwidth}
+				\begin{exampleblock}{FastAPI}
+					Framework moderno y rápido para construir APIs. Rápido, intuitivo y robusto, además de basado en estándares de la industria.
+					
+					\begin{itemize}
+						\item Rápido
+						\item Intuitivo
+						\item Robusto
+					\end{itemize}
+					
+					
+					\begin{figure}[h!]
+						\begin{center}
+							\includegraphics[width=0.7\textwidth]{img/fastapi_logo.png}
+							\caption{asd}
+							%\label{img: microservice architecture}
+						\end{center}
+					\end{figure}
+				\end{exampleblock}
+				
+				
+			\end{column}
+		\end{columns}
+	\end{frame}
+
+	\begin{frame}{Lenguaje de programación \& frameworks}
+		\begin{exampleblock}{Prophet}
+			Framework del lenguaje de programación Python, desarrollado por Meta (Facebook)
+			
+			\begin{figure}[h!]
+				\begin{center}
+					\includegraphics[width=0.5\textwidth]{img/prophet_logo.png}
+					\caption{asd}
+					%\label{img: microservice architecture}
+				\end{center}
+			\end{figure}
+		\end{exampleblock}
+	\end{frame}
+	
+	% ---------------------
+	
+	\begin{frame}{Despliegue en producción}
+		content...
+	\end{frame}
+	
+	% ---------------------
+	
+	\section{Implementación del sistema}
+	
+	\begin{frame}{Descripción API REST (I)}
+		content...
+	\end{frame}
+	
+	% ---------------------
+	
+	\begin{frame}{Descripción API REST (II)}
+		content...
+	\end{frame}
+	
+	% ---------------------
+	
+	\begin{frame}{Estructura (I)}
+		content...
+	\end{frame}
+
+	\begin{frame}{Estructura (II)}
+		content...
+	\end{frame}
+	
+	% ---------------------
+	
+	\begin{frame}{OpenAPI. Swagger}
+		content...
+	\end{frame}
+	
+	% ---------------------
+	
+	\begin{frame}{Modelos de datos. SQL}
+		
+		\begin{itemize}
+			\item asdasd
+		\end{itemize}
+
+		\begin{columns}
+			\begin{column}{0.5\textwidth}
+				\begin{table}[h!]
+					\centering
+					\begin{tabular}{|l|}
+						\hline
+						\multicolumn{1}{|c|}{\textit{\textbf{Networks}}} \\ \hline
+						\texttt{id\_network}: Int, Public Key, Unique                 \\ \hline
+						\texttt{name}: String                                     \\ \hline
+						\texttt{description}: String                              \\ \hline
+						\texttt{ip\_red}: String                                  \\ \hline
+						\texttt{influx\_net}: String                              \\ \hline
+					\end{tabular}
+					%\caption{Modelo de datos para las redes a monitorizar. Equivale con la tabla \textit{networks}.}
+					%\label{tab: modelo sql networks}
+				\end{table}
+			\end{column}
+		
+			\begin{column}{0.5\textwidth}
+				\begin{table}[h!]
+					\centering
+					\begin{tabular}{|l|}
+						\hline
+						\multicolumn{1}{|c|}{\textit{\textbf{Interfaces}}} \\ \hline
+						\texttt{id\_interface}: Int, Public Key, Unique             \\ \hline
+						\texttt{name}: String                                       \\ \hline
+						\texttt{description}: String                                \\ \hline
+						\texttt{influx\_if\_rx}: String                             \\ \hline
+						\texttt{influx\_if\_tx}: String                             \\ \hline
+						\texttt{network}: Int, Foreign Key                          \\ \hline
+					\end{tabular}
+					%\caption{Modelo de datos para las interfaces a monitorizar. Equivale con la tabla \textit{interfaces}.}
+					%\label{tab: modelo sql interfaces}
+				\end{table}
+			\end{column}
+		\end{columns}
+	\end{frame}
+
+	\begin{frame}{Modelos de datos. InfluxDB}
+		content...
+	\end{frame}
+	
+	% ---------------------
+	
+	\begin{frame}{Predicción de tráfico de red}
+		content...
+	\end{frame}
+	
+	% ---------------------
+	
+	\begin{frame}{Resumen rutas HTTP (I)}
+		\begin{columns}
+			\begin{column}{0.5\textwidth}
+				\begin{block}{\textbf{CRUD}: \texttt{networks} (\texttt{/networks})}
+					\begin{itemize}
+						\item \textbf{Información} de \textbf{todas} las redes: \\ \textit{GET} - \texttt{/networks}
+						
+						\item \textbf{Crear} una red: \\ \textit{POST} - \texttt{/networks}
+						
+						\item \textbf{Información} de \textbf{una} red: \\ \textit{GET} - \texttt{/networks/<net\_id>}
+						
+						\item \textbf{Eliminar} una red: \\ \textit{DELETE} - \texttt{/networks/<net\_id>}
+						
+						\item \textbf{Actualizar} una red: \\ \textit{PATCH} - \texttt{/networks/<net\_id>}
+					\end{itemize}
+				\end{block}
+			\end{column}
+		
+			\begin{column}{0.5\textwidth}
+				\begin{block}{\textbf{CRUD}: \texttt{interfaces} (\texttt{/networks/<id1>/interfaces})}
+					\begin{itemize}
+						\item \textbf{Información} de \textbf{todas} las interfaces: \\ \textit{GET} - \texttt{\small /networks/id/interfaces}
+						
+						\item \textbf{Crear} una interfaz: \\ \textit{POST} - \texttt{\small /networks/id/interfaces}
+						
+						\item \textbf{Información} de \textbf{una} interfaz: \\ \textit{GET} - \texttt{/../interfaces/<id2>}
+						
+						\item \textbf{Eliminar} una interfaz: \\ \textit{DELETE} - \texttt{/../interfaces/<id2>}
+						
+						\item \textbf{Actualizar} una interfaz: \\ \textit{PATCH} - \texttt{/../interfaces/<id2>}
+					\end{itemize}
+				\end{block}
+			\end{column}
+		
+		\end{columns}
+	\end{frame}
+
+	\begin{frame}{Resumen rutas HTTP (II)}
+		content...
+	\end{frame}
+	
+	% ---------------------
+	
+	\section{Validación del sistema}
+	
+	\begin{frame}{Validación del sistema (I)}
+		content...
+		
+		\begin{exampleblock}{Demo}
+			content...
+		\end{exampleblock}
+	\end{frame}
+
+	\begin{frame}{Validación del sistema (II)}
+		content...
+	\end{frame}
+	
+	% ---------------------
+	
+	\section{Conclusiones}
+	
+	\begin{frame}{Conclusiones}
+		\begin{itemize}
+			\item asdsad
+			\item asdasd
+		\end{itemize}
+	
+		\begin{exampleblock}{Propuestas futuras}
+			\begin{itemize}
+				\item asd
+				
+				\item asd
+			\end{itemize}
+		\end{exampleblock}
+	\end{frame}
+	
 	% ---------------------
 	
 	\section{Bibliografía}
@@ -75,10 +346,13 @@
 	\begin{frame}
 	    \begin{center}
 	        \vspace{30px}
-	        \Large Muchas gracias por su atención \\
+	        \Large \textbf{Muchas gracias por su atención} \\
 	        \vspace{30px}
 	        \large ¿Preguntas? \\
 	        \vspace{60px}
+	        
+	        Enlace a la aplicación: \\
+	        \href{https://tfm-api.ranii.pro:8443/docs}{\texttt{https://tfm-api.ranii.pro:8443/}}
 	    \end{center}
 	\end{frame}
 	
