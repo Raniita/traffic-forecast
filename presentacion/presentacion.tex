@@ -53,13 +53,13 @@
     
         \begin{block}{Objetivos del proyecto}
             \begin{itemize}
-                \item Diseñar una aplicación siguiendo la metodología de microservicio.
+                \item Diseñar una \textbf{aplicación} siguiendo la metodología de \textbf{microservicios}.
                 
-                \item Investigar herramientas de predicción de series temporales.
+                \item Investigar herramientas de \textbf{predicción de series temporales}.
                 
-                \item Investigar opciones de almacenamiento para muestras temporales.
+                \item Investigar \textbf{opciones de almacenamiento} para \textbf{muestras temporales}.
                 
-                \item Utilizar herramientas de documentación que permitan conocer la estructura de la aplicación.\\
+                \item Utilizar \textbf{herramientas de documentación} que permitan conocer la estructura de la aplicación.\\
                 
             \end{itemize}
         \end{block}
@@ -69,19 +69,52 @@
 	
 	\section{Tecnologías empleadas}
 
-	\begin{frame}{Microservicios \& API}
-		\begin{exampleblock}{Definición microservicio}
-			content...
+	\begin{frame}{Microservicios}
+		\begin{exampleblock}{Definición de microservicio}
+			Sistemas que cumplen las siguientes premisas: 
+			
+			\begin{itemize}
+				\item Sistemas pequeños, independientes y poco ``acoplados''. 
+				\item Código fuente separado entre los diferentes servicios, no necesariamente mismo lenguaje.
+				\item Los servicios se comunican entre sí utilizando APIs.
+				\item Cada sistema es independiente, y responsable de su persistencia de datos.
+			\end{itemize}
 		\end{exampleblock}
 		
-		\begin{alertblock}{API}
+		\begin{alertblock}{Importancia microservicios}
 			content...
 		\end{alertblock}
 	\end{frame}
 
 	% ---------------------
 	
+	\begin{frame}{\texttt{API} \small (\textit{Application Programing Interface})}
+		\begin{itemize}
+			\item Una API permite a dos \textbf{componentes comunicarse} entre sí \textbf{mediante} una serie de \textbf{reglas}.
+			
+			\item Supone un ``\textbf{contrato}'' en el que \textbf{se establecen las solicitudes} y respuestas \textbf{esperadas en la comunicación}.
+		\end{itemize}
+	
+		\begin{exampleblock}{Tipos de API}
+			Dependiendo de la implementación, distinguimos entre cuatro tipos:
+			
+			\begin{itemize}
+				\item \textbf{SOAP}.
+				\item \textbf{RPC}.
+				\item \textbf{Web Socket}.
+				\item \textbf{REST}.
+			\end{itemize}
+		\end{exampleblock}
+	\end{frame}
+	
+	% ---------------------
+	
 	\begin{frame}{Bases de datos}
+		
+		\begin{itemize}
+			\item En función del tipo de dato a almacenar, se distinguen dos bases de datos dentro de la aplicación:
+		\end{itemize}
+		
 		\begin{columns}
 			\begin{column}{0.5\textwidth}
 				\begin{block}{Tipo relacional}
@@ -103,7 +136,7 @@
 	\begin{frame}{Lenguaje de programación \& frameworks}
 		\begin{columns}
 			\begin{column}{0.5\textwidth}
-				\begin{exampleblock}{Python}
+				\begin{exampleblock}{\texttt{Python}}
 					Lenguaje de programación orientado a objetos, interpretado y de alto nivel. Muy popular en los siguientes ambitos:
 					
 					\begin{itemize}
@@ -117,7 +150,7 @@
 					\begin{figure}[h!]
 						\begin{center}
 							\includegraphics[width=0.7\textwidth]{img/python_logo.png}
-							\caption{asd}
+							%\caption{asd}
 							%\label{img: microservice architecture}
 						\end{center}
 					\end{figure}
@@ -125,20 +158,19 @@
 			\end{column}
 		
 			\begin{column}{0.5\textwidth}
-				\begin{exampleblock}{FastAPI}
-					Framework moderno y rápido para construir APIs. Rápido, intuitivo y robusto, además de basado en estándares de la industria.
+				\begin{exampleblock}{\texttt{FastAPI}}
+					Framework moderno y rápido para construir APIs. Características:
 					
 					\begin{itemize}
-						\item Rápido
-						\item Intuitivo
-						\item Robusto
+						\item Rápido: rendimiento equivalente a otros lenguajes (NodeJS o Go).
+						\item Intuitivo: soporta autocompletado. 
+						\item Robusto: herramienta Swagger/ReDoc automática.
 					\end{itemize}
-					
 					
 					\begin{figure}[h!]
 						\begin{center}
-							\includegraphics[width=0.7\textwidth]{img/fastapi_logo.png}
-							\caption{asd}
+							\includegraphics[width=0.8\textwidth]{img/fastapi_logo.png}
+							%\caption{asd}
 							%\label{img: microservice architecture}
 						\end{center}
 					\end{figure}
@@ -150,13 +182,19 @@
 	\end{frame}
 
 	\begin{frame}{Lenguaje de programación \& frameworks}
-		\begin{exampleblock}{Prophet}
-			Framework del lenguaje de programación Python, desarrollado por Meta (Facebook)
+		\begin{exampleblock}{\texttt{Prophet}}
+			Framework del lenguaje de programación Python, desarrollado por Meta (Facebook). Agrupa una serie de procedimientos que permiten realizar predicciones en un dataset temporal. Características:
+			
+			\begin{itemize}
+				\item Permite encontrar y tener en cuenta efectos no lineales (tendencias diarias, semanales, mensuales...).
+				\item Permite predecir datos en días vacacionales.
+				\item Basado en inferencia estadística, más eficiente que si utilizáramos técnicas de \textit{Machine Learning}.
+			\end{itemize}
 			
 			\begin{figure}[h!]
 				\begin{center}
-					\includegraphics[width=0.5\textwidth]{img/prophet_logo.png}
-					\caption{asd}
+					\includegraphics[width=0.4\textwidth]{img/prophet_logo.png}
+					%\caption{asd}
 					%\label{img: microservice architecture}
 				\end{center}
 			\end{figure}
@@ -166,7 +204,19 @@
 	% ---------------------
 	
 	\begin{frame}{Despliegue en producción}
-		content...
+		Herramientas utilizadas para el despliegue del sistema en un entorno de producción:
+		
+		\begin{itemize}
+			\item Docker
+			\item docker-compose
+			\item Traefik	
+		\end{itemize}
+	
+		\begin{figure}[h!]
+			\begin{center}
+				\includegraphics[width=0.95\textwidth]{diag/produccion_tfm.png}
+			\end{center}
+		\end{figure}
 	\end{frame}
 	
 	% ---------------------
@@ -174,22 +224,47 @@
 	\section{Implementación del sistema}
 	
 	\begin{frame}{Descripción API REST (I)}
-		content...
+		\begin{columns}
+			\begin{column}{0.5\textwidth}
+				content...
+			\end{column}
+		
+			\begin{column}{0.5\textwidth}
+				\begin{alertblock}{Agentes}
+					Se identifican los diferentes ``agentes'' presentes en el sistema:
+					
+					\begin{itemize}
+						\item \textbf{Redes} (\texttt{networks}), corresponde con una red que contiene interfaces a monitorizar.
+						
+						\item \textbf{Interfaces} (\texttt{interfaces}), corresponde con las interfaces de red que queremos monitorizar.
+						
+						\item \textbf{Muestras de monitorización} (\texttt{samples}). Valor de tráfico asociado a una interfaz en un intervalo determinado.
+					\end{itemize}
+				\end{alertblock}
+			\end{column}
+		\end{columns}
 	\end{frame}
 	
 	% ---------------------
 	
 	\begin{frame}{Descripción API REST (II)}
-		content...
+		
+		\textbf{Esquema de la aplicación implementada}
+		
+		\begin{figure}[h!]
+			\begin{center}
+				\includegraphics[width=0.75\textwidth]{diag/traffic_forecast_schema.png}
+			\end{center}
+		\end{figure}
 	\end{frame}
 	
 	% ---------------------
 	
-	\begin{frame}{Estructura (I)}
+	\begin{frame}{Implementación (I)}
 		content...
 	\end{frame}
 
-	\begin{frame}{Estructura (II)}
+	\begin{frame}{Implementación (II)}
 		content...
 	\end{frame}
 	
@@ -201,11 +276,17 @@
 	
 	% ---------------------
 	
-	\begin{frame}{Modelos de datos. SQL}
+	\begin{frame}{Modelos de datos. \texttt{SQL}}
 		
 		\begin{itemize}
-			\item asdasd
+			\item Definimos los datos y su \textbf{representación dentro} de nuestra \textbf{aplicación}.
+			
+			\item \textbf{En función} del \textbf{tipo de dato}, almacenaremos en \textbf{base de datos tipo relacional} (\texttt{SQL}) o \textbf{base de datos tipo serie temporal} (\texttt{InfluxDB}).
 		\end{itemize}
+
+		\vspace{11px}
+
+		\textbf{Tablas utilizadas en la base de datos SQL}
 
 		\begin{columns}
 			\begin{column}{0.5\textwidth}
@@ -245,8 +326,29 @@
 		\end{columns}
 	\end{frame}
 
-	\begin{frame}{Modelos de datos. InfluxDB}
-		content...
+	\begin{frame}{Modelos de datos. \texttt{InfluxDB}}
+		\begin{itemize}
+			\item En \texttt{InfluxDB} almacenamos las muestras de tráfico en red.
+		\end{itemize}
+	
+		\vspace{11px}
+	
+		\textbf{Configuración InfluxDB para el sistema}
+	
+		\begin{table}[]
+			\centering
+			\begin{tabular}{|c|c|}
+				\hline
+				\textbf{InfluxDB}    & \textbf{Descripción}                                                                                                                            \\ \hline
+				\texttt{measurement} & \begin{tabular}[c]{@{}c@{}}Red a monitorizar, \\ valor almacenado en \texttt{Networks::influx\_net}\end{tabular}                                         \\ \hline
+				\texttt{fields}      & Nombre del valor a monitorizar (\textit{link\_count})                                                                                                    \\ \hline
+				\texttt{tags}        & \begin{tabular}[c]{@{}c@{}}Solo disponemos un tag, llamado interface, \\ contiene la información del identificador de una interfaz\end{tabular} \\ \hline
+				\texttt{points}      & Corresponde con el valor numérico del campo field.                                                                                              \\ \hline
+			\end{tabular}
+			%\caption{}
+			%\label{tab:my-table}
+		\end{table}
+	
 	\end{frame}
 	
 	% ---------------------
@@ -295,7 +397,31 @@
 	\end{frame}
 
 	\begin{frame}{Resumen rutas HTTP (II)}
-		content...
+		\begin{columns}
+			\begin{column}{0.5\textwidth}
+				\begin{block}{\texttt{Samples}}
+					\begin{itemize}
+						\item \textbf{Importar} datos de topología con \textbf{más de una interfaz}: \\ \textit{\small POST} - \texttt{\small /samples/id/import\_topology}
+						
+						\item \textbf{Importar} datos de \textbf{una interfaz}: \\ \textit{POST} - \texttt{\small /samples/id/import\_interface/id}
+					\end{itemize}
+				\end{block}
+			\end{column}
+		
+			\begin{column}{0.5\textwidth}
+				\begin{block}{\texttt{Query Samples}}
+					\begin{itemize}
+						\item \textbf{Consultar} \textbf{datos} de monitorización \textbf{almacenados}: \\ \textit{GET} - \texttt{\small /query/}
+					\end{itemize}
+				\end{block}
+			
+				\begin{block}{\texttt{Forecast}}
+					\begin{itemize}
+						\item \textbf{Ejecutar} \textbf{predicción} de tráfico en red: \\ \textit{POST} - \texttt{\small /forecast/}
+					\end{itemize}
+				\end{block}
+			\end{column}
+		\end{columns}
 	\end{frame}
 	
 	% ---------------------
@@ -320,15 +446,20 @@
 	
 	\begin{frame}{Conclusiones}
 		\begin{itemize}
-			\item asdsad
-			\item asdasd
+			\item Alcanzados todos los objetivos propuestos.
+			
+			\item Se ha desarrollado una \textbf{microservicio completo}, permitiendo ser implementado por otras aplicaciones.
+			
+			\item El sistema es \textbf{capaz} de \textbf{almacenar} muestras de monitorización, además de poder \textbf{generar predicciones} de tráfico en red en la escala temporal que el usuario solicite.
 		\end{itemize}
 	
 		\begin{exampleblock}{Propuestas futuras}
 			\begin{itemize}
-				\item asd
+				\item Permitir la \textbf{importación} de \textbf{datos de monitorización} de \textbf{herramientas especificas} de planificación de red.
 				
-				\item asd
+				\item Añadir \textbf{funcionalidad de SSE} (Server Side Event) para \textbf{tareas} que requieran un \textbf{largo tiempo de ejecución}.
+				
+				\item Extender la funcionalidad de las \textbf{predicciones}, permitiendo hacer selección \textbf{más selectiva}, o añadir \textbf{filtrados extra}.
 			\end{itemize}
 		\end{exampleblock}
 	\end{frame}
