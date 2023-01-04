@@ -81,8 +81,10 @@
 			\end{itemize}
 		\end{exampleblock}
 		
-		\begin{alertblock}{Importancia microservicios}
-			content...
+		\begin{alertblock}{Importancia de utilizar microservicios}
+			\begin{itemize}
+				\item asdadd
+			\end{itemize}
 		\end{alertblock}
 	\end{frame}
 
@@ -99,10 +101,10 @@
 			Dependiendo de la implementación, distinguimos entre cuatro tipos:
 			
 			\begin{itemize}
-				\item \textbf{SOAP}.
-				\item \textbf{RPC}.
-				\item \textbf{Web Socket}.
-				\item \textbf{REST}.
+				\item \textbf{SOAP}. Protocolo tradicional, usa mensajes XML (HTTP solo transporte). Ambos interlocutores deben conocer la estructura de los objetos. Poco flexible
+				\item \textbf{RPC}. Basado en llamadas a procedimientos remotos. 
+				\item \textbf{WebSocket}. Solicitud moderna, usa objetos JSON y un canal bidireccional de comunicación.
+				\item \textbf{REST}. Solución más popular y flexible. Usa los métodos HTTP. \textbf{Elegimos este tipo}.
 			\end{itemize}
 		\end{exampleblock}
 	\end{frame}
@@ -117,15 +119,32 @@
 		
 		\begin{columns}
 			\begin{column}{0.5\textwidth}
-				\begin{block}{Tipo relacional}
-					asdasdasda
+				\begin{block}{Tipo relacional (\texttt{PostgreSQL})}
+					\begin{itemize}
+						\item Se almacenan datos que puedan tener una relación entre ellos. Por ejemplo: información de una red a monitorizar.
+						
+						\item Se organizan los datos en una serie de ``relaciones'', y estas se almacenan en una o más ``tablas''.
+						
+						\item Cada tabla dispone de una serie de columnas. La información se agrega en forma de filas a la tabla.
+					\end{itemize}
 				\end{block}
 			\end{column}
 			
 			
 			\begin{column}{0.5\textwidth}
-				\begin{block}{Tipo serie temporal}
-					content...
+				\begin{block}{Tipo serie temporal (\texttt{InfluxDB})}
+					\begin{itemize}
+						\item Necesario para almacenar datos en forma de serie temporal de manera eficiente.
+						
+						\item En comparación con el tipo relacional, la fila de datos esta identificada por un valor temporal.
+						
+						\item Algunas ventajas:
+						\begin{itemize}
+							\item Útil para almacenar datos de telemetría.
+							\item Datos comprimidos automáticamente.
+							%\item Permite realizar consultas de manera sencilla.							
+						\end{itemize}
+					\end{itemize}
 				\end{block}
 			\end{column}
 		\end{columns}
@@ -133,7 +152,7 @@
 	
 	% ---------------------
 	
-	\begin{frame}{Lenguaje de programación \& frameworks}
+	\begin{frame}{Lenguaje \& frameworks}
 		\begin{columns}
 			\begin{column}{0.5\textwidth}
 				\begin{exampleblock}{\texttt{Python}}
@@ -181,7 +200,7 @@
 		\end{columns}
 	\end{frame}
 
-	\begin{frame}{Lenguaje de programación \& frameworks}
+	\begin{frame}{Lenguaje \& frameworks}
 		\begin{exampleblock}{\texttt{Prophet}}
 			Framework del lenguaje de programación Python, desarrollado por Meta (Facebook). Agrupa una serie de procedimientos que permiten realizar predicciones en un dataset temporal. Características:
 			
@@ -226,7 +245,25 @@
 	\begin{frame}{Descripción API REST (I)}
 		\begin{columns}
 			\begin{column}{0.5\textwidth}
-				content...
+				Para la aplicación se implementan los diferentes agentes utilizando dos metodologías: \\
+				
+				\vspace{12px}
+				
+				\begin{enumerate}
+					\item \textbf{CRUD} 
+					\begin{itemize}
+						\item Aquellas que siguen la definición \texttt{Create}, \texttt{Read}, \texttt{Update} \& \texttt{Delete}.
+						
+						\item \textit{Ejemplo}: redes o interfaces.
+					\end{itemize}
+				
+					\item \textbf{No CRUD}
+					\begin{itemize}
+						\item Aquellas que no tienen por qué seguir las reglas CRUD.
+						
+						\item \textit{Ejemplo}: ejecutar predicción de red.
+					\end{itemize}
+				\end{enumerate}
 			\end{column}
 		
 			\begin{column}{0.5\textwidth}
@@ -270,8 +307,37 @@
 	
 	% ---------------------
 	
-	\begin{frame}{OpenAPI. Swagger}
-		content...
+	\begin{frame}{OpenAPI. \texttt{Swagger} \& \texttt{ReDoc}}
+		\begin{itemize}
+			\item FastAPI permite generar de manera automática una serie de rutas que sirven como documentación del proyecto.
+			
+			\item En estas herramientas se muestran al usuario la información de: 
+			
+			\begin{itemize}
+				\item Rutas de la aplicación
+				
+				\item Parámetros de entrada y de salida para una petición.
+				
+				\item Modelos de datos para cada una de las rutas.
+				
+				\item Posibles códigos HTTP de respuesta para las peticiones.
+			\end{itemize}
+		
+			\item Permite al usuario realizar peticiones al servidor, y ver su resultado, desde la misma herramienta.
+		\end{itemize}
+		
+		\begin{alertblock}{Acceso a las herramientas de documentación}
+			\begin{itemize}
+				\item Swagger: \href{https://tfm-api.ranii.pro:8443/docs}{\texttt{https://tfm-api.ranii.pro:8443/docs}}
+				
+				\item ReDoc: \href{https://tfm-api.ranii.pro:8443/redoc}{\texttt{https://tfm-api.ranii.pro:8443/redoc}}
+			\end{itemize}
+		\end{alertblock}
+		
+		%\begin{center}
+		%	Acceso a Swagger: \href{https://tfm-api.ranii.pro:8443/docs}{\texttt{https://tfm-api.ranii.pro:8443/docs}} \\
+		%	Acceso a ReDoc: \href{https://tfm-api.ranii.pro:8443/redoc}{\texttt{https://tfm-api.ranii.pro:8443/redoc}}
+		%\end{center}
 	\end{frame}
 	
 	% ---------------------
@@ -342,8 +408,8 @@
 				\textbf{InfluxDB}    & \textbf{Descripción}                                                                                                                            \\ \hline
 				\texttt{measurement} & \begin{tabular}[c]{@{}c@{}}Red a monitorizar, \\ valor almacenado en \texttt{Networks::influx\_net}\end{tabular}                                         \\ \hline
 				\texttt{fields}      & Nombre del valor a monitorizar (\textit{link\_count})                                                                                                    \\ \hline
-				\texttt{tags}        & \begin{tabular}[c]{@{}c@{}}Solo disponemos un tag, llamado interface, \\ contiene la información del identificador de una interfaz\end{tabular} \\ \hline
-				\texttt{points}      & Corresponde con el valor numérico del campo field.                                                                                              \\ \hline
+				\texttt{tags}        & \begin{tabular}[c]{@{}c@{}}Solo disponemos un \texttt{tag}, llamado \texttt{interface}, \\ contiene la información del identificador de una interfaz\end{tabular} \\ \hline
+				\texttt{points}      & Corresponde con el valor numérico del campo \texttt{field}.                                                                                              \\ \hline
 			\end{tabular}
 			%\caption{}
 			%\label{tab:my-table}
@@ -353,8 +419,59 @@
 	
 	% ---------------------
 	
-	\begin{frame}{Predicción de tráfico de red}
-		content...
+	\begin{frame}{Predicción de tráfico de red (I)}
+		\begin{itemize}
+			\item El sistema es capaz de ejecutar predicciones de tráfico de red, en función de las muestras de monitorización previamente almacenadas en el sistema.
+		\end{itemize}
+	
+		\begin{exampleblock}{Pasos para realizar una predicción de tráfico}
+			\begin{enumerate}
+				\item Creamos una red a monitorizar. \texttt{POST} a \texttt{/networks}.
+				
+				\item Creamos una interfaz a monitorizar. \texttt{POST} a \texttt{/networks/<net>/interfaces}
+				
+				\item Importamos datos de monitorización.  Dos maneras: 
+				\begin{itemize}
+					\item \texttt{POST} a ruta: \texttt{/samples/<net>/import\_topology}
+					
+					\item \texttt{POST} a ruta: \texttt{/samples/<net>/import\_interface/<if>}
+				\end{itemize}
+			
+				\item Ejecutamos predicción de tráfico en red. Configuramos la predicción y lanzamos la petición \texttt{POST} a \texttt{/forecast}.
+			\end{enumerate}
+		\end{exampleblock}
+	\end{frame}
+	
+	% ---------------------
+	
+	\begin{frame}{Predicción de tráfico de red (II)}
+		\begin{columns}
+			\begin{column}{0.4\textwidth}
+				\begin{figure}[h!]
+					\begin{center}
+						\includegraphics[width=0.9\textwidth]{img/parameters_post_forecast.png}
+					\end{center}
+				\end{figure}
+			\end{column}
+		
+			\begin{column}{0.6\textwidth}
+				\textbf{Parámetros para la ejecución de la predicción de tráfico}
+				
+				\begin{itemize}
+					\item \texttt{field}. Campo para elegir si RX o TX.
+					
+					\item \texttt{days}. Número de días a predecir.
+					
+					\item \texttt{options}. Opciones que modifican la flexibilidad de la predicción:
+					\begin{itemize}
+						\item \texttt{holidays\_region}
+						\item \texttt{flexibility\_trend}
+						\item \texttt{flexibility\_season}
+						\item \texttt{flexibility\_holidays}
+					\end{itemize}
+				\end{itemize}
+			\end{column}
+		\end{columns}
 	\end{frame}
 	
 	% ---------------------
@@ -429,15 +546,56 @@
 	\section{Validación del sistema}
 	
 	\begin{frame}{Validación del sistema (I)}
-		content...
+		Para demostrar el funcionamiento del sistema, se realiza una batería de pruebas de las funcionalidades implementadas. Dichas pruebas son:
 		
-		\begin{exampleblock}{Demo}
-			content...
-		\end{exampleblock}
+		\begin{enumerate}
+			\item Crear una red a monitorizar.
+			
+			\item Crear una interfaz dentro de una red a monitorizar.
+			
+			\item Cargar muestras en interfaz de red.
+			
+			\item Cargar una topología de red sobre una red a monitorizar.
+			
+			\item Consultar datos de monitorización.
+			
+			\item Ejecutar una predicción de un año.
+		\end{enumerate}
+	
+	\vspace{12px}
+	
+	Estas pruebas corresponden con las \textbf{pruebas unitarias} del sistema.
+		
 	\end{frame}
 
 	\begin{frame}{Validación del sistema (II)}
-		content...
+		\begin{columns}
+			\begin{column}{0.52\textwidth}
+				\begin{alertblock}{Demo!}
+					Realizamos una validación del sistema.
+					
+					\vspace{12px}
+					
+					\href{https://tfm-api.ranii.pro:8443/docs}{\small \texttt{https://tfm-api.ranii.pro:8443/docs}}
+					
+					\vspace{12px}
+					 
+					\begin{itemize}
+						\item \textit{Objetivo}: Completar una predicción de un año. 
+						\item \textit{Requisito}: Asumir sistema sin datos almacenados.
+						\item \textit{Resultado}: Una predicción similar a la de la figura.
+					\end{itemize}
+				\end{alertblock}
+			\end{column}
+		
+			\begin{column}{0.5\textwidth}
+				\begin{figure}[h!]
+					\begin{center}
+						\includegraphics[width=1\textwidth]{img/graph_forecast_2.png}
+					\end{center}
+				\end{figure}
+			\end{column}
+		\end{columns}
 	\end{frame}
 	
 	% ---------------------
