@@ -83,7 +83,7 @@
 		
 		\begin{alertblock}{Importancia de utilizar microservicios}
 			\begin{itemize}
-				\item asdadd
+				\item Permite que otras aplicaciones más complejas puedan implementar el servicio propuesto.
 			\end{itemize}
 		\end{alertblock}
 	\end{frame}
@@ -226,9 +226,9 @@
 		Herramientas utilizadas para el despliegue del sistema en un entorno de producción:
 		
 		\begin{itemize}
-			\item Docker
-			\item docker-compose
-			\item Traefik	
+			\item \texttt{Docker}. Contenedores.
+			\item \texttt{docker-compose}. Despliegue automatizado de contenedores \texttt{Docker}.
+			\item \texttt{Traefik}. Enrutador que permite conectar dominios con servicios \texttt{Docker}.
 		\end{itemize}
 	
 		\begin{figure}[h!]
@@ -298,18 +298,74 @@
 	% ---------------------
 	
 	\begin{frame}{Implementación (I)}
-		content...
+		\begin{exampleblock}{\texttt{Factory Pattern}}
+			Metodología que permite estructurar un proyecto software de modo que permita:
+			\begin{itemize}
+				\item Añadir funcionalidades de manera sencilla.
+				\item Permitir el crecimiento ordenado de la aplicación.
+				\item Ordenar los archivos del proyecto dependiendo de la funcionalidad.
+			\end{itemize}
+		\end{exampleblock}
+	
+		\begin{alertblock}{\texttt{ORM} \& \texttt{migrations}}
+			\begin{itemize}
+				\item \texttt{ORM} (\textit{Object-relational Mappers}). Abstracción de alto nivel que permite definir modelos de datos SQL con el lenguaje Python.
+				
+				\item \texttt{migrations}. Permite tener un control de versiones dentro de los modelos de datos de la aplicación. Facilita el despliegue de la base de datos, en lo que a estructura de tablas se refiere.	
+		\end{itemize}
+		\end{alertblock}
+		
 	\end{frame}
 
 	\begin{frame}{Implementación (II)}
-		content...
+		\begin{columns}
+			\begin{column}{0.6\textwidth}
+				\textbf{Estructura de ficheros del proyecto}
+				
+				\begin{itemize}
+					\item \texttt{migrations}. Contiene las versiones de la DB.
+					
+					\item \texttt{src}
+					
+					\begin{itemize}
+						\item \texttt{crud}. Funcionalidad de agentes CRUD.
+						
+						\item \texttt{database}. Contiene modelos de datos SQL.
+						
+						\item \texttt{noncrud} Funcionalidad agentes no CRUD.
+						
+						\item \texttt{routes}. Rutas de la aplicación.
+						
+						\item \texttt{schemas}. Esquema de datos.
+						
+						\item \texttt{utils}. Utilidades, \texttt{wrapper InfluxDB}.
+						
+						\item \texttt{config.py}. Configuración app.
+						
+						\item \texttt{main.py}. Archivo principal.
+					\end{itemize}
+				
+					\item \texttt{Dockerfile}. Instrucciones para contenedor Docker.
+					
+					\item \texttt{requirements.txt}. Módulos Python utilizados.
+				\end{itemize}
+			\end{column}
+		
+			\begin{column}{0.4\textwidth}
+				\begin{figure}[h!]
+					\begin{center}
+						\includegraphics[width=0.65\textwidth]{img/folder_structure.jpg}
+					\end{center}
+				\end{figure}
+			\end{column}
+		\end{columns}
 	\end{frame}
 	
 	% ---------------------
 	
 	\begin{frame}{OpenAPI. \texttt{Swagger} \& \texttt{ReDoc}}
 		\begin{itemize}
-			\item FastAPI permite generar de manera automática una serie de rutas que sirven como documentación del proyecto.
+			\item FastAPI permite \textbf{generar de manera automática} una serie de rutas que sirven como \textbf{documentación del proyecto}.
 			
 			\item En estas herramientas se muestran al usuario la información de: 
 			
@@ -323,21 +379,16 @@
 				\item Posibles códigos HTTP de respuesta para las peticiones.
 			\end{itemize}
 		
-			\item Permite al usuario realizar peticiones al servidor, y ver su resultado, desde la misma herramienta.
+			\item \textbf{Permite} al usuario r\textbf{ealizar peticiones al servidor}, y ver su resultado, desde la misma herramienta.
 		\end{itemize}
 		
-		\begin{alertblock}{Acceso a las herramientas de documentación}
+		\begin{block}{Acceso a las herramientas de documentación}
 			\begin{itemize}
-				\item Swagger: \href{https://tfm-api.ranii.pro:8443/docs}{\texttt{https://tfm-api.ranii.pro:8443/docs}}
+				\item \textbf{Swagger}: \href{https://tfm-api.ranii.pro:8443/docs}{\texttt{https://tfm-api.ranii.pro:8443/docs}}
 				
-				\item ReDoc: \href{https://tfm-api.ranii.pro:8443/redoc}{\texttt{https://tfm-api.ranii.pro:8443/redoc}}
+				\item \textbf{ReDoc}: \href{https://tfm-api.ranii.pro:8443/redoc}{\texttt{https://tfm-api.ranii.pro:8443/redoc}}
 			\end{itemize}
-		\end{alertblock}
-		
-		%\begin{center}
-		%	Acceso a Swagger: \href{https://tfm-api.ranii.pro:8443/docs}{\texttt{https://tfm-api.ranii.pro:8443/docs}} \\
-		%	Acceso a ReDoc: \href{https://tfm-api.ranii.pro:8443/redoc}{\texttt{https://tfm-api.ranii.pro:8443/redoc}}
-		%\end{center}
+		\end{block}
 	\end{frame}
 	
 	% ---------------------
@@ -421,7 +472,7 @@
 	
 	\begin{frame}{Predicción de tráfico de red (I)}
 		\begin{itemize}
-			\item El sistema es capaz de ejecutar predicciones de tráfico de red, en función de las muestras de monitorización previamente almacenadas en el sistema.
+			\item El sistema es \textbf{capaz} de \textbf{ejecutar predicciones} de tráfico de red, en función de las \textbf{muestras de monitorización} previamente \textbf{almacenadas en el sistema}.
 		\end{itemize}
 	
 		\begin{exampleblock}{Pasos para realizar una predicción de tráfico}
@@ -516,27 +567,27 @@
 	\begin{frame}{Resumen rutas HTTP (II)}
 		\begin{columns}
 			\begin{column}{0.5\textwidth}
-				\begin{block}{\texttt{Samples}}
+				\begin{exampleblock}{\texttt{Samples}}
 					\begin{itemize}
 						\item \textbf{Importar} datos de topología con \textbf{más de una interfaz}: \\ \textit{\small POST} - \texttt{\small /samples/id/import\_topology}
 						
 						\item \textbf{Importar} datos de \textbf{una interfaz}: \\ \textit{POST} - \texttt{\small /samples/id/import\_interface/id}
 					\end{itemize}
-				\end{block}
+				\end{exampleblock}
 			\end{column}
 		
 			\begin{column}{0.5\textwidth}
-				\begin{block}{\texttt{Query Samples}}
+				\begin{exampleblock}{\texttt{Query Samples}}
 					\begin{itemize}
 						\item \textbf{Consultar} \textbf{datos} de monitorización \textbf{almacenados}: \\ \textit{GET} - \texttt{\small /query/}
 					\end{itemize}
-				\end{block}
+				\end{exampleblock}
 			
-				\begin{block}{\texttt{Forecast}}
+				\begin{exampleblock}{\texttt{Forecast}}
 					\begin{itemize}
 						\item \textbf{Ejecutar} \textbf{predicción} de tráfico en red: \\ \textit{POST} - \texttt{\small /forecast/}
 					\end{itemize}
-				\end{block}
+				\end{exampleblock}
 			\end{column}
 		\end{columns}
 	\end{frame}
@@ -546,20 +597,20 @@
 	\section{Validación del sistema}
 	
 	\begin{frame}{Validación del sistema (I)}
-		Para demostrar el funcionamiento del sistema, se realiza una batería de pruebas de las funcionalidades implementadas. Dichas pruebas son:
+		Para demostrar el funcionamiento del sistema, se realiza una \textbf{batería de pruebas} de las funcionalidades implementadas. Dichas pruebas son:
 		
 		\begin{enumerate}
-			\item Crear una red a monitorizar.
+			\item \textbf{Crear una red} a monitorizar.
 			
-			\item Crear una interfaz dentro de una red a monitorizar.
+			\item \textbf{Crear una interfaz} dentro de una red a monitorizar.
 			
-			\item Cargar muestras en interfaz de red.
+			\item \textbf{Cargar muestras} en interfaz de red.
 			
 			\item Cargar una topología de red sobre una red a monitorizar.
 			
-			\item Consultar datos de monitorización.
+			\item \textbf{Consultar datos} de monitorización.
 			
-			\item Ejecutar una predicción de un año.
+			\item \textbf{Ejecutar una predicción} de un año.
 		\end{enumerate}
 	
 	\vspace{12px}
@@ -571,7 +622,7 @@
 	\begin{frame}{Validación del sistema (II)}
 		\begin{columns}
 			\begin{column}{0.52\textwidth}
-				\begin{alertblock}{Demo!}
+				\begin{block}{Demo! (\textit{2 minutos})}
 					Realizamos una validación del sistema.
 					
 					\vspace{12px}
@@ -585,7 +636,7 @@
 						\item \textit{Requisito}: Asumir sistema sin datos almacenados.
 						\item \textit{Resultado}: Una predicción similar a la de la figura.
 					\end{itemize}
-				\end{alertblock}
+				\end{block}
 			\end{column}
 		
 			\begin{column}{0.5\textwidth}
@@ -615,7 +666,7 @@
 			\begin{itemize}
 				\item Permitir la \textbf{importación} de \textbf{datos de monitorización} de \textbf{herramientas especificas} de planificación de red.
 				
-				\item Añadir \textbf{funcionalidad de SSE} (Server Side Event) para \textbf{tareas} que requieran un \textbf{largo tiempo de ejecución}.
+				\item Añadir \textbf{funcionalidad de SSE} (\textit{Server Side Event}) para \textbf{tareas} que requieran un \textbf{largo tiempo de ejecución}.
 				
 				\item Extender la funcionalidad de las \textbf{predicciones}, permitiendo hacer selección \textbf{más selectiva}, o añadir \textbf{filtrados extra}.
 			\end{itemize}
