@@ -74,16 +74,16 @@
 			Sistemas que cumplen las siguientes premisas: 
 			
 			\begin{itemize}
-				\item Sistemas pequeños, independientes y poco ``acoplados''. 
-				\item Código fuente separado entre los diferentes servicios, no necesariamente mismo lenguaje.
-				\item Los servicios se comunican entre sí utilizando APIs.
-				\item Cada sistema es independiente, y responsable de su persistencia de datos.
+				\item Sistemas \textbf{pequeños}, \textbf{independientes} y poco ``\textit{acoplados}''. 
+				\item \textbf{Código fuente separado} entre los diferentes servicios, no necesariamente mismo lenguaje.
+				\item Los servicios \textbf{se comunican} entre sí utilizando \textbf{APIs}.
+				\item Cada \textbf{sistema} es \textbf{independiente}, y responsable de su persistencia de datos.
 			\end{itemize}
 		\end{exampleblock}
 		
 		\begin{alertblock}{Importancia de utilizar microservicios}
 			\begin{itemize}
-				\item Permite que otras aplicaciones más complejas puedan implementar el servicio propuesto.
+				\item Permite que otras \textbf{aplicaciones más complejas} puedan \textbf{implementar el servicio} propuesto.
 			\end{itemize}
 		\end{alertblock}
 	\end{frame}
@@ -103,7 +103,7 @@
 			\begin{itemize}
 				\item \textbf{SOAP}. Protocolo tradicional, usa mensajes XML (HTTP solo transporte). Ambos interlocutores deben conocer la estructura de los objetos. Poco flexible
 				\item \textbf{RPC}. Basado en llamadas a procedimientos remotos. 
-				\item \textbf{WebSocket}. Solicitud moderna, usa objetos JSON y un canal bidireccional de comunicación.
+				\item \textbf{WebSocket}. Solución moderna, usa objetos JSON y un canal bidireccional de comunicación.
 				\item \textbf{REST}. Solución más popular y flexible. Usa los métodos HTTP. \textbf{Elegimos este tipo}.
 			\end{itemize}
 		\end{exampleblock}
@@ -114,16 +114,16 @@
 	\begin{frame}{Bases de datos}
 		
 		\begin{itemize}
-			\item En función del tipo de dato a almacenar, se distinguen dos bases de datos dentro de la aplicación:
+			\item En \textbf{función} del \textbf{tipo de dato} a almacenar, se distinguen dos bases de datos dentro de la aplicación:
 		\end{itemize}
 		
 		\begin{columns}
 			\begin{column}{0.5\textwidth}
 				\begin{block}{Tipo relacional (\texttt{PostgreSQL})}
 					\begin{itemize}
-						\item Se almacenan datos que puedan tener una relación entre ellos. Por ejemplo: información de una red a monitorizar.
+						\item Se almacenan \textbf{datos} que puedan tener una \textbf{relación} entre ellos. Por ejemplo: información de una red a monitorizar.
 						
-						\item Se organizan los datos en una serie de ``relaciones'', y estas se almacenan en una o más ``tablas''.
+						\item Se organizan los datos en una serie de ``\textit{relaciones}'', y estas se almacenan en una o más ``\textit{tablas}''.
 						
 						\item Cada tabla dispone de una serie de columnas. La información se agrega en forma de filas a la tabla.
 					\end{itemize}
@@ -134,7 +134,7 @@
 			\begin{column}{0.5\textwidth}
 				\begin{block}{Tipo serie temporal (\texttt{InfluxDB})}
 					\begin{itemize}
-						\item Necesario para almacenar datos en forma de serie temporal de manera eficiente.
+						\item Necesario para almacenar \textbf{datos} en forma de \textbf{serie temporal} de manera eficiente.
 						
 						\item En comparación con el tipo relacional, la fila de datos esta identificada por un valor temporal.
 						
@@ -156,14 +156,14 @@
 		\begin{columns}
 			\begin{column}{0.5\textwidth}
 				\begin{exampleblock}{\texttt{Python}}
-					Lenguaje de programación orientado a objetos, interpretado y de alto nivel. Muy popular en los siguientes ambitos:
+					Lenguaje de programación orientado a objetos, interpretado y de alto nivel. Muy popular en los siguientes ámbitos:
 					
 					\begin{itemize}
 						\item Aplicaciones web.
 						
-						\item Data Science
+						\item \textit{Data Science}.
 						
-						\item Inteligencia Artificial
+						\item Inteligencia Artificial.
 					\end{itemize}
 					
 					\begin{figure}[h!]
@@ -178,12 +178,12 @@
 		
 			\begin{column}{0.5\textwidth}
 				\begin{exampleblock}{\texttt{FastAPI}}
-					Framework moderno y rápido para construir APIs. Características:
+					\textbf{Framework moderno} y rápido para construir \textbf{APIs}. Características:
 					
 					\begin{itemize}
-						\item Rápido: rendimiento equivalente a otros lenguajes (NodeJS o Go).
-						\item Intuitivo: soporta autocompletado. 
-						\item Robusto: herramienta Swagger/ReDoc automática.
+						\item \textbf{Rápido}: rendimiento equivalente a otros lenguajes (NodeJS o Go).
+						\item \textbf{Intuitivo}: soporta autocompletado. 
+						\item \textbf{Robusto}: herramienta \texttt{Swagger}/\texttt{ReDoc} automática.
 					\end{itemize}
 					
 					\begin{figure}[h!]
@@ -202,12 +202,12 @@
 
 	\begin{frame}{Lenguaje \& frameworks}
 		\begin{exampleblock}{\texttt{Prophet}}
-			Framework del lenguaje de programación Python, desarrollado por Meta (Facebook). Agrupa una serie de procedimientos que permiten realizar predicciones en un dataset temporal. Características:
+			Librería del lenguaje de programación Python, desarrollado por Meta (Facebook). Agrupa una serie de \textbf{procedimientos} que permiten \textbf{realizar predicciones} en un \textbf{dataset temporal}. Características:
 			
 			\begin{itemize}
-				\item Permite encontrar y tener en cuenta efectos no lineales (tendencias diarias, semanales, mensuales...).
-				\item Permite predecir datos en días vacacionales.
-				\item Basado en inferencia estadística, más eficiente que si utilizáramos técnicas de \textit{Machine Learning}.
+				\item Permite encontrar y tener en cuenta \textbf{efectos no lineales} (tendencias diarias, semanales, mensuales...).
+				\item Permite predecir datos en \textbf{días vacacionales}.
+				\item Basado en inferencia estadística, \textbf{más eficiente} que si utilizáramos técnicas de \textit{Machine Learning}.
 			\end{itemize}
 			
 			\begin{figure}[h!]
@@ -245,7 +245,7 @@
 	\begin{frame}{Descripción API REST (I)}
 		\begin{columns}
 			\begin{column}{0.5\textwidth}
-				Para la aplicación se implementan los diferentes agentes utilizando dos metodologías: \\
+				Para la aplicación se implementan los diferentes agentes utilizando \textbf{dos metodologías}: \\
 				
 				\vspace{12px}
 				
@@ -268,7 +268,7 @@
 		
 			\begin{column}{0.5\textwidth}
 				\begin{alertblock}{Agentes}
-					Se identifican los diferentes ``agentes'' presentes en el sistema:
+					Se identifican los diferentes ``\textit{agentes}'' presentes en el sistema:
 					
 					\begin{itemize}
 						\item \textbf{Redes} (\texttt{networks}), corresponde con una red que contiene interfaces a monitorizar.
@@ -299,19 +299,19 @@
 	
 	\begin{frame}{Implementación (I)}
 		\begin{exampleblock}{\texttt{Factory Pattern}}
-			Metodología que permite estructurar un proyecto software de modo que permita:
+			Metodología que \textbf{permite} \textbf{estructurar} un \textbf{proyecto} software de modo que permita:
 			\begin{itemize}
-				\item Añadir funcionalidades de manera sencilla.
-				\item Permitir el crecimiento ordenado de la aplicación.
+				\item \textbf{Añadir} \textbf{funcionalidades} de manera sencilla.
+				\item \textbf{Permitir} el \textbf{crecimiento} ordenado de la aplicación.
 				\item Ordenar los archivos del proyecto dependiendo de la funcionalidad.
 			\end{itemize}
 		\end{exampleblock}
 	
 		\begin{alertblock}{\texttt{ORM} \& \texttt{migrations}}
 			\begin{itemize}
-				\item \texttt{ORM} (\textit{Object-relational Mappers}). Abstracción de alto nivel que permite definir modelos de datos SQL con el lenguaje Python.
+				\item \texttt{ORM} (\textit{Object-relational Mappers}). Abstracción de alto nivel que permite \textbf{definir} \textbf{modelos} de datos SQL con el lenguaje \textbf{Python}.
 				
-				\item \texttt{migrations}. Permite tener un control de versiones dentro de los modelos de datos de la aplicación. Facilita el despliegue de la base de datos, en lo que a estructura de tablas se refiere.	
+				\item \texttt{migrations}. Permite tener un \textbf{control} de \textbf{versiones} dentro de los \textbf{modelos} de datos de la aplicación. Facilita el despliegue de la base de datos, en lo que a estructura de tablas se refiere.	
 		\end{itemize}
 		\end{alertblock}
 		
@@ -477,18 +477,18 @@
 	
 		\begin{exampleblock}{Pasos para realizar una predicción de tráfico}
 			\begin{enumerate}
-				\item Creamos una red a monitorizar. \texttt{POST} a \texttt{/networks}.
+				\item \textbf{Creamos una red} a monitorizar. \texttt{POST} a \texttt{/networks}.
 				
-				\item Creamos una interfaz a monitorizar. \texttt{POST} a \texttt{/networks/<net>/interfaces}
+				\item \textbf{Creamos una interfaz} a monitorizar. \texttt{POST} a \texttt{/networks/<net>/interfaces}
 				
-				\item Importamos datos de monitorización.  Dos maneras: 
+				\item \textbf{Importamos datos} de monitorización.  Dos maneras: 
 				\begin{itemize}
 					\item \texttt{POST} a ruta: \texttt{/samples/<net>/import\_topology}
 					
 					\item \texttt{POST} a ruta: \texttt{/samples/<net>/import\_interface/<if>}
 				\end{itemize}
 			
-				\item Ejecutamos predicción de tráfico en red. Configuramos la predicción y lanzamos la petición \texttt{POST} a \texttt{/forecast}.
+				\item \textbf{Ejecutamos predicción de tráfico} en red. Configuramos la predicción y lanzamos la petición \texttt{POST} a \texttt{/forecast}.
 			\end{enumerate}
 		\end{exampleblock}
 	\end{frame}
