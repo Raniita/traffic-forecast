@@ -77,7 +77,7 @@
 				\item Sistemas \textbf{pequeños}, \textbf{independientes} y poco ``\textit{acoplados}''. 
 				\item \textbf{Código fuente separado} entre los diferentes servicios, no necesariamente mismo lenguaje.
 				\item Los servicios \textbf{se comunican} entre sí utilizando \textbf{APIs}.
-				\item Cada \textbf{sistema} es \textbf{independiente}, y responsable de su persistencia de datos.
+				%\item Cada \textbf{sistema} es \textbf{independiente}, y responsable de su persistencia de datos.
 			\end{itemize}
 		\end{exampleblock}
 		
@@ -125,7 +125,7 @@
 						
 						\item Se organizan los datos en una serie de ``\textit{relaciones}'', y estas se almacenan en una o más ``\textit{tablas}''.
 						
-						\item Cada tabla dispone de una serie de columnas. La información se agrega en forma de filas a la tabla.
+						\item Cada tabla dispone de una serie de columnas. La \textbf{información} se agrega en \textbf{forma de filas} a la tabla.
 					\end{itemize}
 				\end{block}
 			\end{column}
@@ -136,7 +136,7 @@
 					\begin{itemize}
 						\item Necesario para almacenar \textbf{datos} en forma de \textbf{serie temporal} de manera eficiente.
 						
-						\item En comparación con el tipo relacional, la fila de datos está identificada por un valor temporal.
+						\item En comparación con el tipo relacional, la \textbf{fila de datos} está \textbf{identificada} por un \textbf{valor temporal}.
 						
 						\item Algunas ventajas:
 						\begin{itemize}
@@ -156,7 +156,7 @@
 		\begin{columns}
 			\begin{column}{0.5\textwidth}
 				\begin{exampleblock}{\texttt{Python}}
-					Lenguaje de programación orientado a objetos, interpretado y de alto nivel. Muy popular en los siguientes ámbitos:
+					\textbf{Lenguaje de programación orientado a objetos}, interpretado y de alto nivel. \textbf{Muy popular} en los siguientes ámbitos:
 					
 					\begin{itemize}
 						\item Aplicaciones web.
@@ -202,7 +202,7 @@
 
 	\begin{frame}{Lenguaje \& frameworks}
 		\begin{exampleblock}{\texttt{Prophet}}
-			Librería del lenguaje de programación Python, desarrollado por Meta (Facebook). Agrupa una serie de \textbf{procedimientos} que permiten \textbf{realizar predicciones} en un \textbf{dataset temporal}. Características:
+			Librería del lenguaje de programación Python, desarrollada por Meta (Facebook). Agrupa una serie de \textbf{procedimientos} que permiten \textbf{realizar predicciones} en un \textbf{dataset temporal}. Características:
 			
 			\begin{itemize}
 				\item Permite encontrar y tener en cuenta \textbf{efectos no lineales} (tendencias diarias, semanales, mensuales...).
@@ -299,19 +299,19 @@
 	
 	\begin{frame}{Implementación (I)}
 		\begin{exampleblock}{\texttt{Factory Pattern}}
-			Metodología que \textbf{permite} \textbf{estructurar} un \textbf{proyecto} software de modo que permita:
+			Patrón de diseño que \textbf{permite} \textbf{estructurar} un \textbf{proyecto} software de modo que permita:
 			\begin{itemize}
-				\item \textbf{Añadir} \textbf{funcionalidades} de manera sencilla.
-				\item \textbf{Permitir} el \textbf{crecimiento} ordenado de la aplicación.
-				\item Ordenar los archivos del proyecto dependiendo de la funcionalidad.
+				\item Basado en la \textbf{creación de objetos} sin especificar su clase.
+				\item Permite \textbf{añadir} \textbf{funcionalidades} de manera sencilla. Ordena los archivos del proyecto dependiendo de la funcionalidad.
+				\item \textit{Ventaja}: crecimiento ordenado y fácil de la aplicación.
 			\end{itemize}
 		\end{exampleblock}
 	
 		\begin{alertblock}{\texttt{ORM} \& \texttt{migrations}}
 			\begin{itemize}
-				\item \texttt{ORM} (\textit{Object-relational Mappers}). Abstracción de alto nivel que permite \textbf{definir} \textbf{modelos} de datos SQL con el lenguaje \textbf{Python}.
+				\item \texttt{\textbf{ORM}} (\textit{Object-relational Mappers}). Abstracción de alto nivel que permite \textbf{definir} \textbf{modelos} de datos SQL con el lenguaje \textbf{Python}.
 				
-				\item \texttt{migrations}. Permite tener un \textbf{control} de \textbf{versiones} dentro de los \textbf{modelos} de datos de la aplicación. Facilita el despliegue de la base de datos, en lo que a estructura de tablas se refiere.	
+				\item \texttt{\textbf{migrations}}. Permite tener un \textbf{control} de \textbf{versiones} dentro de los \textbf{modelos} de datos de la aplicación. \textbf{Facilita} el \textbf{despliegue} de la base de datos, en lo que a estructura de tablas se refiere.	
 		\end{itemize}
 		\end{alertblock}
 		
@@ -365,7 +365,7 @@
 	
 	\begin{frame}{OpenAPI. \texttt{Swagger} \& \texttt{ReDoc}}
 		\begin{itemize}
-			\item FastAPI permite \textbf{generar de manera automática} una serie de rutas que sirven como \textbf{documentación del proyecto}.
+			\item FastAPI \textbf{genera de manera automática} una serie de rutas que sirven como \textbf{documentación del proyecto}.
 			
 			\item En estas herramientas se muestran al usuario la información de: 
 			
@@ -445,7 +445,7 @@
 
 	\begin{frame}{Modelos de datos. \texttt{InfluxDB}}
 		\begin{itemize}
-			\item En \texttt{InfluxDB} almacenamos las muestras de tráfico en red.
+			\item En \texttt{InfluxDB} \textbf{almacenamos} las \textbf{muestras de tráfico} en red.
 		\end{itemize}
 	
 		\vspace{11px}
@@ -657,7 +657,7 @@
 		\begin{itemize}
 			\item Alcanzados todos los objetivos propuestos.
 			
-			\item Se ha desarrollado una \textbf{microservicio completo}, permitiendo ser implementado por otras aplicaciones.
+			\item Se ha desarrollado un \textbf{microservicio completo}, permitiendo ser implementado por otras aplicaciones.
 			
 			\item El sistema es \textbf{capaz} de \textbf{almacenar} muestras de monitorización, además de poder \textbf{generar predicciones} de tráfico en red en la escala temporal que el usuario solicite.
 		\end{itemize}
@@ -666,7 +666,7 @@
 			\begin{itemize}
 				\item Permitir la \textbf{importación} de \textbf{datos de monitorización} de \textbf{herramientas específicas} de planificación de red.
 				
-				\item Añadir \textbf{funcionalidad de SSE} (\textit{Server Side Event}) para \textbf{tareas} que requieran un \textbf{largo tiempo de ejecución}.
+				\item Añadir \textbf{funcionalidad de \texttt{SSE}} (\textit{Server Side Event}) para \textbf{tareas} que requieran un \textbf{largo tiempo de ejecución}.
 				
 				\item Extender la funcionalidad de las \textbf{predicciones}, permitiendo tener una selección \textbf{más selectiva}, o añadir \textbf{filtrados extra}.
 			\end{itemize}
