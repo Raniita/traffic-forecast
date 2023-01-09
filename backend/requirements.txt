@@ -1,6 +1,6 @@
 aerich
 asyncpg
-fastapi
+fastapi==0.88.0
 fastapi-pagination
 pandas
 prophet
