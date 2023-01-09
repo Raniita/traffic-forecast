@@ -48,12 +48,12 @@
     \begin{frame}{Introducción}
     
         \begin{itemize}
-            \item \textit{Abstract}: Aplicación que permite almacenar muestras de monitorización de tráfico en red, y a su vez, generar predicciones futuras del tráfico de red, en función de la información almacenada.
+            \item \textit{Abstract}: Aplicación web que permite almacenar muestras de monitorización de tráfico en red, y a su vez, generar predicciones futuras del tráfico de red, en función de la información almacenada.
         \end{itemize}
     
         \begin{block}{Objetivos del proyecto}
             \begin{itemize}
-                \item Diseñar una \textbf{aplicación} siguiendo la metodología de \textbf{microservicios}.
+                \item Diseñar una \textbf{aplicación web} siguiendo la metodología de \textbf{microservicios}.
                 
                 \item Investigar herramientas de \textbf{predicción de series temporales}.
                 
@@ -138,9 +138,9 @@
 						
 						\item En comparación con el tipo relacional, la \textbf{fila de datos} está \textbf{identificada} por un \textbf{valor temporal}.
 						
-						\item Algunas ventajas:
+						\item \textit{Ventajas}:
 						\begin{itemize}
-							\item Útil para almacenar datos de telemetría.
+							\item \textbf{Útil para almacenar datos de telemetría}.
 							\item Datos comprimidos automáticamente.
 							%\item Permite realizar consultas de manera sencilla.							
 						\end{itemize}
@@ -240,12 +240,12 @@
 	
 	% ---------------------
 	
-	\section{Implementación del sistema}
+	\section{Diseño e implementación del sistema}
 	
 	\begin{frame}{Descripción API REST (I)}
 		\begin{columns}
 			\begin{column}{0.5\textwidth}
-				Para la aplicación se implementan los diferentes agentes utilizando \textbf{dos metodologías}: \\
+				Para la aplicación se implementan los diferentes agentes siguiendo \textbf{dos metodologías}: \\
 				
 				\vspace{12px}
 				
@@ -299,7 +299,7 @@
 	
 	\begin{frame}{Implementación (I)}
 		\begin{exampleblock}{\texttt{Factory Pattern}}
-			Patrón de diseño que \textbf{permite} \textbf{estructurar} un \textbf{proyecto} software de modo que permita:
+			Patrón de diseño que \textbf{permite} \textbf{estructurar} un \textbf{proyecto} software:
 			\begin{itemize}
 				\item Basado en la \textbf{creación de objetos} sin especificar su clase.
 				\item Permite \textbf{añadir} \textbf{funcionalidades} de manera sencilla. Ordena los archivos del proyecto dependiendo de la funcionalidad.
@@ -590,6 +590,12 @@
 				\end{exampleblock}
 			\end{column}
 		\end{columns}
+	
+		\vspace{22px}
+	
+		\begin{itemize}
+			\item Se han implementado un total de \textbf{14} \textbf{rutas}.
+		\end{itemize}
 	\end{frame}
 	
 	% ---------------------
@@ -657,9 +663,9 @@
 		\begin{itemize}
 			\item Alcanzados todos los objetivos propuestos.
 			
-			\item Se ha desarrollado un \textbf{microservicio completo}, permitiendo ser implementado por otras aplicaciones.
-			
 			\item El sistema es \textbf{capaz} de \textbf{almacenar} muestras de monitorización, además de poder \textbf{generar predicciones} de tráfico en red en la escala temporal que el usuario solicite.
+			
+			\item Se ha desarrollado un \textbf{microservicio completo}, permitiendo ser implementado por otras aplicaciones.
 		\end{itemize}
 	
 		\begin{exampleblock}{Propuestas futuras}
@@ -668,7 +674,7 @@
 				
 				\item Añadir \textbf{funcionalidad de \texttt{SSE}} (\textit{Server Side Event}) para \textbf{tareas} que requieran un \textbf{largo tiempo de ejecución}.
 				
-				\item Extender la funcionalidad de las \textbf{predicciones}, permitiendo tener una selección \textbf{más selectiva}, o añadir \textbf{filtrados extra}.
+				\item Extender la funcionalidad de las \textbf{predicciones}, permitiendo tener opciones \textbf{más selectivas}, o bien añadir \textbf{filtrados extra} de datos.
 			\end{itemize}
 		\end{exampleblock}
 	\end{frame}
