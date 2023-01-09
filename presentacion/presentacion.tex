@@ -101,7 +101,7 @@
 			Dependiendo de la implementación, distinguimos entre cuatro tipos:
 			
 			\begin{itemize}
-				\item \textbf{SOAP}. Protocolo tradicional, usa mensajes XML (HTTP solo transporte). Ambos interlocutores deben conocer la estructura de los objetos. Poco flexible
+				\item \textbf{SOAP}. Protocolo tradicional, usa mensajes XML (HTTP solo transporte). Ambos interlocutores deben conocer la estructura de los objetos. Poco flexible.
 				\item \textbf{RPC}. Basado en llamadas a procedimientos remotos. 
 				\item \textbf{WebSocket}. Solución moderna, usa objetos JSON y un canal bidireccional de comunicación.
 				\item \textbf{REST}. Solución más popular y flexible. Usa los métodos HTTP. \textbf{Elegimos este tipo}.
@@ -136,7 +136,7 @@
 					\begin{itemize}
 						\item Necesario para almacenar \textbf{datos} en forma de \textbf{serie temporal} de manera eficiente.
 						
-						\item En comparación con el tipo relacional, la fila de datos esta identificada por un valor temporal.
+						\item En comparación con el tipo relacional, la fila de datos está identificada por un valor temporal.
 						
 						\item Algunas ventajas:
 						\begin{itemize}
@@ -370,7 +370,7 @@
 			\item En estas herramientas se muestran al usuario la información de: 
 			
 			\begin{itemize}
-				\item Rutas de la aplicación
+				\item Rutas de la aplicación.
 				
 				\item Parámetros de entrada y de salida para una petición.
 				
@@ -379,7 +379,7 @@
 				\item Posibles códigos HTTP de respuesta para las peticiones.
 			\end{itemize}
 		
-			\item \textbf{Permite} al usuario r\textbf{ealizar peticiones al servidor}, y ver su resultado, desde la misma herramienta.
+			\item \textbf{Permite} al usuario \textbf{realizar peticiones al servidor} y ver su resultado, desde la misma herramienta.
 		\end{itemize}
 		
 		\begin{block}{Acceso a las herramientas de documentación}
@@ -479,13 +479,13 @@
 			\begin{enumerate}
 				\item \textbf{Creamos una red} a monitorizar. \texttt{POST} a \texttt{/networks}.
 				
-				\item \textbf{Creamos una interfaz} a monitorizar. \texttt{POST} a \texttt{/networks/<net>/interfaces}
+				\item \textbf{Creamos una interfaz} a monitorizar. \texttt{POST} a \texttt{/networks/<net>/interfaces}.
 				
 				\item \textbf{Importamos datos} de monitorización.  Dos maneras: 
 				\begin{itemize}
-					\item \texttt{POST} a ruta: \texttt{/samples/<net>/import\_topology}
+					\item \texttt{POST} a ruta: \texttt{/samples/<net>/import\_topology}.
 					
-					\item \texttt{POST} a ruta: \texttt{/samples/<net>/import\_interface/<if>}
+					\item \texttt{POST} a ruta: \texttt{/samples/<net>/import\_interface/<if>}.
 				\end{itemize}
 			
 				\item \textbf{Ejecutamos predicción de tráfico} en red. Configuramos la predicción y lanzamos la petición \texttt{POST} a \texttt{/forecast}.
@@ -664,11 +664,11 @@
 	
 		\begin{exampleblock}{Propuestas futuras}
 			\begin{itemize}
-				\item Permitir la \textbf{importación} de \textbf{datos de monitorización} de \textbf{herramientas especificas} de planificación de red.
+				\item Permitir la \textbf{importación} de \textbf{datos de monitorización} de \textbf{herramientas específicas} de planificación de red.
 				
 				\item Añadir \textbf{funcionalidad de SSE} (\textit{Server Side Event}) para \textbf{tareas} que requieran un \textbf{largo tiempo de ejecución}.
 				
-				\item Extender la funcionalidad de las \textbf{predicciones}, permitiendo hacer selección \textbf{más selectiva}, o añadir \textbf{filtrados extra}.
+				\item Extender la funcionalidad de las \textbf{predicciones}, permitiendo tener una selección \textbf{más selectiva}, o añadir \textbf{filtrados extra}.
 			\end{itemize}
 		\end{exampleblock}
 	\end{frame}
