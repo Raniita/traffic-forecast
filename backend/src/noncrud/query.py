@@ -6,6 +6,7 @@ from src.database.models import Networks, Interfaces
 from src.schemas.networks import NetworkDatabaseSchema
 from src.schemas.interfaces import InterfaceDatabaseSchema
 from src.utils.influxdb import query_5m as influx_query_5m
+from src.utils.influxdb import query_24h as influx_query_24h
 
 async def query_linkcount_5m(id_network: str, id_interface: str, field: str, to_csv: bool):
     # Get influx fields of network and interface
@@ -32,7 +33,8 @@ async def query_linkcount_5m(id_network: str, id_interface: str, field: str, to_
         raise DoesNotExist
 
     # Given a network and an interface, query:
-    result_df = influx_query_5m(influx_network=influx_network,influx_interface=influx_interface)
+    #result_df = influx_query_5m(influx_network=influx_network,influx_interface=influx_interface)
+    result_df = influx_query_24h(influx_network=influx_network, influx_interface=influx_interface)
     #logger.info(f"Result query: {result_df}")
     #logger.info(f"Type query result: {type(result_df)}")
 
