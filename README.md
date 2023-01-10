@@ -4,7 +4,7 @@ Trabajo final de estudios para finalizar mi titulación 'Máster Universitario e
 
 * Nombre del trabajo: `Diseño y desarrollo de un microservicio para la gestión de información de monitorización y predicciones de tráfico en red`
 * Promoción: `2022-2023`
-* Estado: _EN PROCESO_
+* Estado: _COMPLETADO_
 
 ## How to's
 ### Start aplication (development)
